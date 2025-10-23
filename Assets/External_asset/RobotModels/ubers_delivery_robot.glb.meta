@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b4ff02faa9d0bfb4eb537422d37eba6f
+guid: df845f9ecdee09143b81bef08d1dc3b3
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -30,3 +30,6 @@ ScriptedImporter:
     code: 20
     messages:
     - KHR_materials_emissive_strength
+  - type: 2
+    code: 31
+    messages: []
