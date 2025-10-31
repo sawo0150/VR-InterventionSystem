@@ -119,6 +119,30 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &608986501 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3930979725086188040, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
+  m_PrefabInstance: {fileID: 1164602767}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &608986502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608986501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a4e07b38ea64635b7dff9e9a52c2d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChildCrossing
+  playerCamera: {fileID: 1202970119}
+  triggerDistance: 10
+  triggerOnce: 1
+  movementSpeed: 2
+  movementDistance: 5
+  movementDirection: {x: 0, y: 0, z: 1}
+  showDebugGizmos: 1
 --- !u!1001 &1164602767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174,7 +198,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3930979725086188040, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 608986502}
   m_SourcePrefab: {fileID: 100100000, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
 --- !u!1 &1202970116
 GameObject:
@@ -608,6 +635,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2093524841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3930979725086188040, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
+  m_PrefabInstance: {fileID: 2095473596}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2093524846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093524841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a4e07b38ea64635b7dff9e9a52c2d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChildCrossing
+  playerCamera: {fileID: 1202970119}
+  triggerDistance: 10
+  triggerOnce: 1
+  movementSpeed: 4
+  movementDistance: 5
+  movementDirection: {x: 0, y: 0, z: 1}
+  showDebugGizmos: 0
 --- !u!1001 &2095473596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -663,7 +714,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3930979725086188040, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2093524846}
   m_SourcePrefab: {fileID: 100100000, guid: 0d46f7bdd93ffc44787bcdf35b4741bb, type: 3}
 --- !u!1 &1000013208097563 stripped
 GameObject:
