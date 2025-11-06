@@ -178015,7 +178015,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2eb00fde9621543b731475d775b484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Event.PlayerKnockback
-  damping: 1
+  drag: 5
+  impactThreshold: 0.2
 --- !u!1001 &1730509593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219441,7 +219442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: a4be385565f95d4448c2c746556e0b20, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 240
+      value: 208.51
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: a4be385565f95d4448c2c746556e0b20, type: 3}
       propertyPath: m_LocalPosition.y
