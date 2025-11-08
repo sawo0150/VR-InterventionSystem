@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic; // ◀◀ List, Queue 등을 사용하기 위해 추가
-using UnityEngine;
+using System.Runtime.Serialization;
 using Unity.WebRTC;
-
+using UnityEngine;
 // 1. NativeWebSocket 대신 websocket-sharp 네임스페이스 사용
 using WebSocketSharp;
 
@@ -40,6 +40,14 @@ public class IceCandidateMessage
     }
 }
 
+[Serializable]
+public class ControlMessage
+{
+    public string type = "control";  // 항상 "control"
+    public float linear;             // 전진(+)/후진(-) 속도
+    public float angular;            // 좌회전(+)/우회전(-) 회전속도
+}
+
 public class WebRTCReceiver : MonoBehaviour
 {
     [Header("Receiver Screen")]
@@ -49,6 +57,9 @@ public class WebRTCReceiver : MonoBehaviour
     //public string signalingServerUrl = "ws://192.168.0.29:8080"; // ◀◀◀ 본인 서버 IP로 변경!
     //public string signalingServerUrl = "ws://192.168.247.247:8080"; // ◀◀◀ 본인 서버 IP로 변경!
     public string signalingServerUrl = "ws://127.0.0.1:8080"; // ◀◀◀ 본인 서버 IP로 변경!
+    
+    [Header("Remote Control")]
+    public bool enableControl = true;
 
     private RTCPeerConnection pc;
 
@@ -149,6 +160,23 @@ public class WebRTCReceiver : MonoBehaviour
             // Debug.Log("[WebSocket] 메시지 발신: " + json);
             ws.Send(json); // SendAsync 대신 Send 사용
         }
+    }
+
+    // 외부 스크립트에서 로봇 제어 명령을 보낼 때 사용하는 헬퍼
+    public void SendControl(float linear, float angular)
+    {
+        if (!enableControl) return;
+        if (ws == null || ws.ReadyState != WebSocketState.Open) return;
+
+        var msg = new ControlMessage
+        {
+            // type = "control" 기본값 유지
+            linear = linear,
+            angular = angular
+        };
+        string json = JsonUtility.ToJson(msg);
+        ws.Send(json);
+        // Debug.Log($"[Control] sent: {json}");
     }
 
     //

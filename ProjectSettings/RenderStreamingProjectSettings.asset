@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderStreaming.Editor::Unity.RenderStreaming.Editor.RenderStreamingProjectSettings
   m_WizardPopupAtStart: 1
-  m_WizardPopupAlreadyShownOnce: 1
+  m_WizardPopupAlreadyShownOnce: 0
