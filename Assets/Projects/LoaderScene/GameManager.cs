@@ -62,19 +62,19 @@ namespace Project
             
             if (playerObject == null)
             {
-                Debug.LogWarning($"[{GetType().Name}] Can't find XR Origin; Try to search object by name ...");
                 var originObj = GameObject.Find(playerObjectName);
-                if (originObj != null)
-                {
-                    playerObject = originObj.transform;
-                }
-                else
-                {
-                    Debug.LogError($"[{GetType().Name}]Can't find XR Origin; Check GameManger in LoaderScene");
-                }
+                if (originObj != null) playerObject = originObj.transform;
             }
+            
+            CheckAssignments();
 
             StartCoroutine(LoadScenesSequence());
+        }
+        
+        private void CheckAssignments()
+        {
+            if (playerObject == null) 
+                MyDebug.LogWarning($"[{GetType().Name}] PlayerObject is Missing (Search Name: {playerObjectName})");
         }
 
         private IEnumerator LoadScenesSequence()
@@ -134,13 +134,7 @@ namespace Project
 
             if (targetAnchor == null)
             {
-                MyDebug.LogError($"[{GetType().Name}] '{targetAnchorName}' Anchor not found in loaded scenes");
-                return;
-            }
-
-            if (playerObject == null)
-            {
-                MyDebug.LogError($"[{GetType().Name}] Player Object is empty");
+                MyDebug.LogError($"[{GetType().Name}] Anchor not found in loaded scenes (Search Name: {targetAnchorName})");
                 return;
             }
             
