@@ -62,7 +62,7 @@ namespace Project
             
             if (playerObject == null)
             {
-                Debug.LogWarning("Can't find XR Origin; Try to search object by name ...");
+                Debug.LogWarning($"[{GetType().Name}] Can't find XR Origin; Try to search object by name ...");
                 var originObj = GameObject.Find(playerObjectName);
                 if (originObj != null)
                 {
@@ -70,7 +70,7 @@ namespace Project
                 }
                 else
                 {
-                    Debug.LogError("Can't find XR Origin; Check GameManger in LoaderScene");
+                    Debug.LogError($"[{GetType().Name}]Can't find XR Origin; Check GameManger in LoaderScene");
                 }
             }
 
@@ -79,7 +79,7 @@ namespace Project
 
         private IEnumerator LoadScenesSequence()
         {
-            MyDebug.Log("    -- Begin LoadScenesSequence()");
+            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ begin LoadScenesSequence()");
             
             AsyncOperation simLoadOp = null;
             AsyncOperation monLoadOp = null;
@@ -115,38 +115,38 @@ namespace Project
             if (simScene.IsValid())
             {
                 SceneManager.SetActiveScene(simScene);
-                MyDebug.Log($"Set Active Scene to: {simulationSceneName}");
+                MyDebug.Log($"[{GetType().Name}] Set Active Scene to: {simulationSceneName}");
             }
             
-            MyDebug.Log("Game Initializing; All Scenes are Loaded");
+            MyDebug.Log($"[{GetType().Name}] Game Initializing; All Scenes are Loaded");
 
             // Move player to monitoring room
             MovePlayerToMonitoringRoom();
             
-            MyDebug.Log("    -- End LoadScenesSequence()");
+            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ end LoadScenesSequence()");
         }
 
         private void MovePlayerToMonitoringRoom()
         {
-            MyDebug.Log("    -- begin MovePlayerToMonitoringRoom()");
+            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ begin MovePlayerToMonitoringRoom()");
             
             var targetAnchor = GameObject.Find(targetAnchorName);
 
             if (targetAnchor == null)
             {
-                MyDebug.LogError($"'{targetAnchorName}' Anchor not found in loaded scenes");
+                MyDebug.LogError($"[{GetType().Name}] '{targetAnchorName}' Anchor not found in loaded scenes");
                 return;
             }
 
             if (playerObject == null)
             {
-                MyDebug.LogError($"Player Object not found");
+                MyDebug.LogError($"[{GetType().Name}] Player Object is empty");
                 return;
             }
             
             // Disable player's physics temporarily (to prevent collision during teleport)
-            CharacterController charController = playerObject.GetComponent<CharacterController>();
-            Rigidbody playerRigidbody = playerObject.GetComponent<Rigidbody>();
+            var charController = playerObject.GetComponent<CharacterController>();
+            var playerRigidbody = playerObject.GetComponent<Rigidbody>();
             if (charController != null) charController.enabled = false;
             if (playerRigidbody != null) playerRigidbody.useGravity = false;
             
@@ -162,9 +162,9 @@ namespace Project
             if (charController != null) charController.enabled = true;
             if (playerRigidbody != null) playerRigidbody.useGravity = true;
             
-            MyDebug.Log("Player moved to Monitoring Room");
+            MyDebug.Log($"[{GetType().Name}] Player moved to Monitoring Room");
             
-            MyDebug.Log("    -- end MovePlayerToMonitoringRoom()");
+            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@ end MovePlayerToMonitoringRoom()");
         }
         
     }
