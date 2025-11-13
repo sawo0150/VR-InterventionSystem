@@ -97,6 +97,16 @@ namespace Project
                 monLoadOp = SceneManager.LoadSceneAsync(monitoringSceneName, LoadSceneMode.Additive);
                 // simLoadOp.allowSceneActivation = false;
             }
+            
+            if (simLoadOp != null) 
+            {
+                while (!simLoadOp.isDone) yield return null;
+            }
+
+            if (monLoadOp != null) 
+            {
+                while (!monLoadOp.isDone) yield return null;
+            }
 
             yield return new WaitForEndOfFrame();
             
