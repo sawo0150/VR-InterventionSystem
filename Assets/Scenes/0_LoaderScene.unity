@@ -179,15 +179,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.90664
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: -3000
       objectReference: {fileID: 0}
     - target: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.79742
+      value: -2.84
       objectReference: {fileID: 0}
     - target: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -222,9 +222,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35d51966c77a024469834cee123adadb, type: 3}
---- !u!4 &676945198 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
+--- !u!1 &676945198 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1351904833967977961, guid: 35d51966c77a024469834cee123adadb, type: 3}
   m_PrefabInstance: {fileID: 676945197}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &843755296
@@ -258,8 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.AppLoader
   enableDebugLogs: 1
   playerObject: {fileID: 676945198}
-  playerObjectName: My Complete XR Origin (XR Rig)
-  targetAnchorName: MonitoringRoom Anchor Offset
+  loaderSceneName: 0_LoaderScene
   monitoringSceneName: 1_MonitoringScene
   simulationSceneName: 2_SimulationScene
 --- !u!4 &843755298
