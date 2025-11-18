@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project
 {
-    public enum PlayerState { MonitoringMode, ControlingMode, DevMode, }
+    public enum PlayerState { MonitoringMode, ControlingMode, }
 
     public enum RobotState { Auto, Manual, }
 

@@ -177,6 +177,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: My Complete XR Origin (XR Rig)
       objectReference: {fileID: 0}
+    - target: {fileID: 1351904833967977961, guid: 35d51966c77a024469834cee123adadb, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -222,9 +226,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35d51966c77a024469834cee123adadb, type: 3}
---- !u!1 &676945198 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1351904833967977961, guid: 35d51966c77a024469834cee123adadb, type: 3}
+--- !u!4 &676945204 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
   m_PrefabInstance: {fileID: 676945197}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &843755296
@@ -257,7 +261,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.AppLoader
   enableDebugLogs: 1
-  playerObject: {fileID: 676945198}
+  playerObject: {fileID: 676945204}
+  playerCharacterController: {fileID: 1871224632}
+  locomotionSystem: {fileID: 1931159366}
+  leftController: {fileID: 1565661449}
+  rightController: {fileID: 1334322560}
   loaderSceneName: 0_LoaderScene
   monitoringSceneName: 1_MonitoringScene
   simulationSceneName: 2_SimulationScene
@@ -276,6 +284,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1334322560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 366349417458699316, guid: 35d51966c77a024469834cee123adadb, type: 3}
+  m_PrefabInstance: {fileID: 676945197}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1565661449 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 366349417886633163, guid: 35d51966c77a024469834cee123adadb, type: 3}
+  m_PrefabInstance: {fileID: 676945197}
+  m_PrefabAsset: {fileID: 0}
+--- !u!143 &1871224632 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 6010792718146615134, guid: 35d51966c77a024469834cee123adadb, type: 3}
+  m_PrefabInstance: {fileID: 676945197}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1931159366 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4804673051339151695, guid: 35d51966c77a024469834cee123adadb, type: 3}
+  m_PrefabInstance: {fileID: 676945197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1975355793
 GameObject:
   m_ObjectHideFlags: 0
