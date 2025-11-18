@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 100997558}
   - component: {fileID: 100997561}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: RawImage 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1567,7 +1567,7 @@ GameObject:
   - component: {fileID: 571055264}
   - component: {fileID: 571055267}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: RawImage 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2692,7 +2692,7 @@ GameObject:
   - component: {fileID: 807303629}
   - component: {fileID: 807303628}
   m_Layer: 0
-  m_Name: divider
+  m_Name: --- divider ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2961,13 +2961,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653ce4b9fbd3f054d971823c00ae5101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonitoringSceneManager
-  respawnAnchor: {fileID: 1782830920}
+  respawnAnchor: {fileID: 1782830921}
   tutorialUIController: {fileID: 1748730855}
   monitoringCanvasGroup: {fileID: 1663086909}
+  monitoringCanvasA: {fileID: 135451550}
+  monitoringCanvasB: {fileID: 1758747207}
   sectorButtons:
   - {fileID: 1638956741}
   - {fileID: 434268650}
-  eventButtons:
+  eventTriggerButtons:
   - {fileID: 1664672778}
   - {fileID: 1629417662}
   - {fileID: 837259761}
@@ -2975,6 +2977,7 @@ MonoBehaviour:
   - {fileID: 100997561}
   - {fileID: 571055267}
   - {fileID: 1333478139}
+  getControlButton: {fileID: 0}
   restartAppButton: {fileID: 840606381}
   resetRobotsButton: {fileID: 594440246}
 --- !u!1 &837259759
@@ -2990,7 +2993,7 @@ GameObject:
   - component: {fileID: 837259762}
   - component: {fileID: 837259761}
   m_Layer: 5
-  m_Name: Button
+  m_Name: TriggerButton 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4414,7 +4417,7 @@ GameObject:
   - component: {fileID: 1333478136}
   - component: {fileID: 1333478139}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: RawImage 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5398,7 +5401,7 @@ GameObject:
   - component: {fileID: 1629417663}
   - component: {fileID: 1629417662}
   m_Layer: 5
-  m_Name: Button
+  m_Name: TriggerButton 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5946,7 +5949,7 @@ GameObject:
   - component: {fileID: 1664672779}
   - component: {fileID: 1664672778}
   m_Layer: 5
-  m_Name: Button
+  m_Name: TriggerButton 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,7 +10,7 @@ namespace Project
         public static MonitoringSceneManager Instance;
         
         [Header("Position Setup")]
-        [SerializeField] private GameObject respawnAnchor;
+        [SerializeField] private Transform respawnAnchor;
         
         [Header("Controllers")]
         [SerializeField] private TutorialUIController tutorialUIController; 
@@ -34,7 +34,7 @@ namespace Project
         [SerializeField] private Button restartAppButton;
         [SerializeField] private Button resetRobotsButton;
         
-        private GameObject playerObject => GameManager.Instance.playerObject;
+        private Transform playerObject => GameManager.Instance.playerObject;
         private PoseData cachedRespawnAnchorPose;
         private PoseData cachedPlayerPose;
 
@@ -73,16 +73,8 @@ namespace Project
             cachedRespawnAnchorPose = new PoseData(respawnAnchor.transform);
         }
 
-        private void MovePlayerToRespawnAnchor()
+        public void MovePlayerToRespawnAnchor()
         {
-            if (GameManager.Instance.CurrentPlayerState == PlayerState.ControlingMode)
-            {
-                /*
-                 * aaaaa
-                 */
-                return;
-            }
-
             respawnAnchor.transform.position = cachedRespawnAnchorPose.Position;
             respawnAnchor.transform.rotation = cachedRespawnAnchorPose.Rotation;
             MyDebug.Log($"[{GetType().Name}] call GameManager.MovePlayer()");
@@ -152,14 +144,7 @@ namespace Project
         {
             MyDebug.Log($"[{GetType().Name}] Request Control for Robot: {robotIndex}");
 
-            if (SimulationSceneManager.Instance != null)
-            {
-                SimulationSceneManager.Instance.MoveCameraToOffset(robotIndex);
-            }
-            else
-            {
-                MyDebug.LogError("SimulationSceneManager is missing!");
-            }
+            GameManager.Instance.BoardRobot(robotIndex);
         }
         
         // ==========================================================================
