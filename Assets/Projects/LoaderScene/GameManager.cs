@@ -4,12 +4,6 @@ using System.Collections;
 
 namespace Project
 {
-    public enum GameState
-    {
-        Monitoring,
-        Controlling
-    }
-    
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
@@ -18,53 +12,37 @@ namespace Project
         [SerializeField] private bool enableDebugLogs = true;
         
         [Header("Target Setup")]
-        [SerializeField] private Transform playerObject;
-        [Tooltip("if player object is empty, search the object by this string")]
-        [SerializeField] private string playerObjectName = "My Complete XR Origin (XR Rig)";
-        [SerializeField] private string targetAnchorName = "MonitoringScene Anchor Offset";
-        
+        [SerializeField] public GameObject playerObject;
         
         [Header("Target Scene Names")]
+        [SerializeField] public string loaderSceneName = "0_LoaderScene";
         [SerializeField] private string monitoringSceneName = "1_MonitoringScene";
         [SerializeField] private string simulationSceneName = "2_SimulationScene";
         
         
-        private GameState currentState = GameState.Monitoring;
-        public GameState CurrentState => currentState;
+        
+        private PlayerState currentPlayerState = PlayerState.MonitoringMode;
+        public PlayerState CurrentPlayerState => currentPlayerState;
 
-        public void SetState(GameState newState)
+        public void ChangePlayerState(PlayerState newState)
         {
-            var prevState  = currentState;
-            currentState = newState;
-            MyDebug.Log($"# Game State Changed: {currentState} (from {prevState})");
+            var prevState  = currentPlayerState; currentPlayerState = newState;
+            MyDebug.Log($"# Player State Changed to: {currentPlayerState} (from {prevState})");
         }
 
         
         private void Awake()
         {
             // Ensure singleton
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
+            else { Destroy(gameObject); return; }
+            
             MyDebug.SetDebuggingFlag(enableDebugLogs);
         }
         
         private void Start()
         {
             MyDebug.Log("# GameManager Started");
-            
-            if (playerObject == null)
-            {
-                var originObj = GameObject.Find(playerObjectName);
-                if (originObj != null) playerObject = originObj.transform;
-            }
             
             CheckAssignments();
 
@@ -74,12 +52,12 @@ namespace Project
         private void CheckAssignments()
         {
             if (playerObject == null) 
-                MyDebug.LogWarning($"[{GetType().Name}] PlayerObject is Missing (Search Name: {playerObjectName})");
+                MyDebug.LogWarning($"[{GetType().Name}] PlayerObject is Missing");
         }
 
         private IEnumerator LoadScenesSequence()
         {
-            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ begin LoadScenesSequence()");
+            MyDebug.Log($"[{GetType().Name}] begin LoadScenesSequence()");
             
             AsyncOperation simLoadOp = null;
             AsyncOperation monLoadOp = null;
@@ -119,46 +97,35 @@ namespace Project
             }
             
             MyDebug.Log($"[{GetType().Name}] Game Initializing; All Scenes are Loaded");
-
-            // Move player to monitoring room
-            MovePlayerToMonitoringRoom();
             
-            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ end LoadScenesSequence()");
+            MyDebug.Log($"[{GetType().Name}] end LoadScenesSequence()");
         }
 
-        private void MovePlayerToMonitoringRoom()
+        public void MovePlayer(GameObject targetAnchor)
         {
-            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@@ begin MovePlayerToMonitoringRoom()");
+            MyDebug.Log($"[{GetType().Name}] Moving Player to '{targetAnchor.name}'...");
             
-            var targetAnchor = GameObject.Find(targetAnchorName);
-
-            if (targetAnchor == null)
-            {
-                MyDebug.LogError($"[{GetType().Name}] Anchor not found in loaded scenes (Search Name: {targetAnchorName})");
-                return;
-            }
-            
-            // Disable player's physics temporarily (to prevent collision during teleport)
             var charController = playerObject.GetComponent<CharacterController>();
             var playerRigidbody = playerObject.GetComponent<Rigidbody>();
+            
+            // 물리설정 해제
             if (charController != null) charController.enabled = false;
-            if (playerRigidbody != null) playerRigidbody.useGravity = false;
+            if (playerRigidbody != null) playerRigidbody.isKinematic = true;
+
+            // 부모 설정 및 위치 정렬
+            // worldPositionStays: false -> 부모가 바뀌어도 로컬 좌표를 유지
+            playerObject.transform.SetParent(targetAnchor.transform, false);
             
-            // Move the player (by set parent anchor)
-            playerObject.SetParent(targetAnchor.transform, false);
-            
-            // Align player's transform
-            playerObject.localScale = Vector3.one;
-            playerObject.localPosition = Vector3.zero;
-            playerObject.localRotation = Quaternion.identity;
-            
-            // Enable player's physics
+            // 확실하게 0점으로 초기화 
+            playerObject.transform.localPosition = Vector3.zero;
+            playerObject.transform.localRotation = Quaternion.identity;
+            playerObject.transform.localScale = Vector3.one;
+
+            // 물리설정 복구
             if (charController != null) charController.enabled = true;
-            if (playerRigidbody != null) playerRigidbody.useGravity = true;
+            if (playerRigidbody != null) playerRigidbody.isKinematic = false;
             
-            MyDebug.Log($"[{GetType().Name}] Player moved to Monitoring Room");
-            
-            MyDebug.Log($"[{GetType().Name}] @@@@@@@@@ end MovePlayerToMonitoringRoom()");
+            MyDebug.Log($"[{GetType().Name}] Player successfully moved to {targetAnchor.name}");
         }
         
     }
