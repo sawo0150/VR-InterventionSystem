@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Locomotion;
+using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.InputSystem;
 
 namespace Project
 {
@@ -27,12 +28,18 @@ namespace Project
         [SerializeField] private string monitoringSceneName = "1_MonitoringScene";
         [SerializeField] private string simulationSceneName = "2_SimulationScene";
         
-        // --- Runtime Data ---
-        private GameObject[] robots;
-        private Transform[] robotSeatAnchors;
-        private int currentRobotIndex = -1;
+        [Header("Event Control")]
+        public List<ScenarioData> scenarioDataList = new List<ScenarioData>();
         
-        public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
+        [Header("Input Settings")]
+        [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
+        [SerializeField] private InputActionReference returnButtonAction;
+        
+        // --- Runtime Data ---
+        //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
+        private PlayerState currentPlayerState = PlayerState.MonitoringMode;
+        private ScenarioData currentActiveScenarioData;
+        
         
         // ---
         private void Awake()
@@ -52,9 +59,53 @@ namespace Project
             // 2. 씬 로딩 시작
             StartCoroutine(LoadScenesSequence());
         }
+
+        private void OnEnable()
+        {
+            returnButtonAction.action.Enable();
+        }
+
+        private void OnDisable()
+        {
+            returnButtonAction.action.Disable();
+        }
         
+        private void Update()
+        {
+            if (currentPlayerState == PlayerState.ControllingMode)
+            {
+                HandleReturnInput();
+            }
+        }
+
+        private void HandleReturnInput()
+        {
+            // 1. VR 컨트롤러 입력
+            bool isVRPressed = returnButtonAction != null && 
+                               returnButtonAction.action != null && 
+                               returnButtonAction.action.WasPressedThisFrame();
+
+            // 2. 키보드 비상키
+            bool isKeyboardPressed = Keyboard.current != null && 
+                                     (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame);
+
+            if (isVRPressed || isKeyboardPressed)
+            {
+                MyDebug.Log("🔘 Return Button Pressed (Detected by GameManager)");
+
+                if (currentActiveScenarioData != null)
+                {
+                    ReturnToMonitoring(ReturnFlag.Interrupt);
+                }
+                else
+                {
+                    ReturnToMonitoring(ReturnFlag.None);
+                }
+            }
+        }
+
         // -------------------------------------------------------------------------
-        // 1. Initialization & Setup
+        // 1. Scene Initialization & Setup
         // -------------------------------------------------------------------------
         
         private void CheckAssignments()
@@ -64,6 +115,7 @@ namespace Project
             if (locomotionSystem == null)          MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Locomotion System not found");
             if (leftController == null)            MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Left Controller not found");
             if (rightController == null)           MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Right Controller not found");
+            if (returnButtonAction == null || returnButtonAction.action == null)        MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Return Button Action not found");
         }
         
 
@@ -99,7 +151,7 @@ namespace Project
         }
         
         // -------------------------------------------------------------------------
-        // 2. Player Movement (Core Logic)
+        // 2. Player Movement
         // -------------------------------------------------------------------------
 
         public void MovePlayer(Transform targetAnchor)
@@ -124,10 +176,12 @@ namespace Project
                     charController.stepOffset = 0.5f;
                     charController.minMoveDistance = 0.001f;
                     break;
-                case PlayerState.ControlingMode:
+                case PlayerState.ControllingMode:
                     // 차량 위로 옮길 경우, 로봇 스케일 때문에 stepOffset 에러 발생
                     charController.stepOffset = 0.01f; // 앉아있을 땐 계단 오를 일이 없으므로 최소화
                     charController.minMoveDistance = 0; // 미세 떨림 방지
+                    break;
+                default:
                     break;
             }
             charController.enabled = true;
@@ -143,90 +197,169 @@ namespace Project
         }
         
         // -------------------------------------------------------------------------
-        // 3. Robot Interaction (Boarding & Returning)
+        // 3. Robot & Scenario Initialization
         // -------------------------------------------------------------------------
-
-        public void RegisterRobots(GameObject[] _robots, Transform[] seats)
+        
+        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors)
         {
-            MyDebug.Log($"[{GetType().Name}] Registering robots...");
+            MyDebug.Log($"[{GetType().Name}] Initializing Robot Data...");
             
-            if (_robots == null || seats == null || _robots.Length != seats.Length)
+            if (rawRobots == null || seatAnchors == null || rawRobots.Length != seatAnchors.Length)
             {
-                MyDebug.LogError($"[{GetType().Name}] ❌ Register Failed; Arrays are null or length mismatch");
+                MyDebug.LogError($"[{GetType().Name}] ❌ Data Mismatch or Null");
+                return;
+            }
+
+            scenarioDataList.Clear();
+
+            for (var i = 0; i < rawRobots.Length; i++)
+            {
+                var scenarioData = new ScenarioData(i + 1, rawRobots[i], seatAnchors[i]);
+                
+                scenarioData.robotObject.SetActive(true);
+                scenarioData.robotObject.tag = "Untagged";
+                
+                if (scenarioData.robotWheelController)
+                {
+                    scenarioData.robotWheelController.enabled = false;
+                }
+                else
+                {
+                    MyDebug.LogWarning($"[{GetType().Name}] ❌ Robot {i + 1} doesn't have Wheel Controller (searched by GetComponentInChildren<RobotWheelController>)");
+                }
+
+                scenarioData.robotState = RobotState.Auto;
+
+                scenarioDataList.Add(scenarioData);
+            }
+            
+            MyDebug.Log($"[{GetType().Name}] ✅ Initialized ({scenarioDataList.Count}) robots successfully");
+        }
+        
+        public void InitializeRobots() { }
+        public void InitializeScenarios() { }
+        
+        // ------------------------------------------------------------------------- //
+        // 5. Event Management
+        // ------------------------------------------------------------------------- //
+        
+        public void StartGameEvent(int eventId)
+        {
+            MyDebug.Log($"[{GetType().Name}] 🔥 Event {eventId} Started;");
+
+            if (currentActiveScenarioData != null)
+            {
+                MyDebug.LogWarning($"[{GetType().Name}] Scenario {currentActiveScenarioData.id} is not ended; Discard it");
+            }
+            
+            var scenarioData = GetScenarioData(eventId);
+            
+            currentActiveScenarioData = scenarioData;
+
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Scenario {eventId} is not found");
                 return;
             }
             
-            for (var i = 0; i < _robots.Length; i++)
-            {
-                if (_robots[i] == null)
-                {
-                    MyDebug.LogError($"[{GetType().Name}] ❌ Robot at index {i} is NULL");
-                    continue;
-                }
-                if (seats[i] == null)
-                {
-                    MyDebug.LogError($"[{GetType().Name}] ❌ Seat Anchor at index {i} is NULL");
-                    continue;
-                }
+            currentActiveScenarioData.eventState = EventState.Active;
 
-                // 초기 상태 설정
-                _robots[i].SetActive(true); // 항상 켜둠 (자율주행 등)
-                _robots[i].tag = "Untagged"; // 태그 초기화
+            currentActiveScenarioData.robotState = RobotState.Manual;
+            MyDebug.Log($"[{GetType().Name}] robot {eventId} state changed to: Manual");
+            
+            // TODO: Simulation Scene 에서 Triggers 활성화하는 등 InitializeScenario() 만들기
+            // TODO: 단순히 트리거만 끄면 되는지, 나무나 돌, 행인 같은걸 없앨 지, rigidbody 만 로봇과 안충돌하게 할 지 등)
+        }
+        
+        // -------------------------------------------------------------------------
+        // 5. Robot Interaction (Boarding, Returning)
+        // -------------------------------------------------------------------------
+        
+        
+        public void BoardRobot(int robotId)
+        {
+            MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
+
+            var scenarioData = GetScenarioData(robotId);
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
+                return;
             }
             
-            this.robots = _robots;
-            this.robotSeatAnchors = seats;
-            
-            MyDebug.Log($"[{GetType().Name}] ✅ Registered {robots.Length} robots successfully");
-        }
-
-        public void BoardRobot(int index)
-        {
-            MyDebug.Log($"[{GetType().Name}] Boarding to Robot {index}...");
-
-            var arrayIndex = index - 1;
-            
-            // 상태 변경
-            currentPlayerState = PlayerState.ControlingMode;
+            // 플레이어 상태 변경
+            currentPlayerState = PlayerState.ControllingMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
 
             // VR 기능 제어 (입력 유지, 인터랙션 끄기)
             ToggleVRFeatures(false);
-
-            // 로봇 설정
-            var targetRobot = robots[arrayIndex];
-            targetRobot.tag = "Player";
             
-            var wheel = targetRobot.GetComponentInChildren<RobotWheelController>();
-            if (wheel) wheel.enabled = true;
+            // 로봇이 Manual 상태일 때만 조작 허용
+            var canControl = (scenarioData.robotState == RobotState.Manual);
+            scenarioData.robotWheelController.enabled = canControl;
 
-            currentRobotIndex = index;
-            
+            if (canControl)
+            {
+                scenarioData.robotObject.tag = "Player";
+                MyDebug.Log("🕹️ Manual Control Enabled");
+            }
+            else
+            {
+                MyDebug.Log("👁️ Auto Mode (View Only)");
+            }
+
             // 플레이어 이동
-            MovePlayer(robotSeatAnchors[arrayIndex]);
+            MovePlayer(scenarioData.seatAnchor);
             
-            MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {index} Completely");
+            MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
         }
 
-        public void ReturnToMonitoring()
+        public void ReturnToMonitoring(ReturnFlag flag)
         {
-            MyDebug.Log($"[{GetType().Name}] Returning to Monitoring...");
-            
-            var arrayIndex = currentRobotIndex - 1;
-            var targetRobot = robots[arrayIndex];
-            
-            var wheel = targetRobot.GetComponentInChildren<RobotWheelController>();
-            if (wheel) wheel.enabled = false;
-            targetRobot.tag = "Untagged";
-            currentRobotIndex = -1;
+            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom; flag: {flag}");
+
+            if (currentActiveScenarioData != null)
+            {
+                switch (flag)
+                {
+                    case ReturnFlag.Completed:
+                        MyDebug.Log($"🎉 Event {currentActiveScenarioData.id} Completed");
+                        currentActiveScenarioData.eventState = EventState.Completed;
+                        break;
+                    case ReturnFlag.Failed:
+                        MyDebug.Log($"⚠️ Event {currentActiveScenarioData.id} Failed");
+                        currentActiveScenarioData.eventState = EventState.Failed;
+                        break;
+                    case ReturnFlag.Interrupt:
+                        MyDebug.Log($"🚫 Interrupted; Treated as Failed");
+                        currentActiveScenarioData.eventState = EventState.Failed;
+                        break;
+                    case ReturnFlag.None:
+                        MyDebug.LogWarning($"Semantic error");
+                        break;
+                }
+                currentActiveScenarioData.robotState = RobotState.Auto;
+                currentActiveScenarioData.robotWheelController.enabled = false;
+                currentActiveScenarioData.robotObject.tag = "Untagged";
+                currentActiveScenarioData = null;
+            }
             
             ToggleVRFeatures(true);
 
             currentPlayerState = PlayerState.MonitoringMode;
+            MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
             
             MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
             
             MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
+        }
+        
+        // -------------------------------------------------------------------------
+        // Helper Methods
+        // -------------------------------------------------------------------------
+        private ScenarioData GetScenarioData(int id)
+        {
+            return scenarioDataList.Find(s => s.id == id);
         }
         
         // -------------------------------------------------------------------------

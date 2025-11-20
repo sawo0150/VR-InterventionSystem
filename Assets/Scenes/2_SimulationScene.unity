@@ -86187,7 +86187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd2758d89265304fa58859b27928e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.SimulationSceneManager
-  robotRoots:
+  rawRobots:
   - {fileID: 1027790784}
   - {fileID: 2079447727}
   - {fileID: 1388930190}

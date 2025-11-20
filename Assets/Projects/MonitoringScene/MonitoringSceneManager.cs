@@ -8,6 +8,28 @@ namespace Project
     public class MonitoringSceneManager : MonoBehaviour
     {
         public static MonitoringSceneManager Instance;
+
+        [System.Serializable]
+        public struct EventTriggerButtonPair
+        {
+            public Button button;
+            public int eventId;
+        }
+
+        [System.Serializable]
+        public struct SectorButtonPair
+        {
+            public Button button;
+            public int sectorId;
+        }
+
+        [System.Serializable]
+        public struct RobotCamButtonPair
+        {
+            public Button button;
+            public int robotId;
+        }
+        
         
         [Header("Position Setup")]
         [SerializeField] private Transform respawnAnchor;
@@ -21,11 +43,11 @@ namespace Project
         [SerializeField] private GameObject monitoringCanvasB;
         
         [Header("Sector Selection")]
-        [SerializeField] private Button[] sectorButtons;
+        [SerializeField] private SectorButtonPair[] sectorButtons;
 
         [Header("Sector A Buttons")]
-        [SerializeField] private Button[] eventTriggerButtons;
-        [SerializeField] private Button[] robotCamButtons;
+        [SerializeField] private EventTriggerButtonPair[] eventTriggerButtons;
+        [SerializeField] private RobotCamButtonPair[] robotCamButtons;
         
         [Header("Sector B Buttons")]
         [SerializeField] private Button getControlButton;
@@ -50,13 +72,13 @@ namespace Project
             
             CheckAssignments();
             
-            StoreInitialRespawnAnchor();
-            MovePlayerToRespawnAnchor();
-            
-            InitializeButtons(); // connect target buttons
-            ResetUIState(); // hide all canvas
+            InitializeButtons();
+            ResetUIState();
 
             BeginTutorial();
+            
+            StoreInitialRespawnAnchor();
+            MovePlayerToRespawnAnchor();
         }
         
         private void CheckAssignments()
@@ -66,6 +88,7 @@ namespace Project
             if (monitoringCanvasGroup == null)   MyDebug.LogWarning($"[{GetType().Name}] monitoringCanvas is missing!");
             if (restartAppButton == null)   MyDebug.LogWarning($"[{GetType().Name}] restartAppButton is missing!");
             if (resetRobotsButton == null)  MyDebug.LogWarning($"[{GetType().Name}] resetRobotsButton is missing!");
+            // TODO
         }
 
         private void StoreInitialRespawnAnchor()
@@ -84,28 +107,31 @@ namespace Project
         private void ResetUIState()
         {
             MyDebug.Log($"[{GetType().Name}] reset UI State (hide all canvas)");
+            if(monitoringCanvasA) monitoringCanvasA.SetActive(true);
+            if(monitoringCanvasB) monitoringCanvasB.SetActive(false);
             monitoringCanvasGroup.SetActive(false);
         }
 
         private void InitializeButtons()
         {
-            for (var i = 0; i < sectorButtons.Length; i++)
+            foreach (var pair in sectorButtons)
             {
-                var index = i;
-                sectorButtons[i].onClick.AddListener(() => OnSectorClicked(index));
+                var targetSectorId = pair.sectorId;
+                pair.button.onClick.RemoveAllListeners();
+                pair.button.onClick.AddListener(() => OnSectorClicked(targetSectorId));
+            }
+            foreach (var pair in eventTriggerButtons)
+            {
+                var targetEventId = pair.eventId;
+                pair.button.onClick.RemoveAllListeners();
+                pair.button.onClick.AddListener(() => OnEventTriggerClicked(targetEventId));
             }
 
-            for (var i = 0; i < eventTriggerButtons.Length; i++)
+            foreach (var pair in robotCamButtons)
             {
-                var index = i + 1;
-                eventTriggerButtons[i].onClick.AddListener(() => OnEventTriggerClicked(index));
-            }
-            
-            for (int i = 0; i < robotCamButtons.Length; i++)
-            {
-                int robotIndex = i + 1;
-                robotCamButtons[i].onClick.RemoveAllListeners();
-                robotCamButtons[i].onClick.AddListener(() => OnRobotCamClicked(robotIndex));
+                var  targetRobotId = pair.robotId;
+                pair.button.onClick.RemoveAllListeners();
+                pair.button.onClick.AddListener(() => OnRobotCamClicked(targetRobotId));
             }
             
 
@@ -128,23 +154,41 @@ namespace Project
         // ==========================================================================
         // ==========================================================================
         
-        private void OnSectorClicked(int index)
+        private void OnSectorClicked(int sectorId)
         {
-            MyDebug.Log($"[{GetType().Name}] Sector Changed to: {index}");
-            // TODO: 미니맵 이미지를 바꾸거나 카메라 위치를 이동하는 로직 추가
+            MyDebug.Log($"[{GetType().Name}] Sector Changed to: {sectorId}");
+            
+            if (sectorId == 1)
+            {
+                // Sector A 활성화
+                if(monitoringCanvasA) monitoringCanvasA.SetActive(true);
+                if(monitoringCanvasB) monitoringCanvasB.SetActive(false);
+                
+                MyDebug.Log("Switched to Canvas A");
+            }
+            else if (sectorId == 2)
+            {
+                // Sector B 활성화
+                if(monitoringCanvasA) monitoringCanvasA.SetActive(false);
+                if(monitoringCanvasB) monitoringCanvasB.SetActive(true);
+                
+                MyDebug.Log("Switched to Canvas B");
+            }
         }
 
-        private void OnEventTriggerClicked(int eventIndex)
+        private void OnEventTriggerClicked(int eventId)
         {
-            MyDebug.Log($"[{GetType().Name}] Event Triggered: {eventIndex}");
+            MyDebug.Log($"[{GetType().Name}] Event Triggered: {eventId}");
+            GameManager.Instance.StartGameEvent(eventId);
             // TODO: 장애물 생성 등 시뮬레이션 이벤트 실행
+            
         }
 
-        private void OnRobotCamClicked(int robotIndex)
+        private void OnRobotCamClicked(int robotId)
         {
-            MyDebug.Log($"[{GetType().Name}] Request Control for Robot: {robotIndex}");
+            MyDebug.Log($"[{GetType().Name}] Request Control for Robot: {robotId}");
 
-            GameManager.Instance.BoardRobot(robotIndex);
+            GameManager.Instance.BoardRobot(robotId);
         }
         
         // ==========================================================================
@@ -161,7 +205,7 @@ namespace Project
 
         private void OnResetRobotsClicked()
         {
-            
+            // TODO
         }
     }
 }

@@ -269,6 +269,17 @@ MonoBehaviour:
   loaderSceneName: 0_LoaderScene
   monitoringSceneName: 1_MonitoringScene
   simulationSceneName: 2_SimulationScene
+  scenarioDataList:
+  - id: 1
+    description: 
+    state: 0
+  - id: 2
+    description: 
+    state: 0
+  - id: 3
+    description: 
+    state: 0
+  returnButtonAction: {fileID: -3875704489234743591, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!4 &843755298
 Transform:
   m_ObjectHideFlags: 0
