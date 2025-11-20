@@ -18,10 +18,6 @@ public class Event1EndTrigger : MonoBehaviour
     [Tooltip("Called when robot reaches end zone")]
     public UnityEvent onEventComplete;
 
-    [Header("Reset Settings")]
-    [Tooltip("Return player to monitoring scene spawn point")]
-    public Transform monitoringSceneSpawnPoint;
-
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;

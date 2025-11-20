@@ -42,7 +42,6 @@ public class RobotWaypointFollower : MonoBehaviour
 
     private NavigationState currentState = NavigationState.PatrollingWaypoints;
     private Vector3 eventDestination;
-    private bool shouldNavigateToEventAfterLoop = false;
     private bool hasReachedWaypoint0 = false; // Track if we've reached waypoint 0 during event initialization
 
     void Start()
@@ -178,7 +177,6 @@ public class RobotWaypointFollower : MonoBehaviour
     public void ResumeWaypointPatrol()
     {
         currentState = NavigationState.PatrollingWaypoints;
-        shouldNavigateToEventAfterLoop = false;
 
         if (enableDebugLogs)
         {
@@ -211,7 +209,6 @@ public class RobotWaypointFollower : MonoBehaviour
         // Reset state and resume patrol
         currentWaypointIndex = 0;
         currentState = NavigationState.PatrollingWaypoints;
-        shouldNavigateToEventAfterLoop = false;
         hasReachedWaypoint0 = false; // Reset flag
 
         // Clear NavMesh path
@@ -222,8 +219,8 @@ public class RobotWaypointFollower : MonoBehaviour
             Debug.Log($"[RobotWaypointFollower] {gameObject.name} reset to waypoint 0 at {waypoints[0].position}");
         }
 
-        // Start patrolling from waypoint 0
-        GoToNextWaypoint();
+        // Note: Don't call GoToNextWaypoint() here - robot stays at waypoint 0
+        // Normal patrol will resume from Update() when state is PatrollingWaypoints
     }
 
     /// <summary>
