@@ -30,8 +30,13 @@ public class RobotWheelController : MonoBehaviour
     public float maxSpeed = 5f;
     [Tooltip("Maximum steering angle in degrees")]
     public float maxSteeringAngle = 30f;
-    [Tooltip("Brake torque applied when not moving")]
+    [Tooltip("Brake torque applied when fully stopped")]
     public float brakeTorque = 1000f;
+    [Tooltip("Deceleration torque for gradual stopping (lower = smoother, higher = faster stop)")]
+    public float decelerationTorque = 500f;
+    [Tooltip("Speed threshold to apply brakes (m/s)")]
+    [Range(0f, 2f)]
+    public float brakeSpeedThreshold = 0.5f;
     [Tooltip("Automatically reduce torque on steep slopes to prevent tipping")]
     public bool slopeSpeedControl = true;
     [Tooltip("Slope angle (degrees) where speed reduction starts")]
@@ -289,6 +294,7 @@ public class RobotWheelController : MonoBehaviour
     {
         float motorTorque = throttleInput * maxMotorTorque;
         float gearRatio = 1f; // Default gear ratio
+        float currentSpeed = rb != null ? rb.linearVelocity.magnitude : 0f;
 
         // Auto gear system: shift to low gear on slopes
         if (enableAutoGear)
@@ -346,7 +352,6 @@ public class RobotWheelController : MonoBehaviour
         // Apply gear ratio to limit top speed in low gear
         if (isInLowGear && rb != null)
         {
-            float currentSpeed = rb.linearVelocity.magnitude;
             float maxLowGearSpeed = 5f * lowGearSpeedFactor; // Limit speed in low gear
 
             if (currentSpeed > maxLowGearSpeed)
@@ -358,8 +363,6 @@ public class RobotWheelController : MonoBehaviour
         // Apply overall max speed limit
         if (maxSpeed > 0f && rb != null)
         {
-            float currentSpeed = rb.linearVelocity.magnitude;
-
             if (currentSpeed >= maxSpeed)
             {
                 // At max speed, cut motor torque
@@ -378,18 +381,58 @@ public class RobotWheelController : MonoBehaviour
             }
         }
 
+        // Handle deceleration and braking when no input
+        bool noInput = Mathf.Abs(throttleInput) < joystickDeadzone;
+
+        if (noInput)
+        {
+            // Apply deceleration torque to slow down gradually
+            if (currentSpeed > brakeSpeedThreshold)
+            {
+                // Use reverse motor torque to decelerate smoothly
+                float decelerationDirection = currentSpeed > 0.1f ? -1f : 0f;
+                motorTorque = decelerationDirection * decelerationTorque;
+
+                // No brakes during deceleration
+                frontLeftWheel.brakeTorque = 0f;
+                frontRightWheel.brakeTorque = 0f;
+                rearLeftWheel.brakeTorque = 0f;
+                rearRightWheel.brakeTorque = 0f;
+
+                if (enableDebugLogs)
+                {
+                    Debug.Log($"[RobotWheelController] Decelerating - Speed: {currentSpeed:F2} m/s, Decel Torque: {motorTorque:F0}");
+                }
+            }
+            else
+            {
+                // Speed is low enough, apply brakes to hold position
+                motorTorque = 0f;
+                frontLeftWheel.brakeTorque = brakeTorque;
+                frontRightWheel.brakeTorque = brakeTorque;
+                rearLeftWheel.brakeTorque = brakeTorque;
+                rearRightWheel.brakeTorque = brakeTorque;
+
+                if (enableDebugLogs && currentSpeed > 0.01f)
+                {
+                    Debug.Log($"[RobotWheelController] Braking - Speed: {currentSpeed:F2} m/s");
+                }
+            }
+        }
+        else
+        {
+            // Has input, release brakes
+            frontLeftWheel.brakeTorque = 0f;
+            frontRightWheel.brakeTorque = 0f;
+            rearLeftWheel.brakeTorque = 0f;
+            rearRightWheel.brakeTorque = 0f;
+        }
+
         // Apply motor torque to all wheels (4-wheel drive)
         frontLeftWheel.motorTorque = motorTorque;
         frontRightWheel.motorTorque = motorTorque;
         rearLeftWheel.motorTorque = motorTorque;
         rearRightWheel.motorTorque = motorTorque;
-
-        // Apply brakes if no input
-        float brake = Mathf.Abs(throttleInput) < joystickDeadzone ? brakeTorque : 0f;
-        frontLeftWheel.brakeTorque = brake;
-        frontRightWheel.brakeTorque = brake;
-        rearLeftWheel.brakeTorque = brake;
-        rearRightWheel.brakeTorque = brake;
     }
 
     /// <summary>
