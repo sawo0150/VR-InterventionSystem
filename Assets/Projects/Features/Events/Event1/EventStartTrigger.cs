@@ -24,12 +24,48 @@ public class EventStartTrigger : MonoBehaviour
 
     private bool eventStarted = false;
 
+    void Start()
+    {
+        // Verify trigger setup at start
+        Collider triggerCollider = GetComponent<Collider>();
+        if (triggerCollider == null)
+        {
+            Debug.LogError($"[EventStartTrigger] No collider found on {gameObject.name}!");
+        }
+        else if (!triggerCollider.isTrigger)
+        {
+            Debug.LogError($"[EventStartTrigger] Collider on {gameObject.name} is NOT set as trigger! Check 'Is Trigger' checkbox.");
+        }
+        else if (enableDebugLogs)
+        {
+            Debug.Log($"[EventStartTrigger] Trigger setup verified on {gameObject.name}");
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
+        // Always log what enters the trigger
+        if (enableDebugLogs)
+        {
+            Debug.Log($"[EventStartTrigger] Trigger entered by: '{other.gameObject.name}' (Tag: '{other.tag}')");
+        }
+
         // Check if robot entered and event hasn't started yet
         if (other.CompareTag(robotTag) && !eventStarted)
         {
             StartEvent(other.gameObject);
+        }
+        else if (enableDebugLogs)
+        {
+            // Explain why event didn't start
+            if (!other.CompareTag(robotTag))
+            {
+                Debug.LogWarning($"[EventStartTrigger] Tag mismatch! Expected '{robotTag}', got '{other.tag}'");
+            }
+            if (eventStarted)
+            {
+                Debug.LogWarning($"[EventStartTrigger] Event already started, ignoring trigger");
+            }
         }
     }
 

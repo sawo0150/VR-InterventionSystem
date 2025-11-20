@@ -15,6 +15,12 @@ public class SimulationSceneManager : MonoBehaviour
     [Tooltip("Reference to Event 3 controller")]
     public MonoBehaviour event3Controller;
 
+    [Header("Camera Settings")]
+    [Tooltip("Main camera with SmoothCameraFollow component")]
+    public SmoothCameraFollow mainCamera;
+    [Tooltip("Monitoring scene spawn point (camera returns here on reset)")]
+    public Transform monitoringSpawnPoint;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
@@ -168,6 +174,9 @@ public class SimulationSceneManager : MonoBehaviour
 
         currentEvent.ResetEvent();
 
+        // Return camera to monitoring scene
+        ReturnCameraToMonitoringScene();
+
         // Clear current event reference
         currentEvent = null;
         currentEventIndex = -1;
@@ -195,5 +204,36 @@ public class SimulationSceneManager : MonoBehaviour
     public EventState GetCurrentEventState()
     {
         return currentEvent != null ? currentEvent.GetState() : EventState.Idle;
+    }
+
+    /// <summary>
+    /// Return camera to monitoring scene spawn point
+    /// (called during event reset)
+    /// </summary>
+    public void ReturnCameraToMonitoringScene()
+    {
+        if (mainCamera == null)
+        {
+            Debug.LogWarning("[SimulationSceneManager] Cannot return camera - mainCamera reference not assigned!");
+            return;
+        }
+
+        if (monitoringSpawnPoint == null)
+        {
+            Debug.LogWarning("[SimulationSceneManager] Cannot return camera - monitoringSpawnPoint not assigned!");
+            return;
+        }
+
+        // Detach camera from robot
+        mainCamera.DetachFromTarget();
+
+        // Move camera to monitoring spawn point
+        mainCamera.transform.position = monitoringSpawnPoint.position;
+        mainCamera.transform.rotation = monitoringSpawnPoint.rotation;
+
+        if (enableDebugLogs)
+        {
+            Debug.Log($"[SimulationSceneManager] Camera returned to monitoring scene at {monitoringSpawnPoint.position}");
+        }
     }
 }

@@ -33,14 +33,20 @@ public class Event1Controller : MonoBehaviour, IEvent
     public bool enableDebugLogs = true;
 
     private EventState currentState = EventState.Idle;
-    private RobotWheelController robotController;
+    private RobotNavMeshController robotController;
 
     void Start()
     {
         // Get robot controller reference
         if (robot != null)
         {
-            robotController = robot.GetComponent<RobotWheelController>();
+            robotController = robot.GetComponent<RobotNavMeshController>();
+
+            // Disable manual control at start (robot will use autonomous navigation)
+            if (robotController != null)
+            {
+                robotController.enabled = false;
+            }
         }
 
         // Validate setup
@@ -56,7 +62,7 @@ public class Event1Controller : MonoBehaviour, IEvent
 
         if (robotController == null)
         {
-            Debug.LogError("[Event1Controller] Robot missing RobotWheelController component!");
+            Debug.LogError("[Event1Controller] Robot missing RobotNavMeshController component!");
         }
 
         if (eventLocation == null)
@@ -181,14 +187,14 @@ public class Event1Controller : MonoBehaviour, IEvent
             robotController.enabled = false;
         }
 
-        // Resume autonomous navigation (robot returns to waypoint patrol)
+        // Move robot back to waypoint 0 and resume patrol
         if (autonomousNavigation != null)
         {
-            autonomousNavigation.ResumeWaypointPatrol();
+            autonomousNavigation.ResetToWaypointZero();
 
             if (enableDebugLogs)
             {
-                Debug.Log("[Event1Controller] Robot resuming waypoint patrol");
+                Debug.Log("[Event1Controller] Robot reset to waypoint 0");
             }
         }
 
@@ -238,9 +244,6 @@ public class Event1Controller : MonoBehaviour, IEvent
                 Debug.Log("[Event1Controller] Stopped clouds particle system");
             }
         }
-
-        // TODO: Move robot back to spawn point or idle position
-        // TODO: Return player camera to monitoring scene
     }
 
     public EventState GetState()

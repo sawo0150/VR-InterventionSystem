@@ -28,7 +28,7 @@ public class RollingObstacleSpawner : MonoBehaviour
 
     [Header("Auto Start")]
     [Tooltip("Start spawning automatically when the scene starts")]
-    public bool autoStart = true;
+    public bool autoStart = false;
 
     [Header("Physics Settings")]
     [Tooltip("Apply initial force to the spawned object (optional)")]
@@ -46,7 +46,7 @@ public class RollingObstacleSpawner : MonoBehaviour
     public bool showGizmos = true;
 
     [Tooltip("Log spawn/destroy events to console")]
-    public bool debugLog = false;
+    public bool debugLog = true;
 
     // Private state
     private GameObject currentObstacle;
@@ -187,7 +187,7 @@ public class RollingObstacleSpawner : MonoBehaviour
     {
         if (obstaclePrefab == null)
         {
-            Debug.LogWarning($"Cannot start spawning - no prefab assigned on {gameObject.name}");
+            Debug.LogError($"[RollingObstacleSpawner] Cannot start spawning - no prefab assigned on {gameObject.name}!");
             return;
         }
 
@@ -195,10 +195,7 @@ public class RollingObstacleSpawner : MonoBehaviour
         timer = 0f;
         currentState = SpawnerState.WaitingToStart;
 
-        if (debugLog)
-        {
-            Debug.Log($"Started spawning cycle on {gameObject.name}");
-        }
+        Debug.Log($"[RollingObstacleSpawner] Started spawning cycle on {gameObject.name} - Initial delay: {initialDelay}s");
     }
 
     /// <summary>
