@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Triggers event start when robot enters the zone.
+/// Triggers Event 1 start when robot enters the zone.
 /// Notifies SimulationSceneManager when robot arrives.
 /// </summary>
-public class EventStartTrigger : MonoBehaviour
+public class Event1StartTrigger : MonoBehaviour
 {
     [Header("Event Settings")]
     [Tooltip("Robot tag to detect (default: Robot)")]
@@ -30,15 +30,15 @@ public class EventStartTrigger : MonoBehaviour
         Collider triggerCollider = GetComponent<Collider>();
         if (triggerCollider == null)
         {
-            Debug.LogError($"[EventStartTrigger] No collider found on {gameObject.name}!");
+            Debug.LogError($"[Event1StartTrigger] No collider found on {gameObject.name}!");
         }
         else if (!triggerCollider.isTrigger)
         {
-            Debug.LogError($"[EventStartTrigger] Collider on {gameObject.name} is NOT set as trigger! Check 'Is Trigger' checkbox.");
+            Debug.LogError($"[Event1StartTrigger] Collider on {gameObject.name} is NOT set as trigger! Check 'Is Trigger' checkbox.");
         }
         else if (enableDebugLogs)
         {
-            Debug.Log($"[EventStartTrigger] Trigger setup verified on {gameObject.name}");
+            Debug.Log($"[Event1StartTrigger] Trigger setup verified on {gameObject.name}");
         }
     }
 
@@ -47,7 +47,7 @@ public class EventStartTrigger : MonoBehaviour
         // Always log what enters the trigger
         if (enableDebugLogs)
         {
-            Debug.Log($"[EventStartTrigger] Trigger entered by: '{other.gameObject.name}' (Tag: '{other.tag}')");
+            Debug.Log($"[Event1StartTrigger] Trigger entered by: '{other.gameObject.name}' (Tag: '{other.tag}')");
         }
 
         // Check if robot entered and event hasn't started yet
@@ -60,11 +60,11 @@ public class EventStartTrigger : MonoBehaviour
             // Explain why event didn't start
             if (!other.CompareTag(robotTag))
             {
-                Debug.LogWarning($"[EventStartTrigger] Tag mismatch! Expected '{robotTag}', got '{other.tag}'");
+                Debug.LogWarning($"[Event1StartTrigger] Tag mismatch! Expected '{robotTag}', got '{other.tag}'");
             }
             if (eventStarted)
             {
-                Debug.LogWarning($"[EventStartTrigger] Event already started, ignoring trigger");
+                Debug.LogWarning($"[Event1StartTrigger] Event already started, ignoring trigger");
             }
         }
     }
@@ -75,7 +75,7 @@ public class EventStartTrigger : MonoBehaviour
 
         if (enableDebugLogs)
         {
-            Debug.Log($"[EventStartTrigger] Robot arrived at event location");
+            Debug.Log($"[Event1StartTrigger] Robot arrived at event location");
         }
 
         // Notify SimulationSceneManager that robot has arrived
@@ -97,7 +97,7 @@ public class EventStartTrigger : MonoBehaviour
 
         if (enableDebugLogs)
         {
-            Debug.Log($"[EventStartTrigger] Event reset");
+            Debug.Log($"[Event1StartTrigger] Event reset");
         }
     }
 

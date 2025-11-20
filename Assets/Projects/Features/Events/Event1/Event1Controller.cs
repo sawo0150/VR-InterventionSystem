@@ -16,9 +16,9 @@ public class Event1Controller : MonoBehaviour, IEvent
 
     [Header("Event Components")]
     [Tooltip("Start trigger zone")]
-    public EventStartTrigger startTrigger;
+    public Event1StartTrigger startTrigger;
     [Tooltip("End trigger zone")]
-    public EventEndTrigger endTrigger;
+    public Event1EndTrigger endTrigger;
 
     [Header("Obstacle References")]
     [Tooltip("Deer jumping obstacles")]

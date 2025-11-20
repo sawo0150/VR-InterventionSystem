@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Triggers event completion when robot reaches end zone.
+/// Triggers Event 1 completion when robot reaches end zone.
 /// Shows reset button and handles event completion.
 /// </summary>
-public class EventEndTrigger : MonoBehaviour
+public class Event1EndTrigger : MonoBehaviour
 {
     [Header("UI Settings")]
     [Tooltip("Reset button to show when robot reaches end")]
@@ -57,7 +57,7 @@ public class EventEndTrigger : MonoBehaviour
 
         if (enableDebugLogs)
         {
-            Debug.Log($"[EventEndTrigger] Robot reached end zone at {transform.position}");
+            Debug.Log($"[Event1EndTrigger] Robot reached end zone at {transform.position}");
         }
 
         // Show reset button UI
@@ -75,7 +75,7 @@ public class EventEndTrigger : MonoBehaviour
 
             if (enableDebugLogs)
             {
-                Debug.Log($"[EventEndTrigger] Reset button shown");
+                Debug.Log($"[Event1EndTrigger] Reset button shown");
             }
         }
     }
@@ -87,7 +87,7 @@ public class EventEndTrigger : MonoBehaviour
     {
         if (enableDebugLogs)
         {
-            Debug.Log($"[EventEndTrigger] Reset button clicked");
+            Debug.Log($"[Event1EndTrigger] Reset button clicked");
         }
 
         // Hide reset button
