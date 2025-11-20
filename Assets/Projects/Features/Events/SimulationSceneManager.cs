@@ -31,7 +31,7 @@ public class SimulationSceneManager : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<SimulationSceneManager>();
+                instance = FindFirstObjectByType<SimulationSceneManager>();
             }
             return instance;
         }

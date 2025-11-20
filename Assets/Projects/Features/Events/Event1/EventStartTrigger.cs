@@ -3,14 +3,11 @@ using UnityEngine.Events;
 
 /// <summary>
 /// Triggers event start when robot enters the zone.
-/// Activates obstacles and notifies MonitoringScene.
+/// Notifies SimulationSceneManager when robot arrives.
 /// </summary>
 public class EventStartTrigger : MonoBehaviour
 {
     [Header("Event Settings")]
-    [Tooltip("Obstacles to activate when event starts")]
-    public GameObject[] obstaclesToActivate;
-
     [Tooltip("Robot tag to detect (default: Robot)")]
     public string robotTag = "Robot";
 
@@ -45,9 +42,6 @@ public class EventStartTrigger : MonoBehaviour
             Debug.Log($"[EventStartTrigger] Robot arrived at event location");
         }
 
-        // Activate all obstacles
-        ActivateObstacles();
-
         // Notify SimulationSceneManager that robot has arrived
         if (SimulationSceneManager.Instance != null)
         {
@@ -58,37 +52,12 @@ public class EventStartTrigger : MonoBehaviour
         onEventStart?.Invoke();
     }
 
-    void ActivateObstacles()
-    {
-        foreach (GameObject obstacle in obstaclesToActivate)
-        {
-            if (obstacle != null)
-            {
-                obstacle.SetActive(true);
-
-                if (enableDebugLogs)
-                {
-                    Debug.Log($"[EventStartTrigger] Activated obstacle: {obstacle.name}");
-                }
-            }
-        }
-    }
-
     /// <summary>
-    /// Reset event state (called from EventManager)
+    /// Reset event state (called from Event1Controller)
     /// </summary>
     public void ResetEvent()
     {
         eventStarted = false;
-
-        // Deactivate all obstacles
-        foreach (GameObject obstacle in obstaclesToActivate)
-        {
-            if (obstacle != null)
-            {
-                obstacle.SetActive(false);
-            }
-        }
 
         if (enableDebugLogs)
         {

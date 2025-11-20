@@ -97075,7 +97075,7 @@ MonoBehaviour:
   lifetimeDuration: 8
   initialDelay: 0
   respawnDelay: 4
-  autoStart: 1
+  autoStart: 0
   applyInitialForce: 0
   forceDirection: {x: 0, y: 0, z: 1}
   forceMagnitude: 10
@@ -107021,8 +107021,13 @@ MonoBehaviour:
   robot: {fileID: 1809839232}
   autonomousNavigation: {fileID: 0}
   eventLocation: {fileID: 0}
-  startTrigger: {fileID: 0}
-  endTrigger: {fileID: 0}
+  startTrigger: {fileID: 1818526989}
+  endTrigger: {fileID: 2007311008}
+  deerObstacles:
+  - {fileID: 4000012285522979}
+  - {fileID: 790727624}
+  rollingObstacle: {fileID: 919671434}
+  cloudsParticleSystem: {fileID: 1675514626}
   enableDebugLogs: 1
 --- !u!4 &1018212063
 Transform:
@@ -173786,6 +173791,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4034336420200126, guid: d9ecf073012ed423aa1bca266513310b, type: 3}
   m_PrefabInstance: {fileID: 1675294994}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &1675514626 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1016472233060052205, guid: cb54b53722e1548b19b2be0007736f94, type: 3}
+  m_PrefabInstance: {fileID: 923295337445163649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1675635546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187555,6 +187565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1818526987}
   - component: {fileID: 1818526988}
+  - component: {fileID: 1818526989}
   m_Layer: 0
   m_Name: Event1Start
   m_TagString: Untagged
@@ -187598,6 +187609,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.627992, y: 6.90469, z: 1}
   m_Center: {x: -1.8139961, y: 2.952345, z: 0}
+--- !u!114 &1818526989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818526986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bfc1ef309511496c947329ddce1c662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventStartTrigger
+  robotTag: Robot
+  onEventStart:
+    m_PersistentCalls:
+      m_Calls: []
+  enableDebugLogs: 1
+  showGizmo: 1
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &1818599091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -208267,6 +208297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2007311006}
   - component: {fileID: 2007311007}
+  - component: {fileID: 2007311008}
   m_Layer: 0
   m_Name: Event1End
   m_TagString: Untagged
@@ -208310,6 +208341,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.627992, y: 6.90469, z: 1}
   m_Center: {x: -1.8139961, y: 2.952345, z: 0}
+--- !u!114 &2007311008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007311005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203dbb48d2dc841bdbfcf1658ca3f476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventEndTrigger
+  resetButton: {fileID: 0}
+  robotTag: Robot
+  onEventComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  monitoringSceneSpawnPoint: {fileID: 0}
+  enableDebugLogs: 1
+  showGizmo: 1
+  gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1001 &2007376391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220758,6 +220810,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7736920385969562327, guid: 3dffffac8d02040f79283cfa01ad0e23, type: 3}
   m_PrefabInstance: {fileID: 5113460530038106066}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4000012285522979 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6110488334378048038, guid: 3dffffac8d02040f79283cfa01ad0e23, type: 3}
+  m_PrefabInstance: {fileID: 5113460530038106066}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e708695d930345138577713ac7c1536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JumpBetweenPoints
 --- !u!4 &4285128885153798 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3669302232510972793, guid: 45b89aec671444e59ba03c5a36fd0a3a, type: 3}
@@ -220883,6 +220946,10 @@ PrefabInstance:
     - target: {fileID: 4800995165146080358, guid: cb54b53722e1548b19b2be0007736f94, type: 3}
       propertyPath: m_Name
       value: clouds
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800995165146080358, guid: cb54b53722e1548b19b2be0007736f94, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8582337524058302313, guid: cb54b53722e1548b19b2be0007736f94, type: 3}
       propertyPath: m_LocalPosition.x

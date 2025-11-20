@@ -20,6 +20,14 @@ public class Event1Controller : MonoBehaviour, IEvent
     [Tooltip("End trigger zone")]
     public EventEndTrigger endTrigger;
 
+    [Header("Obstacle References")]
+    [Tooltip("Deer jumping obstacles")]
+    public JumpBetweenPoints[] deerObstacles;
+    [Tooltip("Rolling sphere spawner")]
+    public RollingObstacleSpawner rollingObstacle;
+    [Tooltip("Clouds particle system")]
+    public ParticleSystem cloudsParticleSystem;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
@@ -118,7 +126,44 @@ public class Event1Controller : MonoBehaviour, IEvent
             robotController.enabled = true;
         }
 
-        // Obstacles are activated by EventStartTrigger
+        // Start all deer obstacles
+        if (deerObstacles != null && deerObstacles.Length > 0)
+        {
+            foreach (JumpBetweenPoints deer in deerObstacles)
+            {
+                if (deer != null)
+                {
+                    deer.StartJumping();
+
+                    if (enableDebugLogs)
+                    {
+                        Debug.Log($"[Event1Controller] Started deer obstacle: {deer.gameObject.name}");
+                    }
+                }
+            }
+        }
+
+        // Start rolling obstacle spawner
+        if (rollingObstacle != null)
+        {
+            rollingObstacle.StartSpawning();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event1Controller] Started rolling obstacle spawner");
+            }
+        }
+
+        // Start clouds particle system
+        if (cloudsParticleSystem != null)
+        {
+            cloudsParticleSystem.Play();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event1Controller] Started clouds particle system");
+            }
+        }
     }
 
     public void ResetEvent()
@@ -143,6 +188,47 @@ public class Event1Controller : MonoBehaviour, IEvent
         if (startTrigger != null)
         {
             startTrigger.ResetEvent();
+        }
+
+        // Stop and reset all deer obstacles
+        if (deerObstacles != null && deerObstacles.Length > 0)
+        {
+            foreach (JumpBetweenPoints deer in deerObstacles)
+            {
+                if (deer != null)
+                {
+                    deer.StopJumping();
+                    deer.ResetToPointA();
+
+                    if (enableDebugLogs)
+                    {
+                        Debug.Log($"[Event1Controller] Reset deer obstacle: {deer.gameObject.name}");
+                    }
+                }
+            }
+        }
+
+        // Stop rolling obstacle spawner
+        if (rollingObstacle != null)
+        {
+            rollingObstacle.StopSpawning();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event1Controller] Stopped rolling obstacle spawner");
+            }
+        }
+
+        // Stop clouds particle system
+        if (cloudsParticleSystem != null)
+        {
+            cloudsParticleSystem.Stop();
+            cloudsParticleSystem.Clear(); // Remove existing particles
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event1Controller] Stopped clouds particle system");
+            }
         }
 
         // TODO: Move robot back to spawn point or idle position
