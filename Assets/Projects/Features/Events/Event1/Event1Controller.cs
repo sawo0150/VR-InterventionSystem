@@ -9,8 +9,8 @@ public class Event1Controller : MonoBehaviour, IEvent
     [Header("Robot Settings")]
     [Tooltip("The robot GameObject for this event")]
     public GameObject robot;
-    [Tooltip("Robot's autonomous navigation component (optional)")]
-    public MonoBehaviour autonomousNavigation;
+    [Tooltip("Robot's waypoint follower component for autonomous navigation")]
+    public RobotWaypointFollower autonomousNavigation;
     [Tooltip("Event location where robot should navigate to")]
     public Transform eventLocation;
 
@@ -181,8 +181,16 @@ public class Event1Controller : MonoBehaviour, IEvent
             robotController.enabled = false;
         }
 
-        // Re-enable autonomous navigation (robot returns to idle state)
-        EnableAutonomousNavigation();
+        // Resume autonomous navigation (robot returns to waypoint patrol)
+        if (autonomousNavigation != null)
+        {
+            autonomousNavigation.ResumeWaypointPatrol();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event1Controller] Robot resuming waypoint patrol");
+            }
+        }
 
         // Reset triggers
         if (startTrigger != null)
@@ -251,16 +259,14 @@ public class Event1Controller : MonoBehaviour, IEvent
 
     void EnableAutonomousNavigation()
     {
-        if (autonomousNavigation != null)
+        if (autonomousNavigation != null && eventLocation != null)
         {
-            autonomousNavigation.enabled = true;
-
-            // TODO: Tell autonomous navigation to navigate to eventLocation
-            // Example: autonomousNavigation.SetDestination(eventLocation.position);
+            // Tell robot to navigate to event location
+            autonomousNavigation.NavigateToEvent(eventLocation.position);
 
             if (enableDebugLogs)
             {
-                Debug.Log("[Event1Controller] Autonomous navigation enabled");
+                Debug.Log($"[Event1Controller] Robot navigating to event location at {eventLocation.position}");
             }
         }
         else
@@ -273,11 +279,10 @@ public class Event1Controller : MonoBehaviour, IEvent
 
                 if (enableDebugLogs)
                 {
-                    Debug.Log("[Event1Controller] No autonomous navigation - teleported robot to event location");
+                    Debug.LogWarning("[Event1Controller] No autonomous navigation assigned - teleported robot to event location");
                 }
 
                 // Automatically trigger Start() after teleport for testing
-                // Remove this in production when you have real autonomous navigation
                 Invoke(nameof(SimulateArrival), 1f);
             }
         }
@@ -285,14 +290,10 @@ public class Event1Controller : MonoBehaviour, IEvent
 
     void DisableAutonomousNavigation()
     {
-        if (autonomousNavigation != null)
+        // Robot has arrived at event, no need to disable anything
+        if (enableDebugLogs)
         {
-            autonomousNavigation.enabled = false;
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Autonomous navigation disabled");
-            }
+            Debug.Log("[Event1Controller] Robot at event location");
         }
     }
 
