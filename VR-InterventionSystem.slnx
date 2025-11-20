@@ -1,14 +1,26 @@
 ﻿<Solution>
   <Project Path="Unity.XR.Content.Interaction.csproj" />
+  <Project Path="Unity.RenderStreaming.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.XR.Content.Interaction.Analytics.csproj" />
+  <Project Path="Unity.WebRTC.Samples.csproj" />
   <Project Path="Unity.AI.Navigation.Samples.csproj" />
+  <Project Path="Unity.RenderStreaming.csproj" />
+  <Project Path="Unity.RenderStreaming.RuntimeTests.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.SpatialKeyboard.Editor.csproj" />
   <Project Path="Polyperfect.Common.csproj" />
+  <Project Path="Unity.RenderStreaming.Sample.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.SpatialKeyboard.csproj" />
+  <Project Path="Unity.RenderStreaming.EditorTests.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
-  <Project Path="Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" />
+  <Project Path="Unity.RenderStreaming.Sample.Editor.csproj" />
+  <Project Path="Unity.RenderStreaming.Sample.Stats.csproj" />
+  <Project Path="Unity.RenderStreaming.Sample.WebBrowserInput.csproj" />
   <Project Path="Unity.AI.Navigation.Samples.Initialization.Editor.csproj" />
+  <Project Path="Unity.WebRTC.Samples.Editror.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.Editor.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" />
 </Solution>
