@@ -179,7 +179,7 @@ Event.Reset()
 - **Only one event can run at a time** - SimulationSceneManager enforces this
 - **Tag your robots** - All robots must have "Robot" tag for triggers to work
 - **Autonomous Navigation** - If you don't have autonomous nav yet, Event1Controller will teleport the robot (for testing)
-- **Player Control** - RobotWheelController is enabled/disabled automatically
+- **Player Control** - RobotNavMeshController is enabled/disabled automatically
 - **Obstacles** - Managed by EventStartTrigger (activated) and Event.Reset() (deactivated)
 
 ## Debug Tips
