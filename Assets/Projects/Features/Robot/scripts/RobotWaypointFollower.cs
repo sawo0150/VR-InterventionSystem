@@ -202,9 +202,17 @@ public class RobotWaypointFollower : MonoBehaviour
             return;
         }
 
-        // Teleport to waypoint 0 (first point in array)
-        transform.position = waypoints[0].position;
-        transform.rotation = waypoints[0].rotation;
+        // Teleport to waypoint 0 (first point in array) using Warp for NavMeshAgent
+        if (agent != null)
+        {
+            agent.Warp(waypoints[0].position);
+            AlignToSlope(); // Align immediately after warping
+        }
+        else
+        {
+            Debug.LogError($"[RobotWaypointFollower] NavMeshAgent is null on {gameObject.name}");
+            return;
+        }
 
         // Reset state and resume patrol
         currentWaypointIndex = 0;
