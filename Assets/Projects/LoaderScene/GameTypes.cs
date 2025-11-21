@@ -38,14 +38,14 @@ namespace Project
         public GameObject robotObject;
         public Transform seatAnchor;
         public RobotState robotState = RobotState.Auto;
-        public RobotWheelController robotWheelController;
-        
+        public RobotNavMeshController robotNavMeshController;
+
         public ScenarioData(int id, GameObject obj, Transform seatAnchor)
         {
             this.id = id;
             this.robotObject = obj;
             this.seatAnchor = seatAnchor;
-            this.robotWheelController = obj.GetComponentInChildren<RobotWheelController>();
+            this.robotNavMeshController = obj.GetComponentInChildren<RobotNavMeshController>();
         }
     }
 

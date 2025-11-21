@@ -218,14 +218,14 @@ namespace Project
                 
                 scenarioData.robotObject.SetActive(true);
                 scenarioData.robotObject.tag = "Untagged";
-                
-                if (scenarioData.robotWheelController)
+
+                if (scenarioData.robotNavMeshController)
                 {
-                    scenarioData.robotWheelController.enabled = false;
+                    scenarioData.robotNavMeshController.enabled = false;
                 }
                 else
                 {
-                    MyDebug.LogWarning($"[{GetType().Name}] ❌ Robot {i + 1} doesn't have Wheel Controller (searched by GetComponentInChildren<RobotWheelController>)");
+                    MyDebug.LogWarning($"[{GetType().Name}] ❌ Robot {i + 1} doesn't have NavMesh Controller (searched by GetComponentInChildren<RobotNavMeshController>)");
                 }
 
                 scenarioData.robotState = RobotState.Auto;
@@ -293,10 +293,10 @@ namespace Project
 
             // VR 기능 제어 (입력 유지, 인터랙션 끄기)
             ToggleVRFeatures(false);
-            
+
             // 로봇이 Manual 상태일 때만 조작 허용
             var canControl = (scenarioData.robotState == RobotState.Manual);
-            scenarioData.robotWheelController.enabled = canControl;
+            scenarioData.robotNavMeshController.enabled = canControl;
 
             if (canControl)
             {
@@ -339,7 +339,7 @@ namespace Project
                         break;
                 }
                 currentActiveScenarioData.robotState = RobotState.Auto;
-                currentActiveScenarioData.robotWheelController.enabled = false;
+                currentActiveScenarioData.robotNavMeshController.enabled = false;
                 currentActiveScenarioData.robotObject.tag = "Untagged";
                 currentActiveScenarioData = null;
             }
