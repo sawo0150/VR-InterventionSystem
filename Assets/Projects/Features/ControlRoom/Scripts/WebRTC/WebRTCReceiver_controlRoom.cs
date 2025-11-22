@@ -134,8 +134,8 @@ public class WebRTCReceiver_controlRoom : MonoBehaviour
 
         _remoteTexture = null;
     }
-// WebSocket으로 메시지 전송 (JSON 직렬화)
-private void SendWebSocketMessage<T>(T msg)
+    // WebSocket으로 메시지 전송 (JSON 직렬화)
+    private void SendWebSocketMessage<T>(T msg)
     {
         if (ws != null && ws.ReadyState == WebSocketState.Open)
         {
