@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "name": "Return(Teleport)",
+    "maps": [
+        {
+            "name": "2action",
+            "id": "ada95dbf-4300-489c-af55-4cc76fdb62d9",
+            "actions": [
+                {
+                    "name": "2",
+                    "type": "Value",
+                    "id": "6d131c01-5ccb-4cce-8b97-ff6dd9a8c8fc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "04e5c48e-227c-45a2-973a-a94ddfa0d0df",
+                    "path": "*/{PrimaryAction}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c2fbe81-9395-4c7a-99fb-f0d670db48e8",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
