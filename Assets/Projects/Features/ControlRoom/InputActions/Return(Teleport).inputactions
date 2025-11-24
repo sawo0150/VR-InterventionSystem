@@ -3,39 +3,39 @@
     "name": "Return(Teleport)",
     "maps": [
         {
-            "name": "2action",
+            "name": "ReturnAction",
             "id": "ada95dbf-4300-489c-af55-4cc76fdb62d9",
             "actions": [
                 {
-                    "name": "2",
-                    "type": "Value",
-                    "id": "6d131c01-5ccb-4cce-8b97-ff6dd9a8c8fc",
+                    "name": "return_action",
+                    "type": "Button",
+                    "id": "9bd39527-cfac-445e-ac20-93407401aed4",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "04e5c48e-227c-45a2-973a-a94ddfa0d0df",
-                    "path": "*/{PrimaryAction}",
+                    "id": "0e245d3f-a263-4e3b-9323-233a4cab6613",
+                    "path": "<XRController>{RightHand}/{PrimaryAction}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "2",
+                    "action": "return_action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8c2fbe81-9395-4c7a-99fb-f0d670db48e8",
+                    "id": "4598b015-e80b-4903-8d4d-f23b7bf8981b",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "2",
+                    "action": "return_action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
