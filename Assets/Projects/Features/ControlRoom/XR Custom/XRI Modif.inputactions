@@ -3400,7 +3400,7 @@
             ]
         },
         {
-            "name": "MOD_ScreenRoom",
+            "name": "MOD_Joystick",
             "id": "7adaf5b2-bdf1-48a8-bda6-2fc135076aba",
             "actions": [
                 {
@@ -3422,6 +3422,76 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "GLOBAL",
+            "id": "f2f5d007-621a-4493-96b4-9e32c64a7a9f",
+            "actions": [
+                {
+                    "name": "GoToLoc2",
+                    "type": "Button",
+                    "id": "b0511fb2-e856-4d2c-987f-ece26f64be94",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "GoToLoc1",
+                    "type": "Button",
+                    "id": "b9a49375-0c59-4aa7-9b69-9f043dbdba2d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "488b0e3b-4913-4126-9ff3-4c753920ef2d",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoToLoc2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a36292da-5603-4d73-b62a-5f6ba5cbcdc1",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoToLoc2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f0f6168-cc9b-4dfa-9c0a-3ef8bc85be59",
+                    "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoToLoc1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2fa4e90e-3c4f-4305-ac3f-1c887fa043d4",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoToLoc1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
