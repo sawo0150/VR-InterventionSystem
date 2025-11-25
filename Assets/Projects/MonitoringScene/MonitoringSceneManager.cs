@@ -70,7 +70,7 @@ namespace Project
         {
             MyDebug.Log("# REAL_INTERVENTION : MonitoringSceneManager Started");
             
-            // CheckAssignments();
+            CheckAssignments();
             
             InitializeButtons();
             ResetUIState();
