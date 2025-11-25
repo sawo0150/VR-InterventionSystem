@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // [í•„ìˆ˜] UI ì»´í¬ë„ŒíŠ¸ë¥¼ ì¸ì‹í•˜ê¸° ìœ„í•´ ì¶”ê°€
 
 /// <summary>
-/// ´ÜÀÏ ÅØ½ºÃ³(À¥Ä· ¶Ç´Â WebRTC)¸¦ »ó/ÇÏ Àı¹İÀ¸·Î ³ª´²
-/// frontTargets / rearTargets ¿¡ GPU¿¡¼­ ¹Ù·Î ¹ÙÀÎµùÇÏ´Â ¹ÙÀÎ´õ.
-/// FeedSplitService¸¦ »ç¿ëÇÏÁö ¾Ê´Â´Ù.
+/// ê¸°ì¡´ ê¸°ëŠ¥: 3D Mesh Rendererì— ì›¹ìº /WebRTC ì˜ìƒ ë¶„í•  ì ìš©
+/// ì¶”ê°€ ê¸°ëŠ¥: UI RawImageì—ë„ ë™ì¼í•œ ì˜ìƒ ë¶„í•  ì ìš© (ì—ëŸ¬ ë°©ì§€ í¬í•¨)
 /// </summary>
 public class UnifiedVideoBindToRenderers : MonoBehaviour
 {
@@ -12,12 +12,17 @@ public class UnifiedVideoBindToRenderers : MonoBehaviour
 
     [Header("Source")]
     public SourceType sourceType = SourceType.MockCamera;
-    public MockCameraFeed mockSource;                    // WebCamTexture ¼Ò½º
-    public WebRTCReceiver_controlRoom webrtcSource;      // WebRTC ¼Ò½º
+    public MockCameraFeed mockSource;                    // WebCamTexture ì†ŒìŠ¤
+    public WebRTCReceiver_controlRoom webrtcSource;      // WebRTC ì†ŒìŠ¤
 
-    [Header("Targets")]
+    [Header("3D Targets (Mesh Renderer)")]
     public List<Renderer> frontTargets = new List<Renderer>();
     public List<Renderer> rearTargets = new List<Renderer>();
+
+    // â–¼â–¼â–¼ [ì¶”ê°€ë¨] UI íƒ€ê²Ÿ ë¦¬ìŠ¤íŠ¸ (ë¹„ì›Œë‘¬ë„ ì—ëŸ¬ ì•ˆ ë‚¨) â–¼â–¼â–¼
+    [Header("UI Targets (Raw Image)")]
+    public List<RawImage> frontUiTargets = new List<RawImage>();
+    public List<RawImage> rearUiTargets = new List<RawImage>();
 
     [Header("Material Property")]
     [Tooltip("URP Lit uses _BaseMap. Built-in Standard uses _MainTex.")]
@@ -25,7 +30,7 @@ public class UnifiedVideoBindToRenderers : MonoBehaviour
     public bool alsoSetMainTex = true;
 
     [Header("Options")]
-    [Tooltip("true¸é À§ÂÊ half°¡ Front, false¸é À§ÂÊ half°¡ Rear")]
+    [Tooltip("trueë©´ ìœ„ìª½ halfê°€ Front, falseë©´ ìœ„ìª½ halfê°€ Rear")]
     public bool topIsFront = true;
 
     private MaterialPropertyBlock mpb;
@@ -43,53 +48,70 @@ public class UnifiedVideoBindToRenderers : MonoBehaviour
         {
             case SourceType.MockCamera:
                 if (mockSource == null || !mockSource.HasValidFrame) return;
-                tex = mockSource.CurrentTexture; // WebCamTexture (GPU)
+                tex = mockSource.CurrentTexture; 
                 break;
 
             case SourceType.WebRTC:
                 if (webrtcSource == null || !webrtcSource.HasRemoteFrame) return;
-                tex = webrtcSource.RemoteTexture; // WebRTC GPU ÅØ½ºÃ³
+                tex = webrtcSource.RemoteTexture; 
                 break;
         }
 
         if (!tex) return;
 
-        // ST(Tiling/Offset) ¼³Á¤
-        // Vector4(xScale, yScale, xOffset, yOffset)
+        // Vector4(TilingX, TilingY, OffsetX, OffsetY)
         Vector4 frontST, rearST;
 
         if (topIsFront)
         {
-            // Front: À§ÂÊ Àı¹İ (y: 0.5~1.0)
+            // Front: ìœ„ìª½ ì ˆë°˜ (Offset Y = 0.5)
             frontST = new Vector4(1f, 0.5f, 0f, 0.5f);
-            // Rear: ¾Æ·¡ÂÊ Àı¹İ (y: 0.0~0.5)
+            // Rear: ì•„ë˜ìª½ ì ˆë°˜ (Offset Y = 0.0)
             rearST = new Vector4(1f, 0.5f, 0f, 0f);
         }
         else
         {
-            // Front: ¾Æ·¡ÂÊ Àı¹İ
             frontST = new Vector4(1f, 0.5f, 0f, 0f);
-            // Rear: À§ÂÊ Àı¹İ
             rearST = new Vector4(1f, 0.5f, 0f, 0.5f);
         }
 
-        foreach (var r in frontTargets)
-            ApplyTextureHalf(r, tex, frontST);
+        // --- [ê¸°ì¡´ ë¡œì§] 3D Renderer ì ìš© ---
+        // ë¦¬ìŠ¤íŠ¸ê°€ nullì´ì–´ë„ ì•ˆì „í•˜ê²Œ ë„˜ì–´ê°€ë„ë¡ ?. ì—°ì‚°ì ì‚¬ìš© ê°€ëŠ¥í•˜ì§€ë§Œ, 
+        // Unity Inspectorì—ì„œ ì´ˆê¸°í™”ë˜ë¯€ë¡œ foreachë„ ì•ˆì „í•¨.
+        if (frontTargets != null)
+        {
+            foreach (var r in frontTargets) ApplyTextureHalf(r, tex, frontST);
+        }
+        if (rearTargets != null)
+        {
+            foreach (var r in rearTargets) ApplyTextureHalf(r, tex, rearST);
+        }
 
-        foreach (var r in rearTargets)
-            ApplyTextureHalf(r, tex, rearST);
+        // --- [ì¶”ê°€ ë¡œì§] UI RawImage ì ìš© ---
+        // ì…°ì´ë”ì˜ Vector4(Tiling, Offset)ë¥¼ UIì˜ Rect(Pos, Size)ë¡œ ë³€í™˜
+        // Rect(x, y, width, height) <-> Vector4(OffsetX, OffsetY, TilingX, TilingY)
+        // ì£¼ì˜: ì½”ë“œìƒì˜ st ìˆœì„œëŠ” (TilingX, TilingY, OffsetX, OffsetY) ì„.
+        Rect frontRect = new Rect(frontST.z, frontST.w, frontST.x, frontST.y);
+        Rect rearRect = new Rect(rearST.z, rearST.w, rearST.x, rearST.y);
+
+        if (frontUiTargets != null)
+        {
+            foreach (var img in frontUiTargets) ApplyTextureHalfUI(img, tex, frontRect);
+        }
+        if (rearUiTargets != null)
+        {
+            foreach (var img in rearUiTargets) ApplyTextureHalfUI(img, tex, rearRect);
+        }
     }
 
+    // ê¸°ì¡´ ë©”ì„œë“œ (ê±´ë“œë¦¬ì§€ ì•ŠìŒ)
     private void ApplyTextureHalf(Renderer r, Texture tex, Vector4 st)
     {
-        if (!r || !tex) return;
+        if (!r || !tex) return; // rì´ ì‚­ì œë˜ì—ˆê±°ë‚˜ ì—†ìœ¼ë©´ íŒ¨ìŠ¤
 
         r.GetPropertyBlock(mpb);
 
-        // ¸ŞÀÎ ÅØ½ºÃ³
         mpb.SetTexture(textureProperty, tex);
-
-        // Tiling/Offset ¼³Á¤ (_BaseMap_ST ¶Ç´Â _MainTex_ST)
         string stProp = textureProperty + "_ST";
         mpb.SetVector(stProp, st);
 
@@ -100,5 +122,18 @@ public class UnifiedVideoBindToRenderers : MonoBehaviour
         }
 
         r.SetPropertyBlock(mpb);
+    }
+
+    // [ì¶”ê°€ ë©”ì„œë“œ] UIìš© ì ìš© í•¨ìˆ˜
+    private void ApplyTextureHalfUI(RawImage img, Texture tex, Rect uvRect)
+    {
+        if (!img || !tex) return; // UIê°€ ì‚­ì œë˜ì—ˆê±°ë‚˜ ì—†ìœ¼ë©´ íŒ¨ìŠ¤
+
+        // ë¶ˆí•„ìš”í•œ ì¬í• ë‹¹ ë°©ì§€ (ìµœì í™”)
+        if (img.texture != tex) 
+            img.texture = tex;
+            
+        if (img.uvRect != uvRect) 
+            img.uvRect = uvRect;
     }
 }
