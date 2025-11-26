@@ -37,13 +37,16 @@ namespace RealRobot{
             switch (axis)
             {
                 case MoveAxis.X_Axis:
-                    direction = Vector3.right;   // (1, 0, 0)
+                    // 내 기준 오른쪽 (빨간 화살표 방향)
+                    direction = transform.right; 
                     break;
                 case MoveAxis.Y_Axis:
-                    direction = Vector3.up;      // (0, 1, 0)
+                    // 내 기준 위쪽 (초록 화살표 방향)
+                    direction = transform.up;    
                     break;
                 case MoveAxis.Z_Axis:
-                    direction = Vector3.forward; // (0, 0, 1)
+                    // 내 기준 앞쪽 (파란 화살표 방향)
+                    direction = transform.forward; 
                     break;
             }
 
