@@ -68,7 +68,7 @@ namespace Project
         
         private void Start()
         {
-            MyDebug.Log("# MonitoringSceneManager Started");
+            MyDebug.Log("# REAL_INTERVENTION : MonitoringSceneManager Started");
             
             CheckAssignments();
             
@@ -108,7 +108,6 @@ namespace Project
         {
             MyDebug.Log($"[{GetType().Name}] reset UI State (hide all canvas)");
             if(monitoringCanvasA) monitoringCanvasA.SetActive(true);
-            if(monitoringCanvasB) monitoringCanvasB.SetActive(false);
             monitoringCanvasGroup.SetActive(false);
         }
 
