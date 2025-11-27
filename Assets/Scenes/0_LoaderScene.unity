@@ -335,37 +335,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1351904833967977962, guid: 35d51966c77a024469834cee123adadb, type: 3}
   m_PrefabInstance: {fileID: 676945197}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &737991330
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 737991331}
-  m_Layer: 0
-  m_Name: MinimapManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &737991331
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737991330}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.47372, y: -2999.2532, z: -0.96739}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &843755296
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,4 +775,3 @@ SceneRoots:
   - {fileID: 676945197}
   - {fileID: 1440532128}
   - {fileID: 1242161531}
-  - {fileID: 737991331}

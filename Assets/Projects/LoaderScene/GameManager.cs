@@ -307,6 +307,12 @@ namespace Project
             currentActiveScenarioData.eventState = EventState.Active;
             currentActiveScenarioData.robotState = RobotState.Manual;
 
+            // Enable the corresponding minimap button
+            if (MinimapButtonManager.Instance != null)
+            {
+                MinimapButtonManager.Instance.EnableEventButton(eventId);
+            }
+
             // If player is currently controlling this robot, enable manual control now
             if (currentActiveScenarioData != null &&
                 currentActiveScenarioData.id == eventId)
