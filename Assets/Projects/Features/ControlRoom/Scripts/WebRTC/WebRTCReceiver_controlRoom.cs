@@ -4,8 +4,10 @@ using System.Collections.Generic; // ◀◀ List, Queue 등을 사용하기 위�
 using System.Runtime.Serialization;
 using Unity.WebRTC;
 using UnityEngine;
+using UnityEngine.UI; // [+] UI 컴포넌트 사용을 위해 필수 추가
 // 1. NativeWebSocket 대신 websocket-sharp 네임스페이스 사용
 using WebSocketSharp;
+using TMPro; // ◀◀ [중요] TextMeshPro를 사용하기 위해 반드시 추가해야 합니다!
 
 
 /*
@@ -20,10 +22,44 @@ using WebSocketSharp;
  * 이 파일에서는 **정의하지 않고 가져다만 사용**한다.
  */
 
+// [+] ROS와 통신하기 위한 신규 데이터 포맷 정의 (파일 하단 혹은 상단에 위치)
+// -------------------------------------------------------------------------
+[System.Serializable]
+public class RobotStatusMessage
+{
+    public string type;
+    public bool error;
+    public string mode; // "AUTO" or "VR"
+}
+
+[System.Serializable]
+public class RobotMapMessage
+{
+    public string type;
+    public string format;
+    public string data; // Base64 String
+}
+
+[System.Serializable]
+public class RobotModeCommand
+{
+    public string type = "mode";
+    public string mode;
+}
+// -------------------------------------------------------------------------
 public class WebRTCReceiver_controlRoom : MonoBehaviour
 {
     [Header("Receiver Screen")]
     public Renderer targetRenderer;   // Plane/Quad의 MeshRenderer를 Inspector에서 연결
+
+    // [+] UI Targets (Inspector에서 연결)
+    // -------------------------------------------------
+    [Header("Robot Data UI (New)")]
+    public RawImage mapDisplay;      // 로봇이 보내는 지도 이미지 표시
+    public TMP_Text statusText;       // [스크린샷의 Overall Status 연결용]
+    public TMP_Text errorText;        // [스크린샷의 Error Message 연결용]
+    public Image errorPanel;          // (선택) 에러시 배경 색상을 바꾸고 싶다면 연결 (Status Container 등)
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     [Header("Signaling")]
     //public string signalingServerUrl = "ws://192.168.0.29:8080"; // ◀◀◀ 본인 서버 IP로 변경!
@@ -99,6 +135,17 @@ public class WebRTCReceiver_controlRoom : MonoBehaviour
                         var candMsg = JsonUtility.FromJson<IceCandidateMessage>(jsonMsg);
                         OnReceiveCandidate(candMsg);
                         break;
+                    // [+] 신규 기능: 로봇 상태 수신
+                    case "status":
+                        var statusMsg = JsonUtility.FromJson<RobotStatusMessage>(jsonMsg);
+                        UpdateRobotStatus(statusMsg);
+                        break;
+
+                    // [+] 신규 기능: 지도 이미지 수신
+                    case "localization_image":
+                        var mapMsg = JsonUtility.FromJson<RobotMapMessage>(jsonMsg);
+                        UpdateRobotMap(mapMsg);
+                        break;
                 }
             });
         };
@@ -144,6 +191,75 @@ public class WebRTCReceiver_controlRoom : MonoBehaviour
             ws.Send(json); // SendAsync 대신 Send 사용
         }
     }
+
+    // [+] 신규 기능 구현부: UI 업데이트 및 모드 제어
+    // ========================================================================
+    // ▼▼▼ [수정된 함수] TMP 텍스트 업데이트 로직 ▼▼▼
+    private void UpdateRobotStatus(RobotStatusMessage msg)
+    {
+        // 1. 모드 상태 표시 ("Overall Status")
+        if (statusText != null)
+        {
+            statusText.text = $"[Status]\n{msg.mode}"; // 예: [Status] VR
+        }
+
+        // 2. 에러 메시지 표시 ("Error Message")
+        if (errorText != null)
+        {
+            if (msg.error)
+            {
+                errorText.text = "SYSTEM ERROR DETECTED";
+                errorText.color = Color.red; // 에러나면 빨간색
+            }
+            else
+            {
+                errorText.text = "System Normal";
+                errorText.color = Color.white; // 정상이면 흰색 (또는 원하는 색)
+            }
+        }
+
+        // 3. (옵션) 패널 색상 변경
+        if (errorPanel != null)
+        {
+            errorPanel.color = msg.error ? new Color(1, 0, 0, 0.3f) : new Color(0, 0, 0, 0.5f);
+        }
+    }
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+    // 2. 지도 이미지 디코딩 및 표시 (Map)
+    private void UpdateRobotMap(RobotMapMessage msg)
+    {
+        if (mapDisplay == null || string.IsNullOrEmpty(msg.data)) return;
+
+        try
+        {
+            // Base64 -> Byte Array
+            byte[] imageBytes = System.Convert.FromBase64String(msg.data);
+
+            // Texture 생성 (크기는 LoadImage가 덮어씌우므로 임의 설정)
+            Texture2D tex = new Texture2D(2, 2);
+
+            // 이미지 로드 (JPG/PNG 디코딩)
+            if (tex.LoadImage(imageBytes))
+            {
+                // UI RawImage에 적용
+                mapDisplay.texture = tex;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Map Decode Error] {ex.Message}");
+        }
+    }
+
+    // 3. 모드 변경 요청 송신 (UI 버튼 연결용 Public 함수)
+    // 버튼 OnClick 이벤트에 연결하여 "AUTO" 또는 "VR" 문자열을 인자로 넘기세요.
+    public void SetOperationMode(string modeName)
+    {
+        var msg = new RobotModeCommand { mode = modeName };
+        SendWebSocketMessage(msg);
+        Debug.Log($"[Command] 모드 변경 요청 전송: {modeName}");
+    }
+    // ========================================================================
 
     // 외부 스크립트에서 로봇 제어 명령을 보낼 때 사용하는 헬퍼
     public void SendControl(float linear, float angular)
