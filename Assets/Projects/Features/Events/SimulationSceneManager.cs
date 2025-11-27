@@ -15,10 +15,10 @@ public class SimulationSceneManager : MonoBehaviour
     [Tooltip("Reference to Event 3 controller")]
     public MonoBehaviour event3Controller;
 
-    [Header("Camera Settings")]
-    [Tooltip("Main camera with SmoothCameraFollow component")]
+    [Header("VR Settings")]
+    [Tooltip("(Optional) Legacy camera with SmoothCameraFollow - leave empty if using XR Origin")]
     public SmoothCameraFollow mainCamera;
-    [Tooltip("Monitoring scene spawn point (camera returns here on reset)")]
+    [Tooltip("Monitoring scene spawn point (player returns here on reset)")]
     public Transform monitoringSpawnPoint;
 
     [Header("Debug")]
@@ -174,8 +174,8 @@ public class SimulationSceneManager : MonoBehaviour
 
         currentEvent.ResetEvent();
 
-        // Return camera to monitoring scene
-        ReturnCameraToMonitoringScene();
+        // Return player to monitoring scene (using GameManager's system)
+        ReturnPlayerToMonitoringScene();
 
         // Clear current event reference
         currentEvent = null;
@@ -207,33 +207,47 @@ public class SimulationSceneManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Return camera to monitoring scene spawn point
+    /// Return player (XR Origin) to monitoring scene spawn point
     /// (called during event reset)
+    /// Uses GameManager's ReturnToMonitoring system for proper state management
     /// </summary>
-    public void ReturnCameraToMonitoringScene()
+    public void ReturnPlayerToMonitoringScene()
     {
-        if (mainCamera == null)
+        // Option 1: Use GameManager's ReturnToMonitoring (recommended - handles all state properly)
+        if (Project.GameManager.Instance != null)
         {
-            Debug.LogWarning("[SimulationSceneManager] Cannot return camera - mainCamera reference not assigned!");
+            Project.GameManager.Instance.ReturnToMonitoring(Project.ReturnFlag.Interrupt);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[SimulationSceneManager] Player returned to monitoring scene via GameManager");
+            }
             return;
         }
 
-        if (monitoringSpawnPoint == null)
+        // Option 2: Legacy fallback for SmoothCameraFollow (if still using old camera system)
+        if (mainCamera != null)
         {
-            Debug.LogWarning("[SimulationSceneManager] Cannot return camera - monitoringSpawnPoint not assigned!");
+            if (monitoringSpawnPoint == null)
+            {
+                Debug.LogWarning("[SimulationSceneManager] Cannot return camera - monitoringSpawnPoint not assigned!");
+                return;
+            }
+
+            // Detach camera from robot
+            mainCamera.DetachFromTarget();
+
+            // Move camera to monitoring spawn point
+            mainCamera.transform.position = monitoringSpawnPoint.position;
+            mainCamera.transform.rotation = monitoringSpawnPoint.rotation;
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[SimulationSceneManager] Legacy camera returned to monitoring scene at {monitoringSpawnPoint.position}");
+            }
             return;
         }
 
-        // Detach camera from robot
-        mainCamera.DetachFromTarget();
-
-        // Move camera to monitoring spawn point
-        mainCamera.transform.position = monitoringSpawnPoint.position;
-        mainCamera.transform.rotation = monitoringSpawnPoint.rotation;
-
-        if (enableDebugLogs)
-        {
-            Debug.Log($"[SimulationSceneManager] Camera returned to monitoring scene at {monitoringSpawnPoint.position}");
-        }
+        Debug.LogWarning("[SimulationSceneManager] Cannot return player - no GameManager or mainCamera configured!");
     }
 }
