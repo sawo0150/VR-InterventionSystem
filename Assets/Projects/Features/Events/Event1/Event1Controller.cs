@@ -29,6 +29,10 @@ public class Event1Controller : MonoBehaviour, IEvent
     [Tooltip("Clouds particle system")]
     public ParticleSystem cloudsParticleSystem;
 
+    [Header("Event Boundaries")]
+    [Tooltip("Event boundary colliders - robot must stay within ANY of these boundaries")]
+    public EventBoundary[] eventBoundaries;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
@@ -255,6 +259,11 @@ public class Event1Controller : MonoBehaviour, IEvent
     public string GetEventName()
     {
         return "Event 1";
+    }
+
+    public EventBoundary[] GetEventBoundaries()
+    {
+        return eventBoundaries;
     }
 
     #endregion

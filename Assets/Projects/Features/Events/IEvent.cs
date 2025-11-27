@@ -34,4 +34,10 @@ public interface IEvent
     /// Get the event name for debugging
     /// </summary>
     string GetEventName();
+
+    /// <summary>
+    /// Get the event boundaries (box colliders defining safe zones)
+    /// Returns array of EventBoundary components - robot must stay within ANY of them
+    /// </summary>
+    EventBoundary[] GetEventBoundaries();
 }

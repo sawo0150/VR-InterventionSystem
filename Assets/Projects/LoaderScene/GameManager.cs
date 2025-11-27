@@ -408,7 +408,32 @@ namespace Project
 
             MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
         }
-        
+
+        // -------------------------------------------------------------------------
+        // Public Getter Methods
+        // -------------------------------------------------------------------------
+
+        /// <summary>
+        /// Get the current player state (MonitoringMode or ControllingMode)
+        /// </summary>
+        public PlayerState GetPlayerState()
+        {
+            return currentPlayerState;
+        }
+
+        /// <summary>
+        /// Get the Transform of the currently controlled robot
+        /// Returns null if no robot is currently being controlled
+        /// </summary>
+        public Transform GetCurrentRobotTransform()
+        {
+            if (currentActiveScenarioData != null && currentActiveScenarioData.robotObject != null)
+            {
+                return currentActiveScenarioData.robotObject.transform;
+            }
+            return null;
+        }
+
         // -------------------------------------------------------------------------
         // Helper Methods
         // -------------------------------------------------------------------------
