@@ -292,8 +292,7 @@ MonoBehaviour:
     robotState: 0
     robotNavMeshController: {fileID: 0}
   returnButtonAction: {fileID: -3875704489234743591, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  xrMoveInputAction: {fileID: 0}
-  xrTurnInputAction: {fileID: 0}
+  xrThumbstickInputAction: {fileID: -60998027439631388, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!4 &843755298
 Transform:
   m_ObjectHideFlags: 0

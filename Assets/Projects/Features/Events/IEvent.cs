@@ -1,6 +1,9 @@
+using Project;
+
 /// <summary>
 /// Interface that all events must implement.
 /// Defines the event lifecycle: InitializeEvent → StartEvent → ResetEvent
+/// Uses EventState from Project namespace (see GameTypes.cs)
 /// </summary>
 public interface IEvent
 {
@@ -31,15 +34,4 @@ public interface IEvent
     /// Get the event name for debugging
     /// </summary>
     string GetEventName();
-}
-
-/// <summary>
-/// Event lifecycle states
-/// </summary>
-public enum EventState
-{
-    Idle,           // Event not started
-    Initializing,   // Robot navigating to location
-    Active,         // Player has control, obstacles active
-    Completed       // Event finished, ready to reset
 }

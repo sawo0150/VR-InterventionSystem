@@ -35,11 +35,8 @@ namespace Project
         [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
         [SerializeField] private InputActionReference returnButtonAction;
 
-        [Tooltip("XR 컨트롤러 이동 입력 (예: XRI RightHand/Primary2DAxis Vertical)")]
-        [SerializeField] private InputActionReference xrMoveInputAction;
-
-        [Tooltip("XR 컨트롤러 회전 입력 (예: XRI RightHand/Primary2DAxis Horizontal)")]
-        [SerializeField] private InputActionReference xrTurnInputAction;
+        [Tooltip("XR 컨트롤러 썸스틱 입력 (예: XRI RightHand/Primary2DAxis) - Vector2 형식")]
+        [SerializeField] private InputActionReference xrThumbstickInputAction;
         
         // --- Runtime Data ---
         //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
@@ -206,10 +203,10 @@ namespace Project
         // 3. Robot & Scenario Initialization
         // -------------------------------------------------------------------------
         
-        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors)
+        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors, MonoBehaviour[] eventControllers)
         {
             MyDebug.Log($"[{GetType().Name}] Initializing Robot Data...");
-            
+
             if (rawRobots == null || seatAnchors == null || rawRobots.Length != seatAnchors.Length)
             {
                 MyDebug.LogError($"[{GetType().Name}] ❌ Data Mismatch or Null");
@@ -221,7 +218,7 @@ namespace Project
             for (var i = 0; i < rawRobots.Length; i++)
             {
                 var scenarioData = new ScenarioData(i + 1, rawRobots[i], seatAnchors[i]);
-                
+
                 scenarioData.robotObject.SetActive(true);
                 scenarioData.robotObject.tag = "Untagged";
 
@@ -238,8 +235,31 @@ namespace Project
 
                 scenarioDataList.Add(scenarioData);
             }
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Initialized ({scenarioDataList.Count}) robots successfully");
+
+            // Initialize events (delegate to SimulationSceneManager for actual event setup)
+            InitializeEvents(eventControllers);
+        }
+
+        private void InitializeEvents(MonoBehaviour[] eventControllers)
+        {
+            if (eventControllers == null || eventControllers.Length == 0)
+            {
+                MyDebug.LogWarning($"[{GetType().Name}] No event controllers provided");
+                return;
+            }
+
+            int validEvents = 0;
+            for (int i = 0; i < eventControllers.Length; i++)
+            {
+                if (eventControllers[i] != null && eventControllers[i] is IEvent)
+                {
+                    validEvents++;
+                }
+            }
+
+            MyDebug.Log($"[{GetType().Name}] ✅ Initialized {validEvents}/{eventControllers.Length} events");
         }
         
         public void InitializeRobots() { }
@@ -257,9 +277,9 @@ namespace Project
             {
                 MyDebug.LogWarning($"[{GetType().Name}] Scenario {currentActiveScenarioData.id} is not ended; Discard it");
             }
-            
+
             var scenarioData = GetScenarioData(eventId);
-            
+
             currentActiveScenarioData = scenarioData;
 
             if (scenarioData == null)
@@ -267,14 +287,14 @@ namespace Project
                 MyDebug.LogError($"[{GetType().Name}] Scenario {eventId} is not found");
                 return;
             }
-            
+
             currentActiveScenarioData.eventState = EventState.Active;
 
             currentActiveScenarioData.robotState = RobotState.Manual;
             MyDebug.Log($"[{GetType().Name}] robot {eventId} state changed to: Manual");
-            
-            // TODO: Simulation Scene 에서 Triggers 활성화하는 등 InitializeScenario() 만들기
-            // TODO: 단순히 트리거만 끄면 되는지, 나무나 돌, 행인 같은걸 없앨 지, rigidbody 만 로봇과 안충돌하게 할 지 등)
+
+            // Trigger the event in SimulationSceneManager
+            SimulationSceneManager.Instance.StartEvent(eventId);
         }
         
         // -------------------------------------------------------------------------
@@ -307,8 +327,7 @@ namespace Project
             {
                 // Configure XR input for robot control
                 scenarioData.robotNavMeshController.enableXRInput = true;
-                scenarioData.robotNavMeshController.xrMoveAction = xrMoveInputAction;
-                scenarioData.robotNavMeshController.xrTurnAction = xrTurnInputAction;
+                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
                 scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
 
                 scenarioData.robotNavMeshController.enabled = true;

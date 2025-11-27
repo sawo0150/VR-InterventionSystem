@@ -52,11 +52,8 @@ public class RobotNavMeshController : MonoBehaviour
     [Tooltip("Enable XR controller input (set by GameManager when player boards robot)")]
     public bool enableXRInput = false;
 
-    [Tooltip("XR controller move input action (thumbstick Y-axis)")]
-    public InputActionReference xrMoveAction;
-
-    [Tooltip("XR controller turn input action (thumbstick X-axis)")]
-    public InputActionReference xrTurnAction;
+    [Tooltip("XR controller thumbstick input (Vector2: X=turn, Y=move)")]
+    public InputActionReference xrThumbstickAction;
 
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
@@ -100,14 +97,10 @@ public class RobotNavMeshController : MonoBehaviour
             }
         }
 
-        // Enable XR input actions if configured
-        if (xrMoveAction != null && xrMoveAction.action != null)
+        // Enable XR input action if configured
+        if (xrThumbstickAction != null && xrThumbstickAction.action != null)
         {
-            xrMoveAction.action.Enable();
-        }
-        if (xrTurnAction != null && xrTurnAction.action != null)
-        {
-            xrTurnAction.action.Enable();
+            xrThumbstickAction.action.Enable();
         }
     }
 
@@ -126,14 +119,10 @@ public class RobotNavMeshController : MonoBehaviour
             }
         }
 
-        // Disable XR input actions
-        if (xrMoveAction != null && xrMoveAction.action != null)
+        // Disable XR input action
+        if (xrThumbstickAction != null && xrThumbstickAction.action != null)
         {
-            xrMoveAction.action.Disable();
-        }
-        if (xrTurnAction != null && xrTurnAction.action != null)
-        {
-            xrTurnAction.action.Disable();
+            xrThumbstickAction.action.Disable();
         }
     }
 
@@ -157,14 +146,12 @@ public class RobotNavMeshController : MonoBehaviour
         // Priority 1: XR Controller Input (for VR gameplay)
         if (enableXRInput)
         {
-            // Read thumbstick input from XR controllers
-            if (xrMoveAction != null && xrMoveAction.action != null)
+            // Read thumbstick input from XR controllers (Vector2)
+            if (xrThumbstickAction != null && xrThumbstickAction.action != null)
             {
-                moveInput = xrMoveAction.action.ReadValue<float>();
-            }
-            if (xrTurnAction != null && xrTurnAction.action != null)
-            {
-                turnInput = xrTurnAction.action.ReadValue<float>();
+                Vector2 thumbstick = xrThumbstickAction.action.ReadValue<Vector2>();
+                moveInput = thumbstick.y;  // Y-axis for forward/backward
+                turnInput = thumbstick.x;  // X-axis for left/right turning
             }
 
             if (enableDebugLogs && Time.frameCount % 120 == 0 && (Mathf.Abs(moveInput) > 0.01f || Mathf.Abs(turnInput) > 0.01f))

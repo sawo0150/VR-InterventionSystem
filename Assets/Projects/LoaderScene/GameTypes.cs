@@ -15,10 +15,11 @@ namespace Project
 
     public enum EventState
     {
-        Standby, 
-        Active, 
-        Completed, // Resolved 
-        Failed,
+        Idle,           // Event not started (equivalent to Standby)
+        Initializing,   // Robot navigating to location
+        Active,         // Player has control, obstacles active
+        Completed,      // Event finished, ready to reset
+        Failed,         // Event failed
     }
 
     public enum ReturnFlag
@@ -34,7 +35,7 @@ namespace Project
     {
         public int id;
         [TextArea] public string description;
-        public EventState eventState = EventState.Standby;
+        public EventState eventState = EventState.Idle;
         public GameObject robotObject;
         public Transform seatAnchor;
         public RobotState robotState = RobotState.Auto;
