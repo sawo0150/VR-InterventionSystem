@@ -95,15 +95,7 @@ namespace Project
             if (isVRPressed || isKeyboardPressed)
             {
                 MyDebug.Log("🔘 Return Button Pressed (Detected by GameManager)");
-
-                if (currentActiveScenarioData != null)
-                {
-                    ReturnToMonitoring(ReturnFlag.Interrupt);
-                }
-                else
-                {
-                    ReturnToMonitoring(ReturnFlag.None);
-                }
+                ReturnToMonitoring();
             }
         }
 
@@ -288,13 +280,47 @@ namespace Project
                 return;
             }
 
-            currentActiveScenarioData.eventState = EventState.Active;
-
-            currentActiveScenarioData.robotState = RobotState.Manual;
-            MyDebug.Log($"[{GetType().Name}] robot {eventId} state changed to: Manual");
-
+            // Set event state to Initializing (robot will navigate to event location)
+            currentActiveScenarioData.eventState = EventState.Initializing;
             // Trigger the event in SimulationSceneManager
             SimulationSceneManager.Instance.StartEvent(eventId);
+        }
+
+        /// <summary>
+        /// Called when event transitions from Initializing to Active
+        /// Enables manual control if player is already boarded
+        /// </summary>
+        public void OnEventActivated(int eventId)
+        {
+            MyDebug.Log($"[{GetType().Name}] Event {eventId} Activated (reached start location)");
+
+            var scenarioData = GetScenarioData(eventId);
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Scenario {eventId} is not found");
+                return;
+            }
+
+            currentActiveScenarioData = scenarioData;
+
+            // Update event state to Active
+            currentActiveScenarioData.eventState = EventState.Active;
+            currentActiveScenarioData.robotState = RobotState.Manual;
+
+            // If player is currently controlling this robot, enable manual control now
+            if (currentPlayerState == PlayerState.ControllingMode &&
+                currentActiveScenarioData != null &&
+                currentActiveScenarioData.id == eventId)
+            {
+                // Enable manual control
+                scenarioData.robotNavMeshController.enableXRInput = true;
+                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableKeyboardInput = false;
+                scenarioData.robotNavMeshController.enabled = true;
+                // Keep "Robot" tag (event triggers need it to detect robot arrival)
+
+                MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
+            }
         }
         
         // -------------------------------------------------------------------------
@@ -320,8 +346,12 @@ namespace Project
             // VR 기능 제어 (입력 유지, 인터랙션 끄기)
             ToggleVRFeatures(false);
 
-            // 로봇이 Manual 상태일 때만 조작 허용
-            var canControl = (scenarioData.robotState == RobotState.Manual);
+            // 로봇이 Manual 상태이고 이벤트가 Active 상태일 때만 조작 허용
+            // Initializing 상태(로봇이 이벤트 위치로 이동 중)에는 조작 불가
+            MyDebug.Log($"[{GetType().Name}] BoardRobot Debug - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+
+            var canControl = (scenarioData.robotState == RobotState.Manual) &&
+                             (scenarioData.eventState == EventState.Active);
 
             if (canControl)
             {
@@ -331,13 +361,21 @@ namespace Project
                 scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
 
                 scenarioData.robotNavMeshController.enabled = true;
-                scenarioData.robotObject.tag = "Player";
+                // Keep "Robot" tag (event triggers need it to detect robot arrival)
                 MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
             }
             else
             {
                 scenarioData.robotNavMeshController.enabled = false;
-                MyDebug.Log("👁️ Auto Mode (View Only)");
+
+                if (scenarioData.eventState == EventState.Initializing)
+                {
+                    MyDebug.Log($"👁️ View Only Mode (Robot navigating to event location) - RobotState: {scenarioData.robotState}");
+                }
+                else
+                {
+                    MyDebug.Log($"👁️ Auto Mode (View Only) - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+                }
             }
 
             // 플레이어 이동
@@ -346,38 +384,18 @@ namespace Project
             MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
         }
 
-        public void ReturnToMonitoring(ReturnFlag flag)
+        public void ReturnToMonitoring()
         {
-            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom; flag: {flag}");
+            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom");
 
             if (currentActiveScenarioData != null)
             {
-                switch (flag)
-                {
-                    case ReturnFlag.Completed:
-                        MyDebug.Log($"🎉 Event {currentActiveScenarioData.id} Completed");
-                        currentActiveScenarioData.eventState = EventState.Completed;
-                        break;
-                    case ReturnFlag.Failed:
-                        MyDebug.Log($"⚠️ Event {currentActiveScenarioData.id} Failed");
-                        currentActiveScenarioData.eventState = EventState.Failed;
-                        break;
-                    case ReturnFlag.Interrupt:
-                        MyDebug.Log($"🚫 Interrupted; Treated as Failed");
-                        currentActiveScenarioData.eventState = EventState.Failed;
-                        break;
-                    case ReturnFlag.None:
-                        MyDebug.LogWarning($"Semantic error");
-                        break;
-                }
-
                 // Disable XR input when leaving robot
                 currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
                 currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
                 currentActiveScenarioData.robotNavMeshController.enabled = false;
 
                 currentActiveScenarioData.robotState = RobotState.Auto;
-                currentActiveScenarioData.robotObject.tag = "Untagged";
                 currentActiveScenarioData = null;
             }
 

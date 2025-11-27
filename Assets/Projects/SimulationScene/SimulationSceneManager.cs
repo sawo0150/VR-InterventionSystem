@@ -143,6 +143,10 @@ namespace Project
                 Debug.Log($"[SimulationSceneManager] {currentEvent.GetEventName()} location reached. Starting event...");
             }
 
+            // Notify GameManager that event is now active (enables manual control if player is boarded)
+            GameManager.Instance.OnEventActivated(currentEventIndex + 1); // Convert 0-based to 1-based
+
+            // Start the event (activates obstacles, etc.)
             currentEvent.StartEvent();
         }
 
@@ -166,7 +170,7 @@ namespace Project
             currentEvent.ResetEvent();
 
             // Return player to monitoring scene via GameManager
-            GameManager.Instance.ReturnToMonitoring(ReturnFlag.Interrupt);
+            GameManager.Instance.ReturnToMonitoring();
 
             // Clear current event reference
             currentEvent = null;
