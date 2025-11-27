@@ -58103,7 +58103,7 @@ PrefabInstance:
       objectReference: {fileID: 897728221}
     - target: {fileID: 6110488334378048038, guid: 3dffffac8d02040f79283cfa01ad0e23, type: 3}
       propertyPath: autoStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6110488334378048038, guid: 3dffffac8d02040f79283cfa01ad0e23, type: 3}
       propertyPath: waitingPoint
@@ -206391,7 +206391,7 @@ MonoBehaviour:
   pauseDuration: 2
   waitingDuration: 2
   rotateAfterJump: 1
-  autoStart: 1
+  autoStart: 0
   startDelay: 0
   startFromPointA: 1
   showGizmos: 1
