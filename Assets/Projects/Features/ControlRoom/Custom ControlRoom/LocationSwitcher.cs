@@ -20,7 +20,7 @@ namespace RealRobot{
         [Header("Map 이름 설정")]
         public string globalMapName = "Global"; // 항상 켜져있어야 하는 맵
         public string[] mapXNames = new string[] { "XRI Right Locomotion", "XRI Right Interaction" }; // 장소 1용 맵
-        public string[] mapYNames = new string[] { "MOD_ScreenRoom" }; // 장소 2용 맵
+        public string[] mapYNames = new string[] { "MOD_Joystick" }; // 장소 2용 맵
 
         // ★ 시작 시 기본 설정 (Global 맵 켜기 등)
         private void Start()
@@ -29,8 +29,8 @@ namespace RealRobot{
             var globalMap = inputAsset.FindActionMap(globalMapName);
             if (globalMap != null) globalMap.Enable();
 
-            // 2. 시작 시 장소 1 상태로 초기화 (원한다면 유지)
-            GoToLocation1();
+            // // 2. 시작 시 장소 1 상태로 초기화 (원한다면 유지)
+            // GoToLocation0();
         }
 
         // ========================================================================
