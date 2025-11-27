@@ -220,7 +220,7 @@ namespace Project
                 var scenarioData = new ScenarioData(i + 1, rawRobots[i], seatAnchors[i]);
 
                 scenarioData.robotObject.SetActive(true);
-                scenarioData.robotObject.tag = "Untagged";
+                scenarioData.robotObject.tag = "Robot";
 
                 if (scenarioData.robotNavMeshController)
                 {
