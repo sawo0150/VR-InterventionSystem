@@ -308,8 +308,7 @@ namespace Project
             currentActiveScenarioData.robotState = RobotState.Manual;
 
             // If player is currently controlling this robot, enable manual control now
-            if (currentPlayerState == PlayerState.ControllingMode &&
-                currentActiveScenarioData != null &&
+            if (currentActiveScenarioData != null &&
                 currentActiveScenarioData.id == eventId)
             {
                 // Enable manual control
@@ -395,7 +394,6 @@ namespace Project
                 currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
                 currentActiveScenarioData.robotNavMeshController.enabled = false;
 
-                currentActiveScenarioData.robotState = RobotState.Auto;
                 currentActiveScenarioData = null;
             }
 
