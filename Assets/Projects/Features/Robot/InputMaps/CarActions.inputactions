@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "CarActions",
+    "maps": [
+        {
+            "name": "Car",
+            "id": "4a882c28-19a3-4c6a-9189-21df17e41dc0",
+            "actions": [
+                {
+                    "name": "CarMove",
+                    "type": "Value",
+                    "id": "00fa9942-ba73-402d-beeb-7c56c76950e6",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "CarTurn",
+                    "type": "Value",
+                    "id": "4d028d3d-4890-4921-9e80-daf310b1e4ee",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1f3c93f9-3581-4339-9529-128b25b09128",
+                    "path": "<XRController>{LeftHand}/{PrimaryAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CarMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "05b8fc57-94e4-4cab-b7e4-7b96796da725",
+                    "path": "<XRController>{RightHand}/{PrimaryAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CarTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -34,6 +34,12 @@ namespace Project
         [Header("Input Settings")]
         [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
         [SerializeField] private InputActionReference returnButtonAction;
+
+        [Tooltip("XR 컨트롤러 이동 입력 (예: XRI RightHand/Primary2DAxis Vertical)")]
+        [SerializeField] private InputActionReference xrMoveInputAction;
+
+        [Tooltip("XR 컨트롤러 회전 입력 (예: XRI RightHand/Primary2DAxis Horizontal)")]
+        [SerializeField] private InputActionReference xrTurnInputAction;
         
         // --- Runtime Data ---
         //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
@@ -286,7 +292,7 @@ namespace Project
                 MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
                 return;
             }
-            
+
             // 플레이어 상태 변경
             currentPlayerState = PlayerState.ControllingMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
@@ -296,21 +302,28 @@ namespace Project
 
             // 로봇이 Manual 상태일 때만 조작 허용
             var canControl = (scenarioData.robotState == RobotState.Manual);
-            scenarioData.robotNavMeshController.enabled = canControl;
 
             if (canControl)
             {
+                // Configure XR input for robot control
+                scenarioData.robotNavMeshController.enableXRInput = true;
+                scenarioData.robotNavMeshController.xrMoveAction = xrMoveInputAction;
+                scenarioData.robotNavMeshController.xrTurnAction = xrTurnInputAction;
+                scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
+
+                scenarioData.robotNavMeshController.enabled = true;
                 scenarioData.robotObject.tag = "Player";
-                MyDebug.Log("🕹️ Manual Control Enabled");
+                MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
             }
             else
             {
+                scenarioData.robotNavMeshController.enabled = false;
                 MyDebug.Log("👁️ Auto Mode (View Only)");
             }
 
             // 플레이어 이동
             MovePlayer(scenarioData.seatAnchor);
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
         }
 
@@ -338,19 +351,24 @@ namespace Project
                         MyDebug.LogWarning($"Semantic error");
                         break;
                 }
-                currentActiveScenarioData.robotState = RobotState.Auto;
+
+                // Disable XR input when leaving robot
+                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
+                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
                 currentActiveScenarioData.robotNavMeshController.enabled = false;
+
+                currentActiveScenarioData.robotState = RobotState.Auto;
                 currentActiveScenarioData.robotObject.tag = "Untagged";
                 currentActiveScenarioData = null;
             }
-            
+
             ToggleVRFeatures(true);
 
             currentPlayerState = PlayerState.MonitoringMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
-            
+
             MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
         }
         
