@@ -167,6 +167,17 @@ namespace Project
                 Debug.Log($"[SimulationSceneManager] Resetting {currentEvent.GetEventName()}");
             }
 
+            // Show delivery completion message
+            if (PlayerUIManager.Instance != null)
+            {
+                PlayerUIManager.Instance.ShowDeliveryMessage("Delivery Complete! Returning to base...", 3f);
+
+                if (enableDebugLogs)
+                {
+                    Debug.Log("[SimulationSceneManager] Showing delivery completion message");
+                }
+            }
+
             currentEvent.ResetEvent();
 
             // Return player to monitoring scene via GameManager

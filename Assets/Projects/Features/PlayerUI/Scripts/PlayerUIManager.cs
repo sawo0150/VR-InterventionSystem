@@ -49,13 +49,19 @@ namespace Project
         [Tooltip("Stone respawn panel prefab (Event 1)")]
         [SerializeField] private UIMessagePanel stoneRespawnPanelPrefab;
 
+        [Tooltip("Alert panel prefab (shown when events are activated)")]
+        [SerializeField] private UIMessagePanel alertPanelPrefab;
+
+        [Tooltip("Delivery panel prefab (shown when robot completes delivery and returns)")]
+        [SerializeField] private UIMessagePanel deliveryPanelPrefab;
+
         [Header("Positioning Settings")]
         [Tooltip("How quickly the canvas follows the camera (0 = instant, higher = slower/lazier)")]
         [Range(1f, 20f)]
         [SerializeField] private float followSpeed = 5f;
 
         [Tooltip("Distance from camera to position the canvas")]
-        [Range(1f, 5f)]
+        [Range(0f, 5f)]
         [SerializeField] private float distanceFromCamera = 2.5f;
 
         [Tooltip("Offset from camera center (x: left/right, y: up/down, z: forward/back)")]
@@ -113,6 +119,8 @@ namespace Project
             InstantiatePanel(UIMessageType.Error, errorPanelPrefab);
             InstantiatePanel(UIMessageType.DeerRespawn, deerRespawnPanelPrefab);
             InstantiatePanel(UIMessageType.StoneRespawn, stoneRespawnPanelPrefab);
+            InstantiatePanel(UIMessageType.Alert, alertPanelPrefab);
+            InstantiatePanel(UIMessageType.Delivery, deliveryPanelPrefab);
 
             if (enableDebugLogs)
             {
@@ -122,19 +130,19 @@ namespace Project
 
         private void Update()
         {
-            // Only active when player is controlling a robot
-            if (GameManager.Instance == null || GameManager.Instance.GetPlayerState() != PlayerState.ControllingMode)
-            {
-                return;
-            }
-
             // Update camera reference (important for VR where camera might change)
             UpdatePlayerCamera();
 
             if (playerCamera != null)
             {
-                // Lazy follow camera
+                // Lazy follow camera (always update so UI is visible in all states)
                 UpdateCanvasPosition();
+            }
+
+            // Only check boundaries when player is controlling a robot
+            if (GameManager.Instance == null || GameManager.Instance.GetPlayerState() != PlayerState.ControllingMode)
+            {
+                return;
             }
 
             // Check boundaries periodically
@@ -259,10 +267,7 @@ namespace Project
         {
             if (prefab == null)
             {
-                if (enableDebugLogs)
-                {
-                    Debug.LogWarning($"[PlayerUIManager] No prefab assigned for {type} message type");
-                }
+                Debug.LogWarning($"[PlayerUIManager] No prefab assigned for {type} message type - THIS PANEL WILL NOT WORK!");
                 return;
             }
 
@@ -281,27 +286,32 @@ namespace Project
         /// </summary>
         public void ShowMessage(UIMessageType type, string message)
         {
+            Debug.Log($"[PlayerUIManager] ShowMessage called - Type: {type}, Message: \"{message}\"");
+            Debug.Log($"[PlayerUIManager] Panel instances count: {panelInstances.Count}");
+            Debug.Log($"[PlayerUIManager] Contains key {type}: {panelInstances.ContainsKey(type)}");
+
             if (!panelInstances.ContainsKey(type))
             {
-                Debug.LogWarning($"[PlayerUIManager] No panel instance for message type: {type}");
+                Debug.LogError($"[PlayerUIManager] No panel instance for message type: {type} - Panel was NOT registered!");
+                Debug.Log($"[PlayerUIManager] Available panel types: {string.Join(", ", panelInstances.Keys)}");
                 return;
             }
 
             // Hide current panel if different type
             if (currentVisiblePanel != null && currentVisiblePanel != panelInstances[type])
             {
+                Debug.Log($"[PlayerUIManager] Hiding current visible panel: {currentVisiblePanel.name}");
                 currentVisiblePanel.Hide();
             }
 
             // Show new panel
             UIMessagePanel panel = panelInstances[type];
+            Debug.Log($"[PlayerUIManager] Panel instance found: {panel.name}, Active: {panel.gameObject.activeSelf}");
+            Debug.Log($"[PlayerUIManager] Calling panel.Show(\"{message}\")");
             panel.Show(message);
             currentVisiblePanel = panel;
 
-            if (enableDebugLogs)
-            {
-                Debug.Log($"[PlayerUIManager] Showing {type} message: {message}");
-            }
+            Debug.Log($"[PlayerUIManager] Panel shown - Active: {panel.gameObject.activeSelf}");
         }
 
         /// <summary>
@@ -309,6 +319,8 @@ namespace Project
         /// </summary>
         public void ShowMessage(UIMessageType type, string message, float autoHideDuration)
         {
+            Debug.Log($"[PlayerUIManager] ShowMessage with auto-hide called - Type: {type}, Message: \"{message}\", Duration: {autoHideDuration}s");
+
             // Show the message first
             ShowMessage(type, message);
 
@@ -316,15 +328,13 @@ namespace Project
             if (autoHideCoroutines.ContainsKey(type) && autoHideCoroutines[type] != null)
             {
                 StopCoroutine(autoHideCoroutines[type]);
+                Debug.Log($"[PlayerUIManager] Cancelled existing auto-hide coroutine for {type}");
             }
 
             // Start new auto-hide coroutine
             autoHideCoroutines[type] = StartCoroutine(AutoHideAfterDelay(type, autoHideDuration));
 
-            if (enableDebugLogs)
-            {
-                Debug.Log($"[PlayerUIManager] Auto-hiding {type} panel after {autoHideDuration} seconds");
-            }
+            Debug.Log($"[PlayerUIManager] Started auto-hide coroutine for {type} panel (will hide after {autoHideDuration} seconds)");
         }
 
         /// <summary>
@@ -359,6 +369,22 @@ namespace Project
                 {
                     currentVisiblePanel = null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Show delivery completion message with auto-hide
+        /// Called when robot completes delivery and returns to base
+        /// </summary>
+        /// <param name="message">Delivery completion message (e.g., "Delivery Complete!")</param>
+        /// <param name="autoHideDuration">How long to display the message before auto-hiding</param>
+        public void ShowDeliveryMessage(string message, float autoHideDuration = 3f)
+        {
+            ShowMessage(UIMessageType.Delivery, message, autoHideDuration);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[PlayerUIManager] Showing delivery message: \"{message}\" (duration: {autoHideDuration}s)");
             }
         }
 

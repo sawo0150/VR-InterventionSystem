@@ -34,6 +34,16 @@ namespace Project
         /// <summary>
         /// Respawn message when robot is hit by rolling stone (Event 1)
         /// </summary>
-        StoneRespawn
+        StoneRespawn,
+
+        /// <summary>
+        /// Alert message shown when an event is activated
+        /// </summary>
+        Alert,
+
+        /// <summary>
+        /// Delivery message shown when robot successfully completes delivery and returns
+        /// </summary>
+        Delivery
     }
 }

@@ -3423,7 +3423,6 @@ GameObject:
   - component: {fileID: 38650889}
   - component: {fileID: 38650892}
   - component: {fileID: 38650891}
-  - component: {fileID: 38650890}
   - component: {fileID: 38650893}
   m_Layer: 0
   m_Name: Event1EndCanvas
@@ -3452,23 +3451,6 @@ RectTransform:
   m_AnchoredPosition: {x: -44.05, y: 88.84}
   m_SizeDelta: {x: 930, y: 454}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &38650890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 38650888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &38650891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164001,9 +163983,6 @@ MonoBehaviour:
   - {fileID: 62368058}
   deerRespawnPoint: {fileID: 1161922839}
   stoneRespawnPoint: {fileID: 726754235}
-  deerRespawnPanelPrefab: {fileID: 2191333819200875518, guid: 623b689e4996040efbb6d0a9b87e4c03, type: 3}
-  stoneRespawnPanelPrefab: {fileID: 3447541090138658412, guid: 5885e2656a89e49418b258037b11a252, type: 3}
-  panelDisplayDuration: 3
   enableDebugLogs: 1
 --- !u!1001 &1542894100
 PrefabInstance:
