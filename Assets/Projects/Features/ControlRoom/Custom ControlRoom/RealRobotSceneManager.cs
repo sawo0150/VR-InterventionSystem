@@ -74,6 +74,7 @@ namespace Project
             respawnAnchor.transform.rotation = cachedRespawnAnchorPose.Rotation;
             
             GameManager.Instance.SetInputMode(InputMode.StandardVR);
+            GameManager.Instance.ToggleVRFeatures(true);
             GameManager.Instance.MovePlayer(respawnAnchor);
         }
         
@@ -83,6 +84,7 @@ namespace Project
             MyDebug.Log($"[{GetType().Name}] >>> Command: Move to Location 1");
             
             GameManager.Instance.SetInputMode(InputMode.RobotControlB);
+            GameManager.Instance.ToggleVRFeatures(false);
             GameManager.Instance.MovePlayer(location1);
         }
 
