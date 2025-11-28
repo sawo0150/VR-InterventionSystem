@@ -34,6 +34,9 @@ namespace Project
         [Header("Input Settings")]
         [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
         [SerializeField] private InputActionReference returnButtonAction;
+
+        [Tooltip("XR 컨트롤러 썸스틱 입력 (예: XRI RightHand/Primary2DAxis) - Vector2 형식")]
+        [SerializeField] private InputActionReference xrThumbstickInputAction;
         
         // --- Runtime Data ---
         //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
@@ -92,15 +95,7 @@ namespace Project
             if (isVRPressed || isKeyboardPressed)
             {
                 MyDebug.Log("🔘 Return Button Pressed (Detected by GameManager)");
-
-                if (currentActiveScenarioData != null)
-                {
-                    ReturnToMonitoring(ReturnFlag.Interrupt);
-                }
-                else
-                {
-                    ReturnToMonitoring(ReturnFlag.None);
-                }
+                ReturnToMonitoring();
             }
         }
 
@@ -200,10 +195,10 @@ namespace Project
         // 3. Robot & Scenario Initialization
         // -------------------------------------------------------------------------
         
-        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors)
+        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors, MonoBehaviour[] eventControllers)
         {
             MyDebug.Log($"[{GetType().Name}] Initializing Robot Data...");
-            
+
             if (rawRobots == null || seatAnchors == null || rawRobots.Length != seatAnchors.Length)
             {
                 MyDebug.LogError($"[{GetType().Name}] ❌ Data Mismatch or Null");
@@ -215,9 +210,9 @@ namespace Project
             for (var i = 0; i < rawRobots.Length; i++)
             {
                 var scenarioData = new ScenarioData(i + 1, rawRobots[i], seatAnchors[i]);
-                
+
                 scenarioData.robotObject.SetActive(true);
-                scenarioData.robotObject.tag = "Untagged";
+                scenarioData.robotObject.tag = "Robot";
 
                 if (scenarioData.robotNavMeshController)
                 {
@@ -232,8 +227,31 @@ namespace Project
 
                 scenarioDataList.Add(scenarioData);
             }
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Initialized ({scenarioDataList.Count}) robots successfully");
+
+            // Initialize events (delegate to SimulationSceneManager for actual event setup)
+            InitializeEvents(eventControllers);
+        }
+
+        private void InitializeEvents(MonoBehaviour[] eventControllers)
+        {
+            if (eventControllers == null || eventControllers.Length == 0)
+            {
+                MyDebug.LogWarning($"[{GetType().Name}] No event controllers provided");
+                return;
+            }
+
+            int validEvents = 0;
+            for (int i = 0; i < eventControllers.Length; i++)
+            {
+                if (eventControllers[i] != null && eventControllers[i] is IEvent)
+                {
+                    validEvents++;
+                }
+            }
+
+            MyDebug.Log($"[{GetType().Name}] ✅ Initialized {validEvents}/{eventControllers.Length} events");
         }
         
         public void InitializeRobots() { }
@@ -251,9 +269,9 @@ namespace Project
             {
                 MyDebug.LogWarning($"[{GetType().Name}] Scenario {currentActiveScenarioData.id} is not ended; Discard it");
             }
-            
+
             var scenarioData = GetScenarioData(eventId);
-            
+
             currentActiveScenarioData = scenarioData;
 
             if (scenarioData == null)
@@ -261,14 +279,53 @@ namespace Project
                 MyDebug.LogError($"[{GetType().Name}] Scenario {eventId} is not found");
                 return;
             }
-            
-            currentActiveScenarioData.eventState = EventState.Active;
 
+            // Set event state to Initializing (robot will navigate to event location)
+            currentActiveScenarioData.eventState = EventState.Initializing;
+            // Trigger the event in SimulationSceneManager
+            SimulationSceneManager.Instance.StartEvent(eventId);
+        }
+
+        /// <summary>
+        /// Called when event transitions from Initializing to Active
+        /// Enables manual control if player is already boarded
+        /// </summary>
+        public void OnEventActivated(int eventId)
+        {
+            MyDebug.Log($"[{GetType().Name}] Event {eventId} Activated (reached start location)");
+
+            var scenarioData = GetScenarioData(eventId);
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Scenario {eventId} is not found");
+                return;
+            }
+
+            currentActiveScenarioData = scenarioData;
+
+            // Update event state to Active
+            currentActiveScenarioData.eventState = EventState.Active;
             currentActiveScenarioData.robotState = RobotState.Manual;
-            MyDebug.Log($"[{GetType().Name}] robot {eventId} state changed to: Manual");
-            
-            // TODO: Simulation Scene 에서 Triggers 활성화하는 등 InitializeScenario() 만들기
-            // TODO: 단순히 트리거만 끄면 되는지, 나무나 돌, 행인 같은걸 없앨 지, rigidbody 만 로봇과 안충돌하게 할 지 등)
+
+            // Enable the corresponding minimap button
+            if (MinimapButtonManager.Instance != null)
+            {
+                MinimapButtonManager.Instance.EnableEventButton(eventId);
+            }
+
+            // If player is currently controlling this robot, enable manual control now
+            if (currentActiveScenarioData != null &&
+                currentActiveScenarioData.id == eventId)
+            {
+                // Enable manual control
+                scenarioData.robotNavMeshController.enableXRInput = true;
+                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableKeyboardInput = false;
+                scenarioData.robotNavMeshController.enabled = true;
+                // Keep "Robot" tag (event triggers need it to detect robot arrival)
+
+                MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
+            }
         }
         
         // -------------------------------------------------------------------------
@@ -286,7 +343,7 @@ namespace Project
                 MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
                 return;
             }
-            
+
             // 플레이어 상태 변경
             currentPlayerState = PlayerState.ControllingMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
@@ -294,66 +351,93 @@ namespace Project
             // VR 기능 제어 (입력 유지, 인터랙션 끄기)
             ToggleVRFeatures(false);
 
-            // 로봇이 Manual 상태일 때만 조작 허용
-            var canControl = (scenarioData.robotState == RobotState.Manual);
-            scenarioData.robotNavMeshController.enabled = canControl;
+            // 로봇이 Manual 상태이고 이벤트가 Active 상태일 때만 조작 허용
+            // Initializing 상태(로봇이 이벤트 위치로 이동 중)에는 조작 불가
+            MyDebug.Log($"[{GetType().Name}] BoardRobot Debug - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+
+            var canControl = (scenarioData.robotState == RobotState.Manual) &&
+                             (scenarioData.eventState == EventState.Active);
 
             if (canControl)
             {
-                scenarioData.robotObject.tag = "Player";
-                MyDebug.Log("🕹️ Manual Control Enabled");
+                // Configure XR input for robot control
+                scenarioData.robotNavMeshController.enableXRInput = true;
+                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
+
+                scenarioData.robotNavMeshController.enabled = true;
+                // Keep "Robot" tag (event triggers need it to detect robot arrival)
+                MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
             }
             else
             {
-                MyDebug.Log("👁️ Auto Mode (View Only)");
+                scenarioData.robotNavMeshController.enabled = false;
+
+                if (scenarioData.eventState == EventState.Initializing)
+                {
+                    MyDebug.Log($"👁️ View Only Mode (Robot navigating to event location) - RobotState: {scenarioData.robotState}");
+                }
+                else
+                {
+                    MyDebug.Log($"👁️ Auto Mode (View Only) - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+                }
             }
 
             // 플레이어 이동
             MovePlayer(scenarioData.seatAnchor);
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
         }
 
-        public void ReturnToMonitoring(ReturnFlag flag)
+        public void ReturnToMonitoring()
         {
-            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom; flag: {flag}");
+            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom");
 
             if (currentActiveScenarioData != null)
             {
-                switch (flag)
-                {
-                    case ReturnFlag.Completed:
-                        MyDebug.Log($"🎉 Event {currentActiveScenarioData.id} Completed");
-                        currentActiveScenarioData.eventState = EventState.Completed;
-                        break;
-                    case ReturnFlag.Failed:
-                        MyDebug.Log($"⚠️ Event {currentActiveScenarioData.id} Failed");
-                        currentActiveScenarioData.eventState = EventState.Failed;
-                        break;
-                    case ReturnFlag.Interrupt:
-                        MyDebug.Log($"🚫 Interrupted; Treated as Failed");
-                        currentActiveScenarioData.eventState = EventState.Failed;
-                        break;
-                    case ReturnFlag.None:
-                        MyDebug.LogWarning($"Semantic error");
-                        break;
-                }
-                currentActiveScenarioData.robotState = RobotState.Auto;
+                // Disable XR input when leaving robot
+                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
+                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
                 currentActiveScenarioData.robotNavMeshController.enabled = false;
-                currentActiveScenarioData.robotObject.tag = "Untagged";
+
                 currentActiveScenarioData = null;
             }
-            
+
             ToggleVRFeatures(true);
 
             currentPlayerState = PlayerState.MonitoringMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
-            
+
             MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
-            
+
             MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
         }
-        
+
+        // -------------------------------------------------------------------------
+        // Public Getter Methods
+        // -------------------------------------------------------------------------
+
+        /// <summary>
+        /// Get the current player state (MonitoringMode or ControllingMode)
+        /// </summary>
+        public PlayerState GetPlayerState()
+        {
+            return currentPlayerState;
+        }
+
+        /// <summary>
+        /// Get the Transform of the currently controlled robot
+        /// Returns null if no robot is currently being controlled
+        /// </summary>
+        public Transform GetCurrentRobotTransform()
+        {
+            if (currentActiveScenarioData != null && currentActiveScenarioData.robotObject != null)
+            {
+                return currentActiveScenarioData.robotObject.transform;
+            }
+            return null;
+        }
+
         // -------------------------------------------------------------------------
         // Helper Methods
         // -------------------------------------------------------------------------

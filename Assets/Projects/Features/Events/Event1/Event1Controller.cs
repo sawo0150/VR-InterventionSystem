@@ -1,4 +1,5 @@
 using UnityEngine;
+using Project;
 
 /// <summary>
 /// Controller for Event 1 - Slope/Tree Fall Event
@@ -27,6 +28,10 @@ public class Event1Controller : MonoBehaviour, IEvent
     public RollingObstacleSpawner rollingObstacle;
     [Tooltip("Clouds particle system")]
     public ParticleSystem cloudsParticleSystem;
+
+    [Header("Event Boundaries")]
+    [Tooltip("Event boundary colliders - robot must stay within ANY of these boundaries")]
+    public EventBoundary[] eventBoundaries;
 
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
@@ -212,7 +217,7 @@ public class Event1Controller : MonoBehaviour, IEvent
                 if (deer != null)
                 {
                     deer.StopJumping();
-                    deer.ResetToPointA();
+                    deer.ResetToWaitingPoint();
 
                     if (enableDebugLogs)
                     {
@@ -254,6 +259,11 @@ public class Event1Controller : MonoBehaviour, IEvent
     public string GetEventName()
     {
         return "Event 1";
+    }
+
+    public EventBoundary[] GetEventBoundaries()
+    {
+        return eventBoundaries;
     }
 
     #endregion

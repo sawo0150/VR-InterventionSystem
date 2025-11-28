@@ -45,9 +45,15 @@ public class RobotNavMeshController : MonoBehaviour
     [Range(0.5f, 5f)]
     public float groundCheckDistance = 2f;
 
-    [Header("Input Settings (for testing)")]
+    [Header("Input Settings")]
     [Tooltip("Enable keyboard input for testing (uses WASD keys)")]
     public bool enableKeyboardInput = true;
+
+    [Tooltip("Enable XR controller input (set by GameManager when player boards robot)")]
+    public bool enableXRInput = false;
+
+    [Tooltip("XR controller thumbstick input (Vector2: X=turn, Y=move)")]
+    public InputActionReference xrThumbstickAction;
 
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
@@ -90,6 +96,12 @@ public class RobotNavMeshController : MonoBehaviour
                 Debug.Log($"[RobotNavMeshController] Manual control enabled");
             }
         }
+
+        // Enable XR input action if configured
+        if (xrThumbstickAction != null && xrThumbstickAction.action != null)
+        {
+            xrThumbstickAction.action.Enable();
+        }
     }
 
     void OnDisable()
@@ -106,6 +118,12 @@ public class RobotNavMeshController : MonoBehaviour
                 Debug.Log($"[RobotNavMeshController] Manual control disabled");
             }
         }
+
+        // Disable XR input action
+        if (xrThumbstickAction != null && xrThumbstickAction.action != null)
+        {
+            xrThumbstickAction.action.Disable();
+        }
     }
 
     void Update()
@@ -116,27 +134,47 @@ public class RobotNavMeshController : MonoBehaviour
     }
 
     /// <summary>
-    /// Handle keyboard input
-    /// W/S = Move forward/backward
-    /// A/D = Turn left/right
+    /// Handle input from keyboard (testing) or XR controllers (VR mode)
+    /// W/S or Thumbstick Y = Move forward/backward
+    /// A/D or Thumbstick X = Turn left/right
     /// </summary>
     void HandleInput()
     {
-        if (!enableKeyboardInput) return;
-
-        // Get keyboard reference (new Input System)
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null) return;
-
-        // W/S: Move forward or backward
         float moveInput = 0f;
-        if (keyboard.wKey.isPressed) moveInput = 1f;
-        if (keyboard.sKey.isPressed) moveInput = -1f;
-
-        // A/D: Turn left or right
         float turnInput = 0f;
-        if (keyboard.aKey.isPressed) turnInput = -1f;
-        if (keyboard.dKey.isPressed) turnInput = 1f;
+
+        // Priority 1: XR Controller Input (for VR gameplay)
+        if (enableXRInput)
+        {
+            // Read thumbstick input from XR controllers (Vector2)
+            if (xrThumbstickAction != null && xrThumbstickAction.action != null)
+            {
+                Vector2 thumbstick = xrThumbstickAction.action.ReadValue<Vector2>();
+                moveInput = thumbstick.y;  // Y-axis for forward/backward
+                turnInput = thumbstick.x;  // X-axis for left/right turning
+            }
+
+            if (enableDebugLogs && Time.frameCount % 120 == 0 && (Mathf.Abs(moveInput) > 0.01f || Mathf.Abs(turnInput) > 0.01f))
+            {
+                Debug.Log($"[RobotNavMeshController] XR Input - Move: {moveInput:F2}, Turn: {turnInput:F2}");
+            }
+        }
+        // Priority 2: Keyboard Input (for testing/debugging)
+        else if (enableKeyboardInput)
+        {
+            // Get keyboard reference (new Input System)
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                // W/S: Move forward or backward
+                if (keyboard.wKey.isPressed) moveInput = 1f;
+                if (keyboard.sKey.isPressed) moveInput = -1f;
+
+                // A/D: Turn left or right
+                if (keyboard.aKey.isPressed) turnInput = -1f;
+                if (keyboard.dKey.isPressed) turnInput = 1f;
+            }
+        }
 
         // Apply movement
         if (Mathf.Abs(moveInput) > 0.01f)

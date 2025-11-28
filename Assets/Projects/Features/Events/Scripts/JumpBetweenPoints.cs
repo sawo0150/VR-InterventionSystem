@@ -1,8 +1,10 @@
 using UnityEngine;
 
 /// <summary>
-/// Makes a GameObject jump back and forth between two points using a parabolic arc.
+/// Makes a GameObject jump in a cycle: A → Waiting → B → Waiting → A (repeat)
+/// Uses parabolic arcs for jumps. Waits at Waiting Point, pauses at A and B.
 /// Can be triggered automatically on start or manually via method calls.
+/// Cycle: Point A → Waiting Point → Point B → Waiting Point → Point A
 /// </summary>
 public class JumpBetweenPoints : MonoBehaviour
 {
@@ -12,6 +14,9 @@ public class JumpBetweenPoints : MonoBehaviour
 
     [Tooltip("Second jump position")]
     public Transform pointB;
+
+    [Tooltip("Waiting point (deer waits here before jumping to Point B)")]
+    public Transform waitingPoint;
 
     [Header("Jump Settings")]
     [Tooltip("Duration of each jump in seconds")]
@@ -25,6 +30,10 @@ public class JumpBetweenPoints : MonoBehaviour
     [Tooltip("Pause duration at each point before jumping again")]
     [Range(0f, 5f)]
     public float pauseDuration = 0.5f;
+
+    [Tooltip("Wait duration at the waiting point before jumping to Point B")]
+    [Range(0f, 10f)]
+    public float waitingDuration = 2f;
 
     [Tooltip("Rotate 180 degrees after each jump")]
     public bool rotateAfterJump = true;
@@ -51,11 +60,15 @@ public class JumpBetweenPoints : MonoBehaviour
     // Private state
     private bool isJumping = false;
     private bool isPaused = false;
+    private bool isWaitingAtWaitPoint = false;
     private float jumpProgress = 0f;
     private float pauseTimer = 0f;
+    private float waitTimer = 0f;
     private Vector3 currentStart;
     private Vector3 currentEnd;
-    private bool jumpingToB = true;
+    // Cycle: AtA → AToWaiting → AtWaiting → WaitingToB → AtB → BToWaiting → AtWaiting → WaitingToA → (repeat)
+    private enum JumpPhase { AtA, AToWaiting, AtWaiting_FromA, WaitingToB, AtB, BToWaiting, AtWaiting_FromB, WaitingToA }
+    private JumpPhase currentPhase = JumpPhase.AtA;
     private bool isWaitingToStart = false;
     private float startDelayTimer = 0f;
 
@@ -69,6 +82,13 @@ public class JumpBetweenPoints : MonoBehaviour
             return;
         }
 
+        if (waitingPoint == null)
+        {
+            Debug.LogError($"JumpBetweenPoints on {gameObject.name}: Waiting Point is not assigned!", this);
+            enabled = false;
+            return;
+        }
+
         // Use current position as Point A if not assigned
         if (pointA == null)
         {
@@ -78,9 +98,9 @@ public class JumpBetweenPoints : MonoBehaviour
             pointA.SetParent(transform.parent);
         }
 
-        // Set initial position
-        transform.position = startFromPointA ? pointA.position : pointB.position;
-        jumpingToB = startFromPointA;
+        // Set initial position to Point A
+        transform.position = pointA.position;
+        currentPhase = JumpPhase.AtA;
 
         if (autoStart)
         {
@@ -112,6 +132,21 @@ public class JumpBetweenPoints : MonoBehaviour
 
         if (!isJumping) return;
 
+        // Handle waiting at waiting point (uses waitingDuration)
+        if (isWaitingAtWaitPoint)
+        {
+            waitTimer += Time.deltaTime;
+            if (waitTimer >= waitingDuration)
+            {
+                isWaitingAtWaitPoint = false;
+                waitTimer = 0f;
+                // Set up next jump based on which phase we're in
+                SetupNextJump();
+            }
+            return;
+        }
+
+        // Handle pause at Point A or Point B (uses pauseDuration)
         if (isPaused)
         {
             pauseTimer += Time.deltaTime;
@@ -134,19 +169,54 @@ public class JumpBetweenPoints : MonoBehaviour
             transform.position = currentEnd;
             jumpProgress = 0f;
 
-            // Rotate 180 degrees if enabled
-            if (rotateAfterJump)
+            // Update phase and determine what to do next
+            if (currentPhase == JumpPhase.AToWaiting)
             {
-                transform.Rotate(0f, 180f, 0f);
+                // Arrived at waiting point from A - don't rotate here
+                currentPhase = JumpPhase.AtWaiting_FromA;
+                // Start waiting (no rotation at waiting point)
+                isWaitingAtWaitPoint = true;
+                waitTimer = 0f;
             }
-
-            if (pauseDuration > 0f)
+            else if (currentPhase == JumpPhase.WaitingToB)
             {
-                isPaused = true;
+                // Arrived at Point B - rotate here
+                currentPhase = JumpPhase.AtB;
+                // Rotate if enabled
+                if (rotateAfterJump) transform.Rotate(0f, 180f, 0f);
+                // Pause before returning
+                if (pauseDuration > 0f)
+                {
+                    isPaused = true;
+                }
+                else
+                {
+                    SetupNextJump();
+                }
             }
-            else
+            else if (currentPhase == JumpPhase.BToWaiting)
             {
-                SetupNextJump();
+                // Arrived at waiting point from B - don't rotate here
+                currentPhase = JumpPhase.AtWaiting_FromB;
+                // Start waiting (no rotation at waiting point)
+                isWaitingAtWaitPoint = true;
+                waitTimer = 0f;
+            }
+            else if (currentPhase == JumpPhase.WaitingToA)
+            {
+                // Arrived back at Point A - rotate here
+                currentPhase = JumpPhase.AtA;
+                // Rotate if enabled
+                if (rotateAfterJump) transform.Rotate(0f, 180f, 0f);
+                // Pause before next cycle
+                if (pauseDuration > 0f)
+                {
+                    isPaused = true;
+                }
+                else
+                {
+                    SetupNextJump();
+                }
             }
         }
         else
@@ -172,21 +242,38 @@ public class JumpBetweenPoints : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets up the next jump (toggles direction)
+    /// Sets up the next jump based on current phase
+    /// Cycle: AtA → AToWaiting → AtWaiting_FromA → WaitingToB → AtB → BToWaiting → AtWaiting_FromB → WaitingToA → (repeat)
     /// </summary>
     private void SetupNextJump()
     {
-        jumpingToB = !jumpingToB;
-
-        if (jumpingToB)
+        if (currentPhase == JumpPhase.AtA)
         {
+            // Jump from Point A to Waiting Point
             currentStart = pointA.position;
-            currentEnd = pointB.position;
+            currentEnd = waitingPoint.position;
+            currentPhase = JumpPhase.AToWaiting;
         }
-        else
+        else if (currentPhase == JumpPhase.AtWaiting_FromA)
         {
+            // Jump from Waiting Point to Point B
+            currentStart = waitingPoint.position;
+            currentEnd = pointB.position;
+            currentPhase = JumpPhase.WaitingToB;
+        }
+        else if (currentPhase == JumpPhase.AtB)
+        {
+            // Jump from Point B back to Waiting Point
             currentStart = pointB.position;
+            currentEnd = waitingPoint.position;
+            currentPhase = JumpPhase.BToWaiting;
+        }
+        else if (currentPhase == JumpPhase.AtWaiting_FromB)
+        {
+            // Jump from Waiting Point back to Point A
+            currentStart = waitingPoint.position;
             currentEnd = pointA.position;
+            currentPhase = JumpPhase.WaitingToA;
         }
     }
 
@@ -195,7 +282,7 @@ public class JumpBetweenPoints : MonoBehaviour
     /// </summary>
     public void StartJumping()
     {
-        if (pointB == null || pointA == null)
+        if (pointB == null || pointA == null || waitingPoint == null)
         {
             Debug.LogWarning($"Cannot start jumping - points not assigned on {gameObject.name}");
             return;
@@ -203,7 +290,18 @@ public class JumpBetweenPoints : MonoBehaviour
 
         isJumping = true;
         jumpProgress = 0f;
-        SetupNextJump();
+
+        // Start from Point A with a pause
+        currentPhase = JumpPhase.AtA;
+        if (pauseDuration > 0f)
+        {
+            isPaused = true;
+            pauseTimer = 0f;
+        }
+        else
+        {
+            SetupNextJump();
+        }
     }
 
     /// <summary>
@@ -213,8 +311,10 @@ public class JumpBetweenPoints : MonoBehaviour
     {
         isJumping = false;
         isPaused = false;
+        isWaitingAtWaitPoint = false;
         jumpProgress = 0f;
         pauseTimer = 0f;
+        waitTimer = 0f;
     }
 
     /// <summary>
@@ -226,7 +326,20 @@ public class JumpBetweenPoints : MonoBehaviour
         if (pointA != null)
         {
             transform.position = pointA.position;
-            jumpingToB = true;
+            currentPhase = JumpPhase.AtA;
+        }
+    }
+
+    /// <summary>
+    /// Resets the object to waiting point
+    /// </summary>
+    public void ResetToWaitingPoint()
+    {
+        StopJumping();
+        if (waitingPoint != null)
+        {
+            transform.position = waitingPoint.position;
+            currentPhase = JumpPhase.AtWaiting_FromB; // Default to coming from B direction
         }
     }
 
@@ -239,7 +352,7 @@ public class JumpBetweenPoints : MonoBehaviour
         if (pointB != null)
         {
             transform.position = pointB.position;
-            jumpingToB = false;
+            currentPhase = JumpPhase.AtB;
         }
     }
 
@@ -257,24 +370,64 @@ public class JumpBetweenPoints : MonoBehaviour
     // Draw the jump arc in the editor
     private void OnDrawGizmos()
     {
-        if (!showGizmos || pointA == null || pointB == null) return;
+        if (!showGizmos) return;
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(pointA.position, 0.3f);
-        Gizmos.DrawIcon(pointA.position, "sv_label_1", true);
+        // Draw Point A (starting point)
+        if (pointA != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(pointA.position, 0.3f);
+            Gizmos.DrawIcon(pointA.position, "sv_label_1", true);
+        }
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(pointB.position, 0.3f);
-        Gizmos.DrawIcon(pointB.position, "sv_label_2", true);
+        // Draw Waiting Point (intermediate point where deer waits)
+        if (waitingPoint != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(waitingPoint.position, 0.3f);
+            Gizmos.DrawIcon(waitingPoint.position, "sv_label_2", true);
+        }
 
-        // Draw the jump arc
-        Gizmos.color = Color.yellow;
-        Vector3 previousPoint = pointA.position;
+        // Draw Point B (far point)
+        if (pointB != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(pointB.position, 0.3f);
+            Gizmos.DrawIcon(pointB.position, "sv_label_3", true);
+        }
+
+        // Draw all four jump arcs
+        if (pointA != null && waitingPoint != null && pointB != null)
+        {
+            // 1. Arc from A to Waiting Point (magenta)
+            Gizmos.color = Color.magenta;
+            DrawArc(pointA.position, waitingPoint.position);
+
+            // 2. Arc from Waiting Point to B (yellow)
+            Gizmos.color = Color.yellow;
+            DrawArc(waitingPoint.position, pointB.position);
+
+            // 3. Arc from B back to Waiting Point (cyan)
+            Gizmos.color = Color.cyan;
+            DrawArc(pointB.position, waitingPoint.position);
+
+            // 4. Arc from Waiting Point back to A (white)
+            Gizmos.color = Color.white;
+            DrawArc(waitingPoint.position, pointA.position);
+        }
+    }
+
+    /// <summary>
+    /// Helper method to draw a parabolic arc between two points
+    /// </summary>
+    private void DrawArc(Vector3 start, Vector3 end)
+    {
+        Vector3 previousPoint = start;
 
         for (int i = 1; i <= gizmoResolution; i++)
         {
             float t = i / (float)gizmoResolution;
-            Vector3 linearPos = Vector3.Lerp(pointA.position, pointB.position, t);
+            Vector3 linearPos = Vector3.Lerp(start, end, t);
             float heightOffset = jumpHeight * 4f * t * (1f - t);
             Vector3 currentPoint = linearPos + Vector3.up * heightOffset;
 
