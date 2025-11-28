@@ -42,6 +42,13 @@ namespace Project
         [Tooltip("Error panel prefab (for critical errors)")]
         [SerializeField] private UIMessagePanel errorPanelPrefab;
 
+        [Header("Event-Specific Panels")]
+        [Tooltip("Deer respawn panel prefab (Event 1)")]
+        [SerializeField] private UIMessagePanel deerRespawnPanelPrefab;
+
+        [Tooltip("Stone respawn panel prefab (Event 1)")]
+        [SerializeField] private UIMessagePanel stoneRespawnPanelPrefab;
+
         [Header("Positioning Settings")]
         [Tooltip("How quickly the canvas follows the camera (0 = instant, higher = slower/lazier)")]
         [Range(1f, 20f)]
@@ -69,6 +76,7 @@ namespace Project
         private Camera playerCamera;
         private float boundaryCheckTimer = 0f;
         private bool wasOutOfBounds = false;
+        private Dictionary<UIMessageType, Coroutine> autoHideCoroutines;
 
         private void Awake()
         {
@@ -83,6 +91,7 @@ namespace Project
             }
 
             panelInstances = new Dictionary<UIMessageType, UIMessagePanel>();
+            autoHideCoroutines = new Dictionary<UIMessageType, Coroutine>();
         }
 
         private void Start()
@@ -102,6 +111,8 @@ namespace Project
             InstantiatePanel(UIMessageType.Status, statusPanelPrefab);
             InstantiatePanel(UIMessageType.Hint, hintPanelPrefab);
             InstantiatePanel(UIMessageType.Error, errorPanelPrefab);
+            InstantiatePanel(UIMessageType.DeerRespawn, deerRespawnPanelPrefab);
+            InstantiatePanel(UIMessageType.StoneRespawn, stoneRespawnPanelPrefab);
 
             if (enableDebugLogs)
             {
@@ -191,6 +202,9 @@ namespace Project
             // Get current event
             IEvent currentEvent = SimulationSceneManager.Instance?.GetCurrentEvent();
             if (currentEvent == null) return;
+
+            // Only check boundaries when event is active
+            if (currentEvent.GetState() != EventState.Active) return;
 
             // Get event boundaries
             EventBoundary[] boundaries = currentEvent.GetEventBoundaries();
@@ -287,6 +301,49 @@ namespace Project
             if (enableDebugLogs)
             {
                 Debug.Log($"[PlayerUIManager] Showing {type} message: {message}");
+            }
+        }
+
+        /// <summary>
+        /// Show a message with auto-hide after duration
+        /// </summary>
+        public void ShowMessage(UIMessageType type, string message, float autoHideDuration)
+        {
+            // Show the message first
+            ShowMessage(type, message);
+
+            // Cancel existing auto-hide coroutine for this type
+            if (autoHideCoroutines.ContainsKey(type) && autoHideCoroutines[type] != null)
+            {
+                StopCoroutine(autoHideCoroutines[type]);
+            }
+
+            // Start new auto-hide coroutine
+            autoHideCoroutines[type] = StartCoroutine(AutoHideAfterDelay(type, autoHideDuration));
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[PlayerUIManager] Auto-hiding {type} panel after {autoHideDuration} seconds");
+            }
+        }
+
+        /// <summary>
+        /// Auto-hide a panel after delay
+        /// </summary>
+        private System.Collections.IEnumerator AutoHideAfterDelay(UIMessageType type, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            HideMessage(type);
+
+            if (autoHideCoroutines.ContainsKey(type))
+            {
+                autoHideCoroutines[type] = null;
+            }
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[PlayerUIManager] Auto-hid {type} panel");
             }
         }
 

@@ -308,9 +308,10 @@ namespace Project
             currentActiveScenarioData.robotState = RobotState.Manual;
 
             // Enable the corresponding minimap button
-            if (MinimapButtonManager.Instance != null)
+            if (MinimapButtonManager.Instance != null && currentPlayerState == PlayerState.MonitoringMode)
             {
                 MinimapButtonManager.Instance.EnableEventButton(eventId);
+
             }
 
             // If player is currently controlling this robot, enable manual control now
@@ -335,6 +336,10 @@ namespace Project
         
         public void BoardRobot(int robotId)
         {
+            if (MinimapButtonManager.Instance != null && MinimapButtonManager.Instance.IsEventButtonEnabled(robotId))
+            {
+                MinimapButtonManager.Instance.DisableEventButton(robotId);
+            }
             MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
 
             var scenarioData = GetScenarioData(robotId);

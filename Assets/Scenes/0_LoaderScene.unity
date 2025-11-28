@@ -786,6 +786,8 @@ MonoBehaviour:
   statusPanelPrefab: {fileID: 0}
   hintPanelPrefab: {fileID: 0}
   errorPanelPrefab: {fileID: 0}
+  deerRespawnPanelPrefab: {fileID: 2191333819200875518, guid: 623b689e4996040efbb6d0a9b87e4c03, type: 3}
+  stoneRespawnPanelPrefab: {fileID: 3447541090138658412, guid: 5885e2656a89e49418b258037b11a252, type: 3}
   followSpeed: 15
   distanceFromCamera: 2.5
   offsetFromCenter: {x: 0, y: 0.9, z: 0}

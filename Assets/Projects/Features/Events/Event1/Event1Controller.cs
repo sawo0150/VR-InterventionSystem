@@ -40,13 +40,6 @@ public class Event1Controller : MonoBehaviour, IEvent
     public Transform deerRespawnPoint;
     [Tooltip("Respawn point for rolling stone collision")]
     public Transform stoneRespawnPoint;
-    [Tooltip("Panel prefab shown when hit by deer")]
-    public UIMessagePanel deerRespawnPanelPrefab;
-    [Tooltip("Panel prefab shown when hit by rolling stone")]
-    public UIMessagePanel stoneRespawnPanelPrefab;
-    [Tooltip("How long panels stay visible before auto-fading (in seconds)")]
-    [Range(1f, 10f)]
-    public float panelDisplayDuration = 3f;
 
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
@@ -55,9 +48,6 @@ public class Event1Controller : MonoBehaviour, IEvent
     private EventState currentState = EventState.Idle;
     private RobotNavMeshController robotController;
     private NavMeshAgent navMeshAgent;
-    private UIMessagePanel deerRespawnPanelInstance;
-    private UIMessagePanel stoneRespawnPanelInstance;
-    private Coroutine autohidePanelCoroutine;
 
     void Start()
     {
@@ -73,9 +63,6 @@ public class Event1Controller : MonoBehaviour, IEvent
                 robotController.enabled = false;
             }
         }
-
-        // Instantiate respawn panels
-        InstantiateRespawnPanels();
 
         // Validate setup
         ValidateSetup();
@@ -356,53 +343,8 @@ public class Event1Controller : MonoBehaviour, IEvent
     #region Respawn System
 
     /// <summary>
-    /// Instantiate respawn panel prefabs as children of PlayerUIManager's canvas
-    /// </summary>
-    void InstantiateRespawnPanels()
-    {
-        if (PlayerUIManager.Instance == null)
-        {
-            Debug.LogWarning("[Event1Controller] PlayerUIManager not found - respawn panels will not be created");
-            return;
-        }
-
-        Canvas worldSpaceCanvas = PlayerUIManager.Instance.GetComponentInChildren<Canvas>();
-        if (worldSpaceCanvas == null)
-        {
-            Debug.LogError("[Event1Controller] World Space Canvas not found in PlayerUIManager!");
-            return;
-        }
-
-        // Instantiate deer respawn panel
-        if (deerRespawnPanelPrefab != null)
-        {
-            deerRespawnPanelInstance = Instantiate(deerRespawnPanelPrefab, worldSpaceCanvas.transform);
-            deerRespawnPanelInstance.gameObject.SetActive(false);
-            deerRespawnPanelInstance.name = "DeerRespawnPanel";
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Created deer respawn panel");
-            }
-        }
-
-        // Instantiate stone respawn panel
-        if (stoneRespawnPanelPrefab != null)
-        {
-            stoneRespawnPanelInstance = Instantiate(stoneRespawnPanelPrefab, worldSpaceCanvas.transform);
-            stoneRespawnPanelInstance.gameObject.SetActive(false);
-            stoneRespawnPanelInstance.name = "StoneRespawnPanel";
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Created stone respawn panel");
-            }
-        }
-    }
-
-    /// <summary>
     /// Respawns the robot to the appropriate location based on obstacle type
-    /// Shows corresponding panel and auto-hides it after duration
+    /// Shows corresponding panel via PlayerUIManager and auto-hides it
     /// </summary>
     public void RespawnRobot(ObstacleType obstacleType)
     {
@@ -416,19 +358,19 @@ public class Event1Controller : MonoBehaviour, IEvent
         }
 
         Transform respawnPoint = null;
-        UIMessagePanel panelToShow = null;
+        UIMessageType panelType = UIMessageType.Warning; // Default fallback
 
-        // Determine respawn point and panel based on obstacle type
+        // Determine respawn point and panel type based on obstacle type
         switch (obstacleType)
         {
             case ObstacleType.Deer:
                 respawnPoint = deerRespawnPoint;
-                panelToShow = deerRespawnPanelInstance;
+                panelType = UIMessageType.DeerRespawn;
                 break;
 
             case ObstacleType.RollingStone:
                 respawnPoint = stoneRespawnPoint;
-                panelToShow = stoneRespawnPanelInstance;
+                panelType = UIMessageType.StoneRespawn;
                 break;
         }
 
@@ -455,64 +397,19 @@ public class Event1Controller : MonoBehaviour, IEvent
             Debug.LogError("[Event1Controller] NavMeshAgent not found on robot - cannot warp!");
         }
 
-        // Show respawn panel
-        if (panelToShow != null)
+        // Show respawn panel via PlayerUIManager with auto-hide (3 seconds)
+        if (PlayerUIManager.Instance != null)
         {
-            // Hide any currently visible panel
-            HideAllRespawnPanels();
-
-            // Show the appropriate panel
-            panelToShow.Show("");
-
-            // Start auto-hide coroutine
-            if (autohidePanelCoroutine != null)
-            {
-                StopCoroutine(autohidePanelCoroutine);
-            }
-            autohidePanelCoroutine = StartCoroutine(AutoHidePanelAfterDelay(panelToShow, panelDisplayDuration));
+            PlayerUIManager.Instance.ShowMessage(panelType, "", 3f);
 
             if (enableDebugLogs)
             {
-                Debug.Log($"[Event1Controller] Showing {obstacleType} respawn panel for {panelDisplayDuration} seconds");
+                Debug.Log($"[Event1Controller] Showing {obstacleType} respawn panel for 3 seconds");
             }
         }
         else
         {
-            Debug.LogWarning($"[Event1Controller] No panel instance for {obstacleType} respawn!");
-        }
-    }
-
-    /// <summary>
-    /// Coroutine to automatically hide a panel after a delay
-    /// </summary>
-    IEnumerator AutoHidePanelAfterDelay(UIMessagePanel panel, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        if (panel != null && panel.IsVisible())
-        {
-            panel.Hide();
-
-            if (enableDebugLogs)
-            {
-                Debug.Log($"[Event1Controller] Auto-hiding respawn panel");
-            }
-        }
-    }
-
-    /// <summary>
-    /// Hide all respawn panels
-    /// </summary>
-    void HideAllRespawnPanels()
-    {
-        if (deerRespawnPanelInstance != null && deerRespawnPanelInstance.IsVisible())
-        {
-            deerRespawnPanelInstance.Hide();
-        }
-
-        if (stoneRespawnPanelInstance != null && stoneRespawnPanelInstance.IsVisible())
-        {
-            stoneRespawnPanelInstance.Hide();
+            Debug.LogWarning("[Event1Controller] PlayerUIManager not found - cannot show respawn panel");
         }
     }
 
