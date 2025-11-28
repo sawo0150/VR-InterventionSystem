@@ -17,13 +17,6 @@ namespace Project
         }
 
         [System.Serializable]
-        public struct SectorButtonPair
-        {
-            public Button button;
-            public int sectorId;
-        }
-
-        [System.Serializable]
         public struct RobotCamButtonPair
         {
             public Button button;
@@ -43,7 +36,8 @@ namespace Project
         [SerializeField] private GameObject monitoringCanvasB;
         
         [Header("Sector Selection")]
-        [SerializeField] private SectorButtonPair[] sectorButtons;
+        [SerializeField] private Button sectorButtonA;
+        [SerializeField] private Button sectorButtonB;
 
         [Header("Sector A Buttons")]
         [SerializeField] private EventTriggerButtonPair[] eventTriggerButtons;
@@ -113,12 +107,9 @@ namespace Project
 
         private void InitializeButtons()
         {
-            foreach (var pair in sectorButtons)
-            {
-                var targetSectorId = pair.sectorId;
-                pair.button.onClick.RemoveAllListeners();
-                pair.button.onClick.AddListener(() => OnSectorClicked(targetSectorId));
-            }
+            sectorButtonA.onClick.AddListener(() => OnSectorAClicked());
+            sectorButtonB.onClick.AddListener(() => OnSectorBClicked());
+            
             foreach (var pair in eventTriggerButtons)
             {
                 var targetEventId = pair.eventId;
@@ -152,27 +143,15 @@ namespace Project
         
         // ==========================================================================
         // ==========================================================================
-        
-        private void OnSectorClicked(int sectorId)
+        private void OnSectorAClicked()
         {
-            MyDebug.Log($"[{GetType().Name}] Sector Changed to: {sectorId}");
+            ; // pass
+        }
+
+        private void OnSectorBClicked()
+        {
+            RealRobotSceneManager.Instance.MovePlayerToSectorB();
             
-            if (sectorId == 1)
-            {
-                // Sector A 활성화
-                if(monitoringCanvasA) monitoringCanvasA.SetActive(true);
-                if(monitoringCanvasB) monitoringCanvasB.SetActive(false);
-                
-                MyDebug.Log("Switched to Canvas A");
-            }
-            else if (sectorId == 2)
-            {
-                // Sector B 활성화
-                if(monitoringCanvasA) monitoringCanvasA.SetActive(false);
-                if(monitoringCanvasB) monitoringCanvasB.SetActive(true);
-                
-                MyDebug.Log("Switched to Canvas B");
-            }
         }
 
         private void OnEventTriggerClicked(int eventId)

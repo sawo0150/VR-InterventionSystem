@@ -11,7 +11,7 @@ namespace Project
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
-
+        #region SerializeField
         // --- Settings & References ---
         [Header("Settings")]
         [SerializeField] private bool enableDebugLogs = true;
@@ -27,6 +27,7 @@ namespace Project
         [SerializeField] public string loaderSceneName = "0_LoaderScene";
         [SerializeField] private string monitoringSceneName = "1_MonitoringScene";
         [SerializeField] private string simulationSceneName = "2_SimulationScene";
+        [SerializeField] private string realRobotSceneName = "5_RealRobotScene";
         
         [Header("Event Control")]
         public List<ScenarioData> scenarioDataList = new List<ScenarioData>();
@@ -50,14 +51,22 @@ namespace Project
 
         [Tooltip("XR 컨트롤러 썸스틱 입력 (예: XRI RightHand/Primary2DAxis) - Vector2 형식")]
         [SerializeField] private InputActionReference xrThumbstickInputAction;
+
+        [SerializeField] private InputActionAsset inputActionAsset;
+        [SerializeField] private string globalMapName = "Global";
+        [SerializeField] private string[] standardVRMaps = { "XRI Right Locomotion", "XRI Right Interaction", "XRI Left Interaction", "XR Left Locomotion" };
+        [SerializeField] private string[] robotControlMaps1 = { "XRI Right Locomotion/Jump", "XRI Left/Thumbstick", "XRI Right Interaction", "XRI Left Interaction" };
+        [SerializeField] private string[] robotControlMaps2 = { "MOD_Joystick", };
+        #endregion
         
-        // --- Runtime Data ---
+        #region Runtime Data 
         //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
         private PlayerState currentPlayerState = PlayerState.MonitoringMode;
         private ScenarioData currentActiveScenarioData;
+        private InputMode currentInputMode;
+        # endregion
         
-        
-        // ---
+        #region Setup & Initialization
         private void Awake()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -72,6 +81,9 @@ namespace Project
             
             // 1. 연결 상태 검증
             CheckAssignments();
+
+            InitializeInputSystem();
+            
             // 2. 씬 로딩 시작
             StartCoroutine(LoadScenesSequence());
         }
@@ -93,7 +105,129 @@ namespace Project
                 HandleReturnInput();
             }
         }
+        // -------------------------------------------------------------------------
+        // 1. Scene Initialization & Setup
+        // -------------------------------------------------------------------------
+        
+        private void CheckAssignments()
+        {
+            if (playerObject == null)              MyDebug.LogError($"[{GetType().Name}] ❌ PlayerObject is Missing");
+            if (playerCharacterController == null) MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Player CharacterController is Missing");
+            if (locomotionSystem == null)          MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Locomotion System not found");
+            if (leftController == null)            MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Left Controller not found");
+            if (rightController == null)           MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Right Controller not found");
+            if (returnButtonAction == null || returnButtonAction.action == null)        MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Return Button Action not found");
+            if (inputActionAsset == null)          MyDebug.LogError($"[{GetType().Name}] ❌ Input Action Asset is Missing");
+        }
+        
 
+        private IEnumerator LoadScenesSequence()
+        {
+            MyDebug.Log($"[{GetType().Name}] Loading Scenes...");
+            
+            AsyncOperation simLoadOp = null;
+            AsyncOperation monLoadOp = null;
+            AsyncOperation realLoadOp = null;
+            
+            // Load other scenes (in parallel)
+            if (!SceneManager.GetSceneByName(simulationSceneName).isLoaded)
+                simLoadOp = SceneManager.LoadSceneAsync(simulationSceneName, LoadSceneMode.Additive);
+
+            if (!SceneManager.GetSceneByName(monitoringSceneName).isLoaded)
+                monLoadOp = SceneManager.LoadSceneAsync(monitoringSceneName, LoadSceneMode.Additive);
+            
+            if (!SceneManager.GetSceneByName(realRobotSceneName).isLoaded)
+                realLoadOp = SceneManager.LoadSceneAsync(realRobotSceneName, LoadSceneMode.Additive);
+            
+            // Wait for asynchronous scene loading to finish
+            if (simLoadOp != null) while (!simLoadOp.isDone) yield return null;
+            if (monLoadOp != null) while (!monLoadOp.isDone) yield return null;
+            if (realLoadOp != null) while (!realLoadOp.isDone) yield return null;
+
+            yield return new WaitForEndOfFrame();
+            
+            // Regard Simulation Scene as MainScene (set active scene)
+            var simScene = SceneManager.GetSceneByName(simulationSceneName);
+            if (simScene.IsValid())
+            {
+                SceneManager.SetActiveScene(simScene);
+                MyDebug.Log($"[{GetType().Name}] Set Active Scene to: {simulationSceneName}");
+            }
+            
+            MyDebug.Log($"[{GetType().Name}] ✅ All Scenes Loaded & Ready");
+        }
+        #endregion
+        
+        #region Input System Management
+        // -------------------------------------------------------------------------
+        // 2. Input System Management
+        // -------------------------------------------------------------------------
+
+        private void InitializeInputSystem()
+        {
+            var globalMap = inputActionAsset.FindActionMap(globalMapName);
+            if (globalMap != null) globalMap.Enable();
+                
+            // 기본적으로 Standard 모드로 시작
+            SetInputMode(InputMode.StandardVR);
+        }
+
+        public void SetInputMode(InputMode inputMode)
+        {
+            MyDebug.Log($"[{GetType().Name}] Change Input Mode to {inputMode} from {currentInputMode}");
+
+            switch (currentInputMode)
+            {
+                case InputMode.StandardVR:
+                    ToggleInputMaps(standardVRMaps, false);
+                    break;
+                case InputMode.RobotControlA:
+                    ToggleInputMaps(robotControlMaps1, false);
+                    break;
+                case InputMode.RobotControlB:
+                    ToggleInputMaps(robotControlMaps2, false);
+                    break;
+                case InputMode.None:
+                    //
+                    break;
+            }
+            
+            switch (inputMode)
+            {
+                case InputMode.StandardVR:
+                    ToggleInputMaps(standardVRMaps, true);
+                    break;
+                case InputMode.RobotControlA:
+                    ToggleInputMaps(robotControlMaps1, true);
+                    break;
+                case InputMode.RobotControlB:
+                    ToggleInputMaps(robotControlMaps2, true);
+                    break;
+                case InputMode.None:
+                    //
+                    break;
+                
+            }
+        }
+
+        private void ToggleInputMaps(string[] mapNames, bool enable)
+        {
+            foreach (var mapName in mapNames)
+            {
+                MyDebug.Log($"[{GetType().Name}] Set Input Map {mapName} {enable}");
+                var map = inputActionAsset.FindActionMap(mapName);
+                if (map != null)
+                {
+                    if (enable) map.Enable();
+                    else map.Disable();
+                }
+                else
+                {
+                    MyDebug.LogWarning($"[{GetType().Name}] Input Map '{mapName}' not found in asset!");
+                }
+            }
+        }
+        
         private void HandleReturnInput()
         {
             // 1. VR 컨트롤러 입력
@@ -111,57 +245,14 @@ namespace Project
                 ReturnToMonitoring();
             }
         }
-
-        // -------------------------------------------------------------------------
-        // 1. Scene Initialization & Setup
-        // -------------------------------------------------------------------------
+        #endregion
         
-        private void CheckAssignments()
-        {
-            if (playerObject == null)              MyDebug.LogWarning($"[{GetType().Name}] ❌ PlayerObject is Missing");
-            if (playerCharacterController == null) MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Player CharacterController is Missing");
-            if (locomotionSystem == null)          MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Locomotion System not found");
-            if (leftController == null)            MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Left Controller not found");
-            if (rightController == null)           MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Right Controller not found");
-            if (returnButtonAction == null || returnButtonAction.action == null)        MyDebug.LogWarning($"[{GetType().Name}] ⚠️ Return Button Action not found");
-        }
-        
-
-        private IEnumerator LoadScenesSequence()
-        {
-            MyDebug.Log($"[{GetType().Name}] Loading Scenes...");
-            
-            AsyncOperation simLoadOp = null;
-            AsyncOperation monLoadOp = null;
-            
-            // Load other scenes (in parallel)
-            if (!SceneManager.GetSceneByName(simulationSceneName).isLoaded)
-                simLoadOp = SceneManager.LoadSceneAsync(simulationSceneName, LoadSceneMode.Additive);
-
-            if (!SceneManager.GetSceneByName(monitoringSceneName).isLoaded)
-                monLoadOp = SceneManager.LoadSceneAsync(monitoringSceneName, LoadSceneMode.Additive);
-            
-            // Wait for asynchronous scene loading to finish
-            if (simLoadOp != null) while (!simLoadOp.isDone) yield return null;
-            if (monLoadOp != null) while (!monLoadOp.isDone) yield return null;
-
-            yield return new WaitForEndOfFrame();
-            
-            // Regard Simulation Scene as MainScene (set active scene)
-            var simScene = SceneManager.GetSceneByName(simulationSceneName);
-            if (simScene.IsValid())
-            {
-                SceneManager.SetActiveScene(simScene);
-                MyDebug.Log($"[{GetType().Name}] Set Active Scene to: {simulationSceneName}");
-            }
-            
-            MyDebug.Log($"[{GetType().Name}] ✅ All Scenes Loaded & Ready");
-        }
-        
+        #region Player Movement
         // -------------------------------------------------------------------------
         // 2. Player Movement
         // -------------------------------------------------------------------------
 
+        // TODO: MovePlayer(), SetInputMode() 통합하기
         public void MovePlayer(Transform targetAnchor)
         {
             MyDebug.Log($"[{GetType().Name}] Moving Player to '{targetAnchor.name}'...");
@@ -266,10 +357,9 @@ namespace Project
 
             MyDebug.Log($"[{GetType().Name}] ✅ Initialized {validEvents}/{eventControllers.Length} events");
         }
+        #endregion
         
-        public void InitializeRobots() { }
-        public void InitializeScenarios() { }
-        
+        #region Event Management
         // ------------------------------------------------------------------------- //
         // 5. Event Management
         // ------------------------------------------------------------------------- //
@@ -327,7 +417,6 @@ namespace Project
             if (MinimapButtonManager.Instance != null && currentPlayerState == PlayerState.MonitoringMode)
             {
                 MinimapButtonManager.Instance.EnableEventButton(eventId);
-
             }
 
             // If player is currently controlling this robot, enable manual control now
@@ -344,6 +433,7 @@ namespace Project
                 MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
             }
         }
+        #endregion
 
         /// <summary>
         /// Shows an alert panel when an event is activated
@@ -470,6 +560,7 @@ namespace Project
             MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
         }
 
+        #region Public Getter Methods
         // -------------------------------------------------------------------------
         // Public Getter Methods
         // -------------------------------------------------------------------------
@@ -494,7 +585,9 @@ namespace Project
             }
             return null;
         }
+        #endregion
 
+        #region Helper Methods
         // -------------------------------------------------------------------------
         // Helper Methods
         // -------------------------------------------------------------------------
@@ -502,6 +595,7 @@ namespace Project
         {
             return scenarioDataList.Find(s => s.id == id);
         }
+        #endregion
         
         // -------------------------------------------------------------------------
         // 4. VR Feature Control

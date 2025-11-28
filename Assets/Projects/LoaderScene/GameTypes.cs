@@ -30,6 +30,14 @@ namespace Project
         Failed,
     }
 
+    public enum InputMode
+    {
+        StandardVR,
+        RobotControlA,
+        RobotControlB,
+        None
+    }
+
     [System.Serializable]
     public class ScenarioData
     {
