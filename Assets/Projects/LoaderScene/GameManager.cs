@@ -295,90 +295,6 @@ namespace Project
             }
         }
         
-        public void BoardRobot(int robotId)
-        {
-            MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
-
-            var scenarioData = GetScenarioData(robotId);
-            if (scenarioData == null)
-            {
-                MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
-                return;
-            }
-
-            // 플레이어 상태 변경
-            currentPlayerState = PlayerState.ControllingMode;
-            MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
-
-            // VR 기능 제어 (입력 유지, 인터랙션 끄기)
-            // TODO SetInputMode() 만 사용하도록 변경하기
-            ToggleVRFeatures(false);
-            SetInputMode(InputMode.RobotControlA);
-
-            // 로봇이 Manual 상태이고 이벤트가 Active 상태일 때만 조작 허용
-            // Initializing 상태(로봇이 이벤트 위치로 이동 중)에는 조작 불가
-            MyDebug.Log($"[{GetType().Name}] BoardRobot Debug - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
-
-            var canControl = (scenarioData.robotState == RobotState.Manual) &&
-                             (scenarioData.eventState == EventState.Active);
-
-            if (canControl)
-            {
-                // Configure XR input for robot control
-                scenarioData.robotNavMeshController.enableXRInput = true;
-                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
-                scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
-
-                scenarioData.robotNavMeshController.enabled = true;
-                // Keep "Robot" tag (event triggers need it to detect robot arrival)
-                MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
-            }
-            else
-            {
-                scenarioData.robotNavMeshController.enabled = false;
-
-                if (scenarioData.eventState == EventState.Initializing)
-                {
-                    MyDebug.Log($"👁️ View Only Mode (Robot navigating to event location) - RobotState: {scenarioData.robotState}");
-                }
-                else
-                {
-                    MyDebug.Log($"👁️ Auto Mode (View Only) - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
-                }
-            }
-
-            // 플레이어 이동
-            MovePlayer(scenarioData.seatAnchor);
-
-            MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
-        }
-        
-        public void ReturnToMonitoring()
-        {
-            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom");
-
-            if (currentActiveScenarioData != null)
-            {
-                // Disable XR input when leaving robot
-                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
-                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
-                currentActiveScenarioData.robotNavMeshController.enabled = false;
-
-                currentActiveScenarioData = null;
-            }
-            
-            // TODO SetInputMode() 사용하도록 변경하기
-            ToggleVRFeatures(true);
-            SetInputMode(InputMode.StandardVR);
-
-            currentPlayerState = PlayerState.MonitoringMode;
-            MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
-
-            MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
-
-            MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
-        }
-        
         #endregion
         
         #region Robot & Scenario Initialization
@@ -638,6 +554,7 @@ namespace Project
             }
 
             ToggleVRFeatures(true);
+            SetInputMode(InputMode.StandardVR);
 
             currentPlayerState = PlayerState.MonitoringMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
@@ -688,7 +605,7 @@ namespace Project
         // 4. VR Feature Control
         // -------------------------------------------------------------------------
 
-        private void ToggleVRFeatures(bool enable)
+        public void ToggleVRFeatures(bool enable)
         {
             // 이동 시스템: 끄면 됨 (로봇 조종 중에는 텔레포트/이동 불가)
             if (locomotionSystem) locomotionSystem.SetActive(enable);
