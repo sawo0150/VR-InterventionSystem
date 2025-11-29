@@ -71,9 +71,15 @@ public class JumpBetweenPoints : MonoBehaviour
     private JumpPhase currentPhase = JumpPhase.AtA;
     private bool isWaitingToStart = false;
     private float startDelayTimer = 0f;
+    private Rigidbody rb;
+    private Vector3 targetPosition; // Position to move to in FixedUpdate
+    private bool needsPositionUpdate = false; // Flag to update position in FixedUpdate
 
     void Start()
     {
+        // Get Rigidbody component
+        rb = GetComponent<Rigidbody>();
+
         // Validate setup
         if (pointB == null)
         {
@@ -99,7 +105,7 @@ public class JumpBetweenPoints : MonoBehaviour
         }
 
         // Set initial position to Point A
-        transform.position = pointA.position;
+        SetPosition(pointA.position);
         currentPhase = JumpPhase.AtA;
 
         if (autoStart)
@@ -166,7 +172,7 @@ public class JumpBetweenPoints : MonoBehaviour
         if (jumpProgress >= 1f)
         {
             // Jump complete - snap to end position
-            transform.position = currentEnd;
+            SetPosition(currentEnd);
             jumpProgress = 0f;
 
             // Update phase and determine what to do next
@@ -222,7 +228,17 @@ public class JumpBetweenPoints : MonoBehaviour
         else
         {
             // Calculate position along parabolic arc
-            transform.position = CalculateJumpPosition(jumpProgress);
+            SetPosition(CalculateJumpPosition(jumpProgress));
+        }
+    }
+
+    void FixedUpdate()
+    {
+        // Apply position changes in FixedUpdate for proper physics collision detection
+        if (needsPositionUpdate && rb != null && rb.isKinematic)
+        {
+            rb.MovePosition(targetPosition);
+            needsPositionUpdate = false;
         }
     }
 
@@ -318,6 +334,25 @@ public class JumpBetweenPoints : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets the position using Rigidbody.MovePosition if available, otherwise transform.position
+    /// This ensures proper collision detection for kinematic Rigidbodies
+    /// MovePosition is deferred to FixedUpdate for proper physics processing
+    /// </summary>
+    private void SetPosition(Vector3 position)
+    {
+        if (rb != null && rb.isKinematic)
+        {
+            // Queue the position update for FixedUpdate
+            targetPosition = position;
+            needsPositionUpdate = true;
+        }
+        else
+        {
+            transform.position = position;
+        }
+    }
+
+    /// <summary>
     /// Resets the object to Point A
     /// </summary>
     public void ResetToPointA()
@@ -325,7 +360,7 @@ public class JumpBetweenPoints : MonoBehaviour
         StopJumping();
         if (pointA != null)
         {
-            transform.position = pointA.position;
+            SetPosition(pointA.position);
             currentPhase = JumpPhase.AtA;
         }
     }
@@ -338,7 +373,7 @@ public class JumpBetweenPoints : MonoBehaviour
         StopJumping();
         if (waitingPoint != null)
         {
-            transform.position = waitingPoint.position;
+            SetPosition(waitingPoint.position);
             currentPhase = JumpPhase.AtWaiting_FromB; // Default to coming from B direction
         }
     }
@@ -351,7 +386,7 @@ public class JumpBetweenPoints : MonoBehaviour
         StopJumping();
         if (pointB != null)
         {
-            transform.position = pointB.position;
+            SetPosition(pointB.position);
             currentPhase = JumpPhase.AtB;
         }
     }

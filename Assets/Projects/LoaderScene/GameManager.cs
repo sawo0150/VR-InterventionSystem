@@ -30,7 +30,20 @@ namespace Project
         
         [Header("Event Control")]
         public List<ScenarioData> scenarioDataList = new List<ScenarioData>();
-        
+
+        [Header("Event Alert Messages")]
+        [Tooltip("Alert messages shown when each event is activated (index 0 = Event 1, index 1 = Event 2, etc.)")]
+        [SerializeField] private string[] eventAlertMessages = new string[]
+        {
+            "Event 1: Slope Hazard Activated",
+            "Event 2: Traffic Zone Activated",
+            "Event 3: Construction Area Activated"
+        };
+
+        [Tooltip("How long alert panels stay visible (in seconds)")]
+        [Range(1f, 10f)]
+        [SerializeField] private float alertDisplayDuration = 3f;
+
         [Header("Input Settings")]
         [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
         [SerializeField] private InputActionReference returnButtonAction;
@@ -307,10 +320,14 @@ namespace Project
             currentActiveScenarioData.eventState = EventState.Active;
             currentActiveScenarioData.robotState = RobotState.Manual;
 
+            // Show alert panel with event-specific message
+            ShowEventAlert(eventId);
+
             // Enable the corresponding minimap button
-            if (MinimapButtonManager.Instance != null)
+            if (MinimapButtonManager.Instance != null && currentPlayerState == PlayerState.MonitoringMode)
             {
                 MinimapButtonManager.Instance.EnableEventButton(eventId);
+
             }
 
             // If player is currently controlling this robot, enable manual control now
@@ -327,7 +344,43 @@ namespace Project
                 MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
             }
         }
-        
+
+        /// <summary>
+        /// Shows an alert panel when an event is activated
+        /// </summary>
+        private void ShowEventAlert(int eventId)
+        {
+            MyDebug.Log($"[GameManager] ShowEventAlert called for Event {eventId}");
+
+            if (PlayerUIManager.Instance == null)
+            {
+                MyDebug.LogWarning("[GameManager] PlayerUIManager.Instance is NULL - cannot show event alert");
+                return;
+            }
+
+            MyDebug.Log($"[GameManager] PlayerUIManager.Instance found");
+
+            // Validate event ID
+            int messageIndex = eventId - 1; // Convert to 0-based index
+            MyDebug.Log($"[GameManager] Event ID: {eventId}, Message Index: {messageIndex}, Array Length: {eventAlertMessages.Length}");
+
+            if (messageIndex < 0 || messageIndex >= eventAlertMessages.Length)
+            {
+                MyDebug.LogError($"[GameManager] No alert message configured for Event {eventId} (index {messageIndex} out of range 0-{eventAlertMessages.Length - 1})");
+                return;
+            }
+
+            // Get the message for this event
+            string alertMessage = eventAlertMessages[messageIndex];
+            MyDebug.Log($"[GameManager] Alert message retrieved: \"{alertMessage}\"");
+
+            // Show alert panel with auto-hide
+            MyDebug.Log($"[GameManager] Calling PlayerUIManager.ShowMessage(UIMessageType.Alert, \"{alertMessage}\", {alertDisplayDuration})");
+            PlayerUIManager.Instance.ShowMessage(UIMessageType.Alert, alertMessage, alertDisplayDuration);
+
+            MyDebug.Log($"[GameManager] ShowMessage call completed - alert should now be visible");
+        }
+
         // -------------------------------------------------------------------------
         // 5. Robot Interaction (Boarding, Returning)
         // -------------------------------------------------------------------------
@@ -335,6 +388,10 @@ namespace Project
         
         public void BoardRobot(int robotId)
         {
+            if (MinimapButtonManager.Instance != null && MinimapButtonManager.Instance.IsEventButtonEnabled(robotId))
+            {
+                MinimapButtonManager.Instance.DisableEventButton(robotId);
+            }
             MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
 
             var scenarioData = GetScenarioData(robotId);
@@ -452,13 +509,13 @@ namespace Project
 
         private void ToggleVRFeatures(bool enable)
         {
-            // 이동 시스템: 끄면 됨
+            // 이동 시스템: 끄면 됨 (로봇 조종 중에는 텔레포트/이동 불가)
             if (locomotionSystem) locomotionSystem.SetActive(enable);
-            
-            // 컨트롤러: 오브젝트 자체를 끄면 입력(Input)도 끊길 수 있음.
-            // 따라서 Interactor(Ray, Direct) 컴포넌트만 끄는 것이 안전함.
-            ToggleControllerInteractors(leftController, enable);
-            ToggleControllerInteractors(rightController, enable);
+
+            // 컨트롤러 인터랙션은 항상 활성화 유지 (UI 조작을 위해)
+            // 로봇 조종 중에도 UI 패널, 버튼 등과 상호작용할 수 있어야 함
+            // ToggleControllerInteractors(leftController, enable);
+            // ToggleControllerInteractors(rightController, enable);
         }
         
         private void ToggleControllerInteractors(GameObject controller, bool enable)

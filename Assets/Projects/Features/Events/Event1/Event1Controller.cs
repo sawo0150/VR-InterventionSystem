@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
 using Project;
 
 /// <summary>
 /// Controller for Event 1 - Slope/Tree Fall Event
-/// Manages event lifecycle and robot control
+/// Manages event lifecycle, robot control, and respawn system
 /// </summary>
 public class Event1Controller : MonoBehaviour, IEvent
 {
@@ -33,12 +35,19 @@ public class Event1Controller : MonoBehaviour, IEvent
     [Tooltip("Event boundary colliders - robot must stay within ANY of these boundaries")]
     public EventBoundary[] eventBoundaries;
 
+    [Header("Respawn System")]
+    [Tooltip("Respawn point for deer collision")]
+    public Transform deerRespawnPoint;
+    [Tooltip("Respawn point for rolling stone collision")]
+    public Transform stoneRespawnPoint;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
 
     private EventState currentState = EventState.Idle;
     private RobotNavMeshController robotController;
+    private NavMeshAgent navMeshAgent;
 
     void Start()
     {
@@ -46,6 +55,7 @@ public class Event1Controller : MonoBehaviour, IEvent
         if (robot != null)
         {
             robotController = robot.GetComponent<RobotNavMeshController>();
+            navMeshAgent = robot.GetComponent<NavMeshAgent>();
 
             // Disable manual control at start (robot will use autonomous navigation)
             if (robotController != null)
@@ -325,6 +335,81 @@ public class Event1Controller : MonoBehaviour, IEvent
             {
                 SimulationSceneManager.Instance.OnEventLocationReached();
             }
+        }
+    }
+
+    #endregion
+
+    #region Respawn System
+
+    /// <summary>
+    /// Respawns the robot to the appropriate location based on obstacle type
+    /// Shows corresponding panel via PlayerUIManager and auto-hides it
+    /// </summary>
+    public void RespawnRobot(ObstacleType obstacleType)
+    {
+        if (currentState != EventState.Active)
+        {
+            if (enableDebugLogs)
+            {
+                Debug.LogWarning($"[Event1Controller] Respawn ignored - event not active (state: {currentState})");
+            }
+            return;
+        }
+
+        Transform respawnPoint = null;
+        UIMessageType panelType = UIMessageType.Warning; // Default fallback
+
+        // Determine respawn point and panel type based on obstacle type
+        switch (obstacleType)
+        {
+            case ObstacleType.Deer:
+                respawnPoint = deerRespawnPoint;
+                panelType = UIMessageType.DeerRespawn;
+                break;
+
+            case ObstacleType.RollingStone:
+                respawnPoint = stoneRespawnPoint;
+                panelType = UIMessageType.StoneRespawn;
+                break;
+        }
+
+        // Validate respawn point
+        if (respawnPoint == null)
+        {
+            Debug.LogError($"[Event1Controller] Respawn point not assigned for {obstacleType}!");
+            return;
+        }
+
+        // Warp robot to respawn point
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.Warp(respawnPoint.position);
+            robot.transform.rotation = respawnPoint.rotation;
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[Event1Controller] Robot respawned to {obstacleType} respawn point at {respawnPoint.position}");
+            }
+        }
+        else
+        {
+            Debug.LogError("[Event1Controller] NavMeshAgent not found on robot - cannot warp!");
+        }
+
+        // Show respawn panel via PlayerUIManager with auto-hide (3 seconds)
+        if (PlayerUIManager.Instance != null)
+        {
+            PlayerUIManager.Instance.ShowMessage(panelType, "", 3f);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[Event1Controller] Showing {obstacleType} respawn panel for 3 seconds");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[Event1Controller] PlayerUIManager not found - cannot show respawn panel");
         }
     }
 

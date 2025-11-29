@@ -24,6 +24,26 @@ namespace Project
         /// <summary>
         /// Error messages for critical issues
         /// </summary>
-        Error
+        Error,
+
+        /// <summary>
+        /// Respawn message when robot is hit by deer (Event 1)
+        /// </summary>
+        DeerRespawn,
+
+        /// <summary>
+        /// Respawn message when robot is hit by rolling stone (Event 1)
+        /// </summary>
+        StoneRespawn,
+
+        /// <summary>
+        /// Alert message shown when an event is activated
+        /// </summary>
+        Alert,
+
+        /// <summary>
+        /// Delivery message shown when robot successfully completes delivery and returns
+        /// </summary>
+        Delivery
     }
 }
