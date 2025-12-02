@@ -10,6 +10,7 @@ namespace Project
     {
         public static SimulationSceneManager Instance;
 
+        #region Serialized Fields
         [Header("Robot Settings")]
         [Tooltip("Array of robot GameObjects in the simulation scene")]
         [SerializeField] private GameObject[] rawRobots;
@@ -28,11 +29,14 @@ namespace Project
         [Header("Debug")]
         [Tooltip("Enable debug logging")]
         [SerializeField] private bool enableDebugLogs = true;
+        #endregion
 
+        #region Runtime Data
         // Event management
         private IEvent[] events;
         private IEvent currentEvent;
         private int currentEventIndex = -1;
+        #endregion
 
         private void Awake()
         {

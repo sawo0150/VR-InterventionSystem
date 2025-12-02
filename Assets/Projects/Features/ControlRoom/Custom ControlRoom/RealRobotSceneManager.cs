@@ -67,12 +67,13 @@ namespace Project
         // [기능 2] 위치 이동 및 입력 맵 전환 함수들 (Public API)
         // =========================================================================
 
-        public void MovePlayerToSectorB()
+        public void MovePlayerToRespawnAnchorB()
         {
-            MyDebug.Log($"[{GetType().Name}] begin MovePlayerToSectorB()");
+            MyDebug.Log($"[{GetType().Name}] begin MovePlayerToRespawnAnchorB()");
             respawnAnchor.transform.position = cachedRespawnAnchorPose.Position;
             respawnAnchor.transform.rotation = cachedRespawnAnchorPose.Rotation;
             
+            GameManager.Instance.SetPlayerState(PlayerState.MonitoringMode);
             GameManager.Instance.SetInputMode(InputMode.StandardVR);
             GameManager.Instance.ToggleVRFeatures(true);
             GameManager.Instance.MovePlayer(respawnAnchor);
@@ -83,6 +84,7 @@ namespace Project
         {
             MyDebug.Log($"[{GetType().Name}] >>> Command: Move to Location 1");
             
+            GameManager.Instance.SetPlayerState(PlayerState.ControllingModeB);
             GameManager.Instance.SetInputMode(InputMode.RobotControlB);
             GameManager.Instance.ToggleVRFeatures(false);
             GameManager.Instance.MovePlayer(location1);
@@ -92,13 +94,23 @@ namespace Project
         {
             MyDebug.Log($"[{GetType().Name}] >>> Command: Move to Location 2");
             
+            GameManager.Instance.SetPlayerState(PlayerState.ControllingModeB);
             GameManager.Instance.SetInputMode(InputMode.RobotControlB);
+            GameManager.Instance.ToggleVRFeatures(false);
             GameManager.Instance.MovePlayer(location2);
         }
 
         private void OnSectorAClicked()
         {
+            GameManager.Instance.SetSectorState(SectorState.Simulation);
             MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
+        }
+
+        public void ReturnToMonitoringB()
+        {
+            MyDebug.Log($"[{GetType().Name}] >>> Command: Return to Monitoring B");
+            
+            MovePlayerToRespawnAnchorB();
         }
     }
 }

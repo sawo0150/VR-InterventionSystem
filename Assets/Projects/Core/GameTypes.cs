@@ -2,10 +2,11 @@ using UnityEngine;
 
 namespace Project
 {
-    public enum PlayerState
+    public enum  PlayerState
     {
         MonitoringMode, 
         ControllingMode,
+        ControllingModeB,
     }
 
     public enum RobotState { 
@@ -28,6 +29,12 @@ namespace Project
         Interrupt,
         Completed,
         Failed,
+    }
+
+    public enum SectorState
+    {
+        Simulation,
+        RealWorld,
     }
 
     public enum InputMode

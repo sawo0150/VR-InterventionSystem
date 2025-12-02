@@ -11,10 +11,19 @@ namespace Project
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
-        #region SerializeField
-        // --- Settings & References ---
-        [Header("Settings")]
+        
+        #region Settings & Serialized Fields
+        // -------------------------------------------------------------------------
+        // Configuration & Inspector Setup
+        // -------------------------------------------------------------------------
+        [Header("Global Settings")]
         [SerializeField] private bool enableDebugLogs = true;
+        
+        [Header("Scene Configuration")]
+        [SerializeField] public string loaderSceneName = "0_LoaderScene";
+        [SerializeField] private string monitoringSceneName = "1_MonitoringScene";
+        [SerializeField] private string simulationSceneName = "2_SimulationScene";
+        [SerializeField] private string realRobotSceneName = "5_RealRobotScene";
         
         [Header("Player References")]
         [SerializeField] public Transform playerObject;
@@ -23,13 +32,7 @@ namespace Project
         [SerializeField] private GameObject leftController;
         [SerializeField] private GameObject rightController;
         
-        [Header("Scene Configuration")]
-        [SerializeField] public string loaderSceneName = "0_LoaderScene";
-        [SerializeField] private string monitoringSceneName = "1_MonitoringScene";
-        [SerializeField] private string simulationSceneName = "2_SimulationScene";
-        [SerializeField] private string realRobotSceneName = "5_RealRobotScene";
-        
-        [Header("Event Control")]
+        [Header("Event Data")]
         public List<ScenarioData> scenarioDataList = new List<ScenarioData>();
 
         [Header("Event Alert Messages")]
@@ -42,10 +45,9 @@ namespace Project
         };
 
         [Tooltip("How long alert panels stay visible (in seconds)")]
-        [Range(1f, 10f)]
-        [SerializeField] private float alertDisplayDuration = 3f;
+        [SerializeField] [Range(1f, 10f)] private float alertDisplayDuration = 3f;
 
-        [Header("Input Settings")]
+        [Header("Input System  Settings")]
         [Tooltip("복귀 버튼으로 사용할 액션 (예: XRI LeftHand/PrimaryButton)")]
         [SerializeField] private InputActionReference returnButtonAction;
 
@@ -55,18 +57,24 @@ namespace Project
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private string globalMapName = "Global";
         [SerializeField] private string[] standardVRMaps = { "XRI Right Locomotion", "XRI Right Interaction", "XRI Left Interaction", "XR Left Locomotion" };
-        [SerializeField] private string[] robotControlMaps1 = { "XRI Right Locomotion/Jump", "XRI Left/Thumbstick", "XRI Right Interaction", "XRI Left Interaction" };
-        [SerializeField] private string[] robotControlMaps2 = { "MOD_Joystick", };
+        [SerializeField] private string[] robotControlMaps_Sim = { "XRI Right Locomotion/Jump", "XRI Left/Thumbstick", "XRI Right Interaction", "XRI Left Interaction" };
+        [SerializeField] private string[] robotControlMaps_Real = { "MOD_Joystick", };
         #endregion
         
-        #region Runtime Data 
-        //public PlayerState currentPlayerState { get; private set; } = PlayerState.MonitoringMode;
+        #region Runtime States
+        // -------------------------------------------------------------------------
+        // Internal State Management
+        // -------------------------------------------------------------------------
         private PlayerState currentPlayerState = PlayerState.MonitoringMode;
         private ScenarioData currentActiveScenarioData;
         private InputMode currentInputMode;
-        # endregion
+        private SectorState currentSectorState =  SectorState.Simulation;
+        #endregion
         
-        #region Setup & Initialization
+        #region Unity Lifecycle
+        // -------------------------------------------------------------------------
+        // 
+        // -------------------------------------------------------------------------
         private void Awake()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -100,15 +108,17 @@ namespace Project
         
         private void Update()
         {
-            if (currentPlayerState == PlayerState.ControllingMode)
+            if (currentPlayerState == PlayerState.ControllingMode || currentInputMode == InputMode.RobotControlB)
             {
                 HandleReturnInput();
             }
         }
-        // -------------------------------------------------------------------------
-        // 1. Scene Initialization & Setup
-        // -------------------------------------------------------------------------
+        #endregion
         
+        #region Check Assignments & Scene Loading
+        // -------------------------------------------------------------------------
+        // Check Assignments & Scene Loading
+        // -------------------------------------------------------------------------
         private void CheckAssignments()
         {
             if (playerObject == null)              MyDebug.LogError($"[{GetType().Name}] ❌ PlayerObject is Missing");
@@ -120,7 +130,6 @@ namespace Project
             if (inputActionAsset == null)          MyDebug.LogError($"[{GetType().Name}] ❌ Input Action Asset is Missing");
         }
         
-
         private IEnumerator LoadScenesSequence()
         {
             MyDebug.Log($"[{GetType().Name}] Loading Scenes...");
@@ -158,9 +167,9 @@ namespace Project
         }
         #endregion
         
-        #region Input System Management
+        #region Input System Management & Interrupt Handling
         // -------------------------------------------------------------------------
-        // 2. Input System Management
+        // Input System Management & Interrupt Handling
         // -------------------------------------------------------------------------
 
         private void InitializeInputSystem()
@@ -172,49 +181,39 @@ namespace Project
             SetInputMode(InputMode.StandardVR);
         }
 
-        public void SetInputMode(InputMode inputMode)
+        public void SetInputMode(InputMode newInputMode)
         {
-            MyDebug.Log($"[{GetType().Name}] Change Input Mode to {inputMode} from {currentInputMode}");
+            if (currentInputMode == newInputMode) return;
 
-            switch (currentInputMode)
-            {
-                case InputMode.StandardVR:
-                    ToggleInputMaps(standardVRMaps, false);
-                    break;
-                case InputMode.RobotControlA:
-                    ToggleInputMaps(robotControlMaps1, false);
-                    break;
-                case InputMode.RobotControlB:
-                    ToggleInputMaps(robotControlMaps2, false);
-                    break;
-                case InputMode.None:
-                    //
-                    break;
-            }
-            
+            MyDebug.Log($"[{GetType().Name}] Change Input Mode: {currentInputMode} -> {newInputMode}");
+
+            // 1. Disable current maps
+            ToggleInputMaps(GetMapsForMode(currentInputMode), false);
+
+            // 2. Enable new maps
+            ToggleInputMaps(GetMapsForMode(newInputMode), true);
+
+            currentInputMode = newInputMode;
+        }
+
+        private string[] GetMapsForMode(InputMode inputMode)
+        {
             switch (inputMode)
             {
-                case InputMode.StandardVR:
-                    ToggleInputMaps(standardVRMaps, true);
-                    break;
-                case InputMode.RobotControlA:
-                    ToggleInputMaps(robotControlMaps1, true);
-                    break;
-                case InputMode.RobotControlB:
-                    ToggleInputMaps(robotControlMaps2, true);
-                    break;
-                case InputMode.None:
-                    //
-                    break;
-                
+                case InputMode.StandardVR: return standardVRMaps;
+                case InputMode.RobotControlA: return robotControlMaps_Sim;
+                case InputMode.RobotControlB: return robotControlMaps_Real;
+                default: return new string[0];
             }
         }
 
         private void ToggleInputMaps(string[] mapNames, bool enable)
         {
+            if (mapNames == null) return;
+            
             foreach (var mapName in mapNames)
             {
-                MyDebug.Log($"[{GetType().Name}] Set Input Map {mapName} {enable}");
+                //MyDebug.Log($"[{GetType().Name}] Set Input Map {mapName} {enable}");
                 var map = inputActionAsset.FindActionMap(mapName);
                 if (map != null)
                 {
@@ -223,7 +222,7 @@ namespace Project
                 }
                 else
                 {
-                    MyDebug.LogWarning($"[{GetType().Name}] Input Map '{mapName}' not found in asset!");
+                    MyDebug.LogWarning($"[{GetType().Name}] Input Map '{mapName}' not found");
                 }
             }
         }
@@ -241,18 +240,38 @@ namespace Project
 
             if (isVRPressed || isKeyboardPressed)
             {
-                MyDebug.Log("🔘 Return Button Pressed (Detected by GameManager)");
-                ReturnToMonitoring();
+                var currentSectorStr = "";
+                switch (currentSectorState)
+                {
+                    case SectorState.Simulation:
+                        currentSectorStr = "A";
+                        break;
+                    case SectorState.RealWorld:
+                        currentSectorStr = "B";
+                        break;
+                    default:
+                        MyDebug.LogWarning($"[{GetType().Name}] Current sector state: {currentSectorState}");
+                        break;
+                }
+                MyDebug.Log($"[{GetType().Name}] 🔘 Return Button Pressed; Sector: {currentSectorStr}");
+
+                switch (currentSectorState)
+                {
+                    case SectorState.Simulation:
+                        ReturnToMonitoring();
+                        break;
+                    case SectorState.RealWorld:
+                        RealRobotSceneManager.Instance.ReturnToMonitoringB();
+                        break;
+                }
             }
         }
         #endregion
         
         #region Player Movement
         // -------------------------------------------------------------------------
-        // 2. Player Movement
+        // Player Movement
         // -------------------------------------------------------------------------
-
-        // TODO: MovePlayer(), SetInputMode() 통합하기
         public void MovePlayer(Transform targetAnchor)
         {
             MyDebug.Log($"[{GetType().Name}] Moving Player to '{targetAnchor.name}'...");
@@ -272,15 +291,13 @@ namespace Project
             switch (currentPlayerState)
             {
                 case PlayerState.MonitoringMode:
-                    charController.stepOffset = 0.5f;
+                    charController.stepOffset = 0.3f;
                     charController.minMoveDistance = 0.001f;
                     break;
                 case PlayerState.ControllingMode:
                     // 차량 위로 옮길 경우, 로봇 스케일 때문에 stepOffset 에러 발생
                     charController.stepOffset = 0.01f; // 앉아있을 땐 계단 오를 일이 없으므로 최소화
                     charController.minMoveDistance = 0; // 미세 떨림 방지
-                    break;
-                default:
                     break;
             }
             charController.enabled = true;
@@ -295,13 +312,97 @@ namespace Project
             }
         }
         
+        public void BoardRobot(int robotId)
+        {
+            if (MinimapButtonManager.Instance != null && MinimapButtonManager.Instance.IsEventButtonEnabled(robotId))
+            {
+                MinimapButtonManager.Instance.DisableEventButton(robotId);
+            }
+            MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
+
+            var scenarioData = GetScenarioData(robotId);
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
+                return;
+            }
+
+            // 플레이어 상태 변경
+            currentPlayerState = PlayerState.ControllingMode;
+            MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
+
+            // VR 기능 제어 (입력 유지, 인터랙션 끄기)
+            ToggleVRFeatures(false);
+
+            // 로봇이 Manual 상태이고 이벤트가 Active 상태일 때만 조작 허용
+            // Initializing 상태(로봇이 이벤트 위치로 이동 중)에는 조작 불가
+            MyDebug.Log($"[{GetType().Name}] BoardRobot Debug - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+
+            var canControl = (scenarioData.robotState == RobotState.Manual) &&
+                             (scenarioData.eventState == EventState.Active);
+
+            if (canControl)
+            {
+                // Configure XR input for robot control
+                scenarioData.robotNavMeshController.enableXRInput = true;
+                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
+
+                scenarioData.robotNavMeshController.enabled = true;
+                // Keep "Robot" tag (event triggers need it to detect robot arrival)
+                MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
+            }
+            else
+            {
+                scenarioData.robotNavMeshController.enabled = false;
+
+                if (scenarioData.eventState == EventState.Initializing)
+                {
+                    MyDebug.Log($"👁️ View Only Mode (Robot navigating to event location) - RobotState: {scenarioData.robotState}");
+                }
+                else
+                {
+                    MyDebug.Log($"👁️ Auto Mode (View Only) - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
+                }
+            }
+
+            // 플레이어 이동
+            MovePlayer(scenarioData.seatAnchor);
+
+            MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
+        }
+
+        public void ReturnToMonitoring()
+        {
+            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom");
+
+            if (currentActiveScenarioData != null)
+            {
+                // Disable XR input when leaving robot
+                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
+                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput =
+                    true; // Re-enable keyboard for testing
+                currentActiveScenarioData.robotNavMeshController.enabled = false;
+
+                currentActiveScenarioData = null;
+            }
+
+            ToggleVRFeatures(true);
+            SetInputMode(InputMode.StandardVR);
+
+            currentPlayerState = PlayerState.MonitoringMode;
+            MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
+
+            MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
+
+            MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
+        }
         #endregion
         
         #region Robot & Scenario Initialization
         // -------------------------------------------------------------------------
-        // 3. Robot & Scenario Initialization
+        // Robot & Scenario Initialization
         // -------------------------------------------------------------------------
-        
         public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors, MonoBehaviour[] eventControllers)
         {
             MyDebug.Log($"[{GetType().Name}] Initializing Robot Data...");
@@ -364,7 +465,7 @@ namespace Project
         
         #region Event Management
         // ------------------------------------------------------------------------- //
-        // 5. Event Management
+        // Event Management
         // ------------------------------------------------------------------------- //
         
         public void StartGameEvent(int eventId)
@@ -436,7 +537,6 @@ namespace Project
                 MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
             }
         }
-        #endregion
 
         /// <summary>
         /// Shows an alert panel when an event is activated
@@ -473,100 +573,11 @@ namespace Project
 
             MyDebug.Log($"[GameManager] ShowMessage call completed - alert should now be visible");
         }
+        #endregion
 
+        #region Public Getter & Setter
         // -------------------------------------------------------------------------
-        // 5. Robot Interaction (Boarding, Returning)
-        // -------------------------------------------------------------------------
-        
-        
-        public void BoardRobot(int robotId)
-        {
-            if (MinimapButtonManager.Instance != null && MinimapButtonManager.Instance.IsEventButtonEnabled(robotId))
-            {
-                MinimapButtonManager.Instance.DisableEventButton(robotId);
-            }
-            MyDebug.Log($"[{GetType().Name}] Boarding to Robot {robotId}...");
-
-            var scenarioData = GetScenarioData(robotId);
-            if (scenarioData == null)
-            {
-                MyDebug.LogError($"[{GetType().Name}] Robot {robotId} is not found");
-                return;
-            }
-
-            // 플레이어 상태 변경
-            currentPlayerState = PlayerState.ControllingMode;
-            MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
-
-            // VR 기능 제어 (입력 유지, 인터랙션 끄기)
-            ToggleVRFeatures(false);
-
-            // 로봇이 Manual 상태이고 이벤트가 Active 상태일 때만 조작 허용
-            // Initializing 상태(로봇이 이벤트 위치로 이동 중)에는 조작 불가
-            MyDebug.Log($"[{GetType().Name}] BoardRobot Debug - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
-
-            var canControl = (scenarioData.robotState == RobotState.Manual) &&
-                             (scenarioData.eventState == EventState.Active);
-
-            if (canControl)
-            {
-                // Configure XR input for robot control
-                scenarioData.robotNavMeshController.enableXRInput = true;
-                scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
-                scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
-
-                scenarioData.robotNavMeshController.enabled = true;
-                // Keep "Robot" tag (event triggers need it to detect robot arrival)
-                MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
-            }
-            else
-            {
-                scenarioData.robotNavMeshController.enabled = false;
-
-                if (scenarioData.eventState == EventState.Initializing)
-                {
-                    MyDebug.Log($"👁️ View Only Mode (Robot navigating to event location) - RobotState: {scenarioData.robotState}");
-                }
-                else
-                {
-                    MyDebug.Log($"👁️ Auto Mode (View Only) - RobotState: {scenarioData.robotState}, EventState: {scenarioData.eventState}");
-                }
-            }
-
-            // 플레이어 이동
-            MovePlayer(scenarioData.seatAnchor);
-
-            MyDebug.Log($"[{GetType().Name}] ✅ Boarded Robot {robotId} Completely");
-        }
-
-        public void ReturnToMonitoring()
-        {
-            MyDebug.Log($"[{GetType().Name}] Returning to MonitoringRoom");
-
-            if (currentActiveScenarioData != null)
-            {
-                // Disable XR input when leaving robot
-                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
-                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true; // Re-enable keyboard for testing
-                currentActiveScenarioData.robotNavMeshController.enabled = false;
-
-                currentActiveScenarioData = null;
-            }
-
-            ToggleVRFeatures(true);
-            SetInputMode(InputMode.StandardVR);
-
-            currentPlayerState = PlayerState.MonitoringMode;
-            MyDebug.Log($"[{GetType().Name}] Change PlayerState to MonitoringMode");
-
-            MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
-
-            MyDebug.Log($"[{GetType().Name}] ✅ Returning to Monitoring Scene Completely");
-        }
-
-        #region Public Getter Methods
-        // -------------------------------------------------------------------------
-        // Public Getter Methods
+        // Public Getter & Setter
         // -------------------------------------------------------------------------
 
         /// <summary>
@@ -589,6 +600,21 @@ namespace Project
             }
             return null;
         }
+
+        public void SetPlayerState(PlayerState playerState)
+        {
+            currentPlayerState = playerState;
+        }
+
+        public SectorState GetSectorState()
+        {
+            return currentSectorState;
+        }
+
+        public void SetSectorState(SectorState sectorState)
+        {
+            currentSectorState = sectorState;
+        }
         #endregion
 
         #region Helper Methods
@@ -601,10 +627,10 @@ namespace Project
         }
         #endregion
         
+        #region VR Feature Control
         // -------------------------------------------------------------------------
-        // 4. VR Feature Control
+        // VR Feature Control
         // -------------------------------------------------------------------------
-
         public void ToggleVRFeatures(bool enable)
         {
             // 이동 시스템: 끄면 됨 (로봇 조종 중에는 텔레포트/이동 불가)
@@ -628,5 +654,6 @@ namespace Project
             // var model = controller.transform.Find("Model Parent"); // 이름 확인 필요
             // if (model) model.gameObject.SetActive(enable);
         }
+        #endregion
     }
 }

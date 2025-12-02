@@ -150,16 +150,14 @@ namespace Project
 
         private void OnSectorBClicked()
         {
-            RealRobotSceneManager.Instance.MovePlayerToSectorB();
-            
+            GameManager.Instance.SetSectorState(SectorState.RealWorld);
+            RealRobotSceneManager.Instance.MovePlayerToRespawnAnchorB();
         }
 
         private void OnEventTriggerClicked(int eventId)
         {
             MyDebug.Log($"[{GetType().Name}] Event Triggered: {eventId}");
             GameManager.Instance.StartGameEvent(eventId);
-            // TODO: 장애물 생성 등 시뮬레이션 이벤트 실행
-            
         }
 
         private void OnRobotCamClicked(int robotId)
