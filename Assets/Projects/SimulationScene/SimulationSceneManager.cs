@@ -38,6 +38,7 @@ namespace Project
         private int currentEventIndex = -1;
         #endregion
 
+        #region Unity Lifecycle
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -50,11 +51,14 @@ namespace Project
 
             // Pass robot and event data to GameManager for initialization
             MonoBehaviour[] eventControllers = new MonoBehaviour[] { event1Controller, event2Controller, event3Controller };
-            GameManager.Instance.InitializeSimulationData(rawRobots, robotSeatAnchors, eventControllers);
+            GameManager.Instance.InitializeSimulationData(rawRobots, robotSeatAnchors);
+            // Initialize events (delegate to SimulationSceneManager for actual event setup)
+            GameManager.Instance.InitializeEvents(eventControllers);
 
             // Initialize local event references
             InitializeEventReferences();
         }
+        #endregion
 
         /// <summary>
         /// Initialize local event references (called after GameManager sets up events)

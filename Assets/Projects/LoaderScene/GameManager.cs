@@ -73,7 +73,7 @@ namespace Project
         
         #region Unity Lifecycle
         // -------------------------------------------------------------------------
-        // 
+        // Unity Lifecycle
         // -------------------------------------------------------------------------
         private void Awake()
         {
@@ -115,10 +115,7 @@ namespace Project
         }
         #endregion
         
-        #region Check Assignments & Scene Loading
-        // -------------------------------------------------------------------------
-        // Check Assignments & Scene Loading
-        // -------------------------------------------------------------------------
+        #region Assignments  Checking
         private void CheckAssignments()
         {
             if (playerObject == null)              MyDebug.LogError($"[{GetType().Name}] ❌ PlayerObject is Missing");
@@ -130,6 +127,12 @@ namespace Project
             if (inputActionAsset == null)          MyDebug.LogError($"[{GetType().Name}] ❌ Input Action Asset is Missing");
         }
         
+        #endregion
+        
+        #region Scene Loading
+        // -------------------------------------------------------------------------
+        // Scene Loading
+        // -------------------------------------------------------------------------
         private IEnumerator LoadScenesSequence()
         {
             MyDebug.Log($"[{GetType().Name}] Loading Scenes...");
@@ -176,8 +179,7 @@ namespace Project
         {
             var globalMap = inputActionAsset.FindActionMap(globalMapName);
             if (globalMap != null) globalMap.Enable();
-                
-            // 기본적으로 Standard 모드로 시작
+            
             SetInputMode(InputMode.StandardVR);
         }
 
@@ -240,20 +242,7 @@ namespace Project
 
             if (isVRPressed || isKeyboardPressed)
             {
-                var currentSectorStr = "";
-                switch (currentSectorState)
-                {
-                    case SectorState.Simulation:
-                        currentSectorStr = "A";
-                        break;
-                    case SectorState.RealWorld:
-                        currentSectorStr = "B";
-                        break;
-                    default:
-                        MyDebug.LogWarning($"[{GetType().Name}] Current sector state: {currentSectorState}");
-                        break;
-                }
-                MyDebug.Log($"[{GetType().Name}] 🔘 Return Button Pressed; Sector: {currentSectorStr}");
+                MyDebug.Log($"[{GetType().Name}] 🔘 Return Button Pressed; Sector: {currentSectorState}");
 
                 switch (currentSectorState)
                 {
@@ -403,7 +392,7 @@ namespace Project
         // -------------------------------------------------------------------------
         // Robot & Scenario Initialization
         // -------------------------------------------------------------------------
-        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors, MonoBehaviour[] eventControllers)
+        public void InitializeSimulationData(GameObject[] rawRobots, Transform[] seatAnchors)
         {
             MyDebug.Log($"[{GetType().Name}] Initializing Robot Data...");
 
@@ -437,12 +426,9 @@ namespace Project
             }
 
             MyDebug.Log($"[{GetType().Name}] ✅ Initialized ({scenarioDataList.Count}) robots successfully");
-
-            // Initialize events (delegate to SimulationSceneManager for actual event setup)
-            InitializeEvents(eventControllers);
         }
 
-        private void InitializeEvents(MonoBehaviour[] eventControllers)
+        public void InitializeEvents(MonoBehaviour[] eventControllers)
         {
             if (eventControllers == null || eventControllers.Length == 0)
             {
@@ -575,9 +561,9 @@ namespace Project
         }
         #endregion
 
-        #region Public Getter & Setter
+        #region Public Getter, Setter & Helper Methods
         // -------------------------------------------------------------------------
-        // Public Getter & Setter
+        // Public Getter & Setter / Helper Methods
         // -------------------------------------------------------------------------
 
         /// <summary>
@@ -615,12 +601,7 @@ namespace Project
         {
             currentSectorState = sectorState;
         }
-        #endregion
 
-        #region Helper Methods
-        // -------------------------------------------------------------------------
-        // Helper Methods
-        // -------------------------------------------------------------------------
         private ScenarioData GetScenarioData(int id)
         {
             return scenarioDataList.Find(s => s.id == id);
@@ -649,10 +630,6 @@ namespace Project
             {
                 interactor.enabled = enable;
             }
-            
-            // (선택) 시각적 모델(손) 숨기기
-            // var model = controller.transform.Find("Model Parent"); // 이름 확인 필요
-            // if (model) model.gameObject.SetActive(enable);
         }
         #endregion
     }

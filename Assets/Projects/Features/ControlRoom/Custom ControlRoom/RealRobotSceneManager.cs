@@ -13,6 +13,7 @@ namespace Project
     {
         public static RealRobotSceneManager Instance;
 
+        #region Serialized Fields
         [Space(10)]
         [Header("Locations (Drag Transforms Here)")]
         [SerializeField] private Transform respawnAnchor;  // 초기 위치
@@ -22,14 +23,14 @@ namespace Project
         [SerializeField] private Button sectorButtonA;
         [SerializeField] private Button location1Button;
         [SerializeField] private Button location2Button;
+        #endregion
 
+        #region Runtime Data
         private PoseData cachedRespawnAnchorPose;
+        #endregion
 
         
-        // =========================================================================
-        // 초기화 및 실행 (Start)
-        // =========================================================================
-        
+        #region Unity Lifecycle
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
@@ -45,12 +46,16 @@ namespace Project
 
             InitializeButtons();
         }
+        #endregion
 
+        #region Assignments Checking
         private void CheckAssignments()
         {
-            //
+            //TODO
         }
+        #endregion
         
+        #region Initialization & Setup
         private void StoreInitialRespawnAnchor()
         {
             cachedRespawnAnchorPose = new PoseData(respawnAnchor.transform);
@@ -62,7 +67,9 @@ namespace Project
             location1Button.onClick.AddListener(() => GoToLocation1());
             location2Button.onClick.AddListener(() => GoToLocation2());
         }
+        #endregion
 
+        #region Player Movement
         // =========================================================================
         // [기능 2] 위치 이동 및 입력 맵 전환 함수들 (Public API)
         // =========================================================================
@@ -79,6 +86,12 @@ namespace Project
             GameManager.Instance.MovePlayer(respawnAnchor);
         }
         
+        public void ReturnToMonitoringB()
+        {
+            MyDebug.Log($"[{GetType().Name}] >>> Command: Return to Monitoring B");
+            
+            MovePlayerToRespawnAnchorB();
+        }
 
         public void GoToLocation1()
         {
@@ -99,18 +112,14 @@ namespace Project
             GameManager.Instance.ToggleVRFeatures(false);
             GameManager.Instance.MovePlayer(location2);
         }
+        #endregion
 
+        #region UI Event Handler
         private void OnSectorAClicked()
         {
             GameManager.Instance.SetSectorState(SectorState.Simulation);
             MonitoringSceneManager.Instance.MovePlayerToRespawnAnchor();
         }
-
-        public void ReturnToMonitoringB()
-        {
-            MyDebug.Log($"[{GetType().Name}] >>> Command: Return to Monitoring B");
-            
-            MovePlayerToRespawnAnchorB();
-        }
+        #endregion
     }
 }
