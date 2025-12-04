@@ -507,6 +507,7 @@ MonoBehaviour:
   loaderSceneName: 0_LoaderScene
   monitoringSceneName: 1_MonitoringScene
   simulationSceneName: 2_SimulationScene
+  realRobotSceneName: 5_RealRobotScene
   scenarioDataList:
   - id: 1
     description: 
@@ -536,6 +537,22 @@ MonoBehaviour:
   alertDisplayDuration: 3
   returnButtonAction: {fileID: -3875704489234743591, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   xrThumbstickInputAction: {fileID: -60998027439631388, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  inputActionAsset: {fileID: -944628639613478452, guid: d15bb17f6f8ff674ab9b92aa85521239, type: 3}
+  globalMapName: Global
+  standardVRMaps:
+  - XRI Right Locomotion
+  - XRI Right Interaction
+  - XRI Left Interaction
+  - XRI Left Locomotion
+  robotControlMaps1:
+  - XRI Right Locomotion/Jump
+  - XRI Left/Thumbstick
+  - XRI Right Interaction
+  - XRI Left Interaction
+  robotControlMaps2:
+  - XRI Right Interaction
+  - XRI Left Interaction
+  - MOD_Joystick
 --- !u!4 &843755298
 Transform:
   m_ObjectHideFlags: 0

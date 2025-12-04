@@ -10,6 +10,7 @@ namespace Project
     {
         public static SimulationSceneManager Instance;
 
+        #region Serialized Fields
         [Header("Robot Settings")]
         [Tooltip("Array of robot GameObjects in the simulation scene")]
         [SerializeField] private GameObject[] rawRobots;
@@ -28,12 +29,16 @@ namespace Project
         [Header("Debug")]
         [Tooltip("Enable debug logging")]
         [SerializeField] private bool enableDebugLogs = true;
+        #endregion
 
+        #region Runtime Data
         // Event management
         private IEvent[] events;
         private IEvent currentEvent;
         private int currentEventIndex = -1;
+        #endregion
 
+        #region Unity Lifecycle
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -46,11 +51,14 @@ namespace Project
 
             // Pass robot and event data to GameManager for initialization
             MonoBehaviour[] eventControllers = new MonoBehaviour[] { event1Controller, event2Controller, event3Controller };
-            GameManager.Instance.InitializeSimulationData(rawRobots, robotSeatAnchors, eventControllers);
+            GameManager.Instance.InitializeSimulationData(rawRobots, robotSeatAnchors);
+            // Initialize events (delegate to SimulationSceneManager for actual event setup)
+            GameManager.Instance.InitializeEvents(eventControllers);
 
             // Initialize local event references
             InitializeEventReferences();
         }
+        #endregion
 
         /// <summary>
         /// Initialize local event references (called after GameManager sets up events)

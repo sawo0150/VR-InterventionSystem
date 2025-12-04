@@ -3411,6 +3411,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ReturnToMonitoring",
+                    "type": "Button",
+                    "id": "0a952cf8-987b-4319-8bb2-e05c0a7fb20e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -3422,6 +3431,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightStickMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d603f98a-2414-4124-af52-d2e97263746b",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReturnToMonitoring",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -3453,45 +3473,51 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "488b0e3b-4913-4126-9ff3-4c753920ef2d",
-                    "path": "<XRController>{RightHand}/{PrimaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GoToLoc2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "a36292da-5603-4d73-b62a-5f6ba5cbcdc1",
-                    "path": "<Keyboard>/numpad1",
+                    "path": "<Keyboard>/numpad9",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "GoToLoc2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1f0f6168-cc9b-4dfa-9c0a-3ef8bc85be59",
-                    "path": "<XRController>{RightHand}/{SecondaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GoToLoc1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "2fa4e90e-3c4f-4305-ac3f-1c887fa043d4",
-                    "path": "<Keyboard>/numpad2",
+                    "path": "<Keyboard>/numpad8",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "GoToLoc1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "MOD_Sim_Joystick",
+            "id": "e74c04c3-4acb-45a5-8dbe-152a93965027",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "0ca669bb-2d53-422b-886c-2399013cd1fb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd23f2f0-b715-488a-b914-931ed2d05b80",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
