@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 91c2cdce01d4441d5acf7df438cc45b9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 242192
+  packageName: Kids character Free
+  packageVersion: 1.0
+  assetPath: Assets/KidsCharacterFree/Scripts/KidsScript.cs
+  uploadId: 578579

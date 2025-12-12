@@ -5,7 +5,7 @@ using UnityEngine;
 /// Attach this to obstacle GameObjects (deer, rolling stones, etc.).
 /// Triggers respawn in Event1Controller when robot collides with the obstacle.
 /// </summary>
-public class ObstacleCollisionHandler : MonoBehaviour
+public class ObstacleCollisionHandler3 : MonoBehaviour
 {
     [Header("Obstacle Settings")]
     [Tooltip("Type of obstacle - determines which respawn point is used")]
@@ -130,5 +130,6 @@ public class ObstacleCollisionHandler : MonoBehaviour
 public enum ObstacleType
 {
     Deer,
-    RollingStone
+    RollingStone,
+    Children
 }
