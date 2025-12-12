@@ -1,4 +1,5 @@
 using UnityEngine;
+using VRInterventionSystem.Audio;
 
 namespace Project
 {
@@ -165,6 +166,12 @@ namespace Project
             if (enableDebugLogs)
             {
                 Debug.Log($"[SimulationSceneManager] Resetting {currentEvent.GetEventName()}");
+            }
+
+            // Play delivery complete sound
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayDeliveryCompleteSound();
             }
 
             // Show delivery completion message

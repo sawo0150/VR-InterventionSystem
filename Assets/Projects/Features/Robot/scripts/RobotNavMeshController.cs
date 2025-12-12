@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using VRInterventionSystem.Audio;
 
 /// <summary>
 /// NavMesh-based robot controller for VR Intervention System.
@@ -131,6 +132,20 @@ public class RobotNavMeshController : MonoBehaviour
         HandleInput();
         UpdateMovement();
         AlignToSlope();
+        UpdateEngineSound();
+    }
+
+    /// <summary>
+    /// Update engine sound based on current speed
+    /// </summary>
+    void UpdateEngineSound()
+    {
+        if (SoundManager.Instance != null)
+        {
+            float speedNormalized = Mathf.Abs(currentSpeed) / maxSpeed;
+            bool isMoving = Mathf.Abs(currentSpeed) > 0.01f;
+            SoundManager.Instance.UpdateEngineSound(speedNormalized, isMoving);
+        }
     }
 
     /// <summary>

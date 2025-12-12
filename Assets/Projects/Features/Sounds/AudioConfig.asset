@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0472785f087c4a91b9a026534a7ae69, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.AudioConfig
+  engineLoop: {fileID: 8300000, guid: 747532a51eab24514a053dc13fb73320, type: 3}
+  engineBaseVolume: 0.5
+  engineMinPitch: 0.8
+  engineMaxPitch: 1.5
+  enginePitchSmoothTime: 0.3
+  deerCollisionSound: {fileID: 8300000, guid: e07e40535eb1a4a3591ccbda3bb995fb, type: 3}
+  stoneCollisionSound: {fileID: 8300000, guid: e07e40535eb1a4a3591ccbda3bb995fb, type: 3}
+  collisionVolume: 0.7
+  alertSound: {fileID: 8300000, guid: 45a347794ca004efa9b3042beb8072fb, type: 3}
+  warningSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}
+  errorSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}
+  hintSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
+  statusSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
+  uiSoundVolume: 0.6
+  buttonClickSound: {fileID: 8300000, guid: 0ddf69541af314cb58835fb8698e8fe6, type: 3}
+  buttonHoverSound: {fileID: 0}
+  buttonSoundVolume: 0.5
+  deliveryCompleteSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
+  completionVolume: 0.8
+  engineSpatialBlend: 1
+  engineMaxDistance: 50
+  uiSpatialBlend: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using VRInterventionSystem.Audio;
 
 /// <summary>
 /// Handles collisions between obstacles and the robot.
@@ -83,6 +84,12 @@ public class ObstacleCollisionHandler : MonoBehaviour
             if (enableDebugLogs)
             {
                 Debug.Log($"[ObstacleCollisionHandler] Robot detected by {obstacleType} obstacle: {gameObject.name}");
+            }
+
+            // Play collision sound
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayCollisionSound(obstacleType);
             }
 
             // Notify Event1Controller to respawn the robot

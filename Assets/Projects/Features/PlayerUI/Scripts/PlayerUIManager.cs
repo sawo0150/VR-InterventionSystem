@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using VRInterventionSystem.Audio;
 
 namespace Project
 {
@@ -295,6 +296,12 @@ namespace Project
                 Debug.LogError($"[PlayerUIManager] No panel instance for message type: {type} - Panel was NOT registered!");
                 Debug.Log($"[PlayerUIManager] Available panel types: {string.Join(", ", panelInstances.Keys)}");
                 return;
+            }
+
+            // Play UI sound for this message type
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayUISound(type);
             }
 
             // Hide current panel if different type

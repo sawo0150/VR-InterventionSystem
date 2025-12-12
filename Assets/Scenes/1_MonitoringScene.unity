@@ -441,6 +441,7 @@ GameObject:
   - component: {fileID: 100997559}
   - component: {fileID: 100997558}
   - component: {fileID: 100997561}
+  - component: {fileID: 100997562}
   m_Layer: 0
   m_Name: RawImage 1
   m_TagString: Untagged
@@ -560,6 +561,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &100997562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100997556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &135451550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,6 +1141,7 @@ GameObject:
   - component: {fileID: 434268652}
   - component: {fileID: 434268651}
   - component: {fileID: 434268650}
+  - component: {fileID: 434268653}
   m_Layer: 0
   m_Name: Sector B Button
   m_TagString: Untagged
@@ -1235,6 +1251,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434268648}
   m_CullTransparentMesh: 1
+--- !u!114 &434268653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434268648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &560946710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,6 +1365,7 @@ GameObject:
   - component: {fileID: 571055265}
   - component: {fileID: 571055264}
   - component: {fileID: 571055267}
+  - component: {fileID: 571055268}
   m_Layer: 0
   m_Name: RawImage 2
   m_TagString: Untagged
@@ -1454,6 +1485,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &571055268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571055262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &577132521
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,6 +4375,7 @@ GameObject:
   - component: {fileID: 1333478137}
   - component: {fileID: 1333478136}
   - component: {fileID: 1333478139}
+  - component: {fileID: 1333478140}
   m_Layer: 0
   m_Name: RawImage 3
   m_TagString: Untagged
@@ -4449,6 +4495,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1333478140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333478134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &1336659375
 GameObject:
   m_ObjectHideFlags: 0
@@ -5569,6 +5629,7 @@ GameObject:
   - component: {fileID: 1638956743}
   - component: {fileID: 1638956742}
   - component: {fileID: 1638956741}
+  - component: {fileID: 1638956744}
   m_Layer: 0
   m_Name: Sector A Button
   m_TagString: Untagged
@@ -5678,6 +5739,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638956739}
   m_CullTransparentMesh: 1
+--- !u!114 &1638956744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638956739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &1651534750
 GameObject:
   m_ObjectHideFlags: 0
@@ -6342,6 +6417,7 @@ GameObject:
   - component: {fileID: 1723166839}
   - component: {fileID: 1723166838}
   - component: {fileID: 1723166837}
+  - component: {fileID: 1723166841}
   m_Layer: 5
   m_Name: Event1Alert
   m_TagString: Untagged
@@ -6467,6 +6543,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1723166835}
   m_CullTransparentMesh: 1
+--- !u!114 &1723166841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723166835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &1729158842
 GameObject:
   m_ObjectHideFlags: 0
