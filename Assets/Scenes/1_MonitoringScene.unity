@@ -2679,8 +2679,6 @@ MonoBehaviour:
     robotId: 2
   - button: {fileID: 1333478139}
     robotId: 3
-  restartAppButton: {fileID: 0}
-  resetRobotsButton: {fileID: 0}
 --- !u!1 &837259759
 GameObject:
   m_ObjectHideFlags: 0
@@ -3895,7 +3893,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: a9273102ec5110f489701522a8abced8, type: 2}
+  m_Texture: {fileID: 8400000, guid: 784c612fc587347de9e113a0a837c74d, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0

@@ -400,6 +400,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &516902440 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 366349417295850678, guid: 35d51966c77a024469834cee123adadb, type: 3}
+  m_PrefabInstance: {fileID: 676945197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &676945197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -499,15 +504,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.AppLoader
   enableDebugLogs: 1
+  loaderSceneName: 0_LoaderScene
+  monitoringSceneName: 1_MonitoringScene
+  simulationSceneName: 2_SimulationScene
+  realRobotSceneName: 5_RealRobotScene
   playerObject: {fileID: 676945204}
   playerCharacterController: {fileID: 1871224632}
   locomotionSystem: {fileID: 1931159366}
   leftController: {fileID: 1565661449}
   rightController: {fileID: 1334322560}
-  loaderSceneName: 0_LoaderScene
-  monitoringSceneName: 1_MonitoringScene
-  simulationSceneName: 2_SimulationScene
-  realRobotSceneName: 5_RealRobotScene
   scenarioDataList:
   - id: 1
     description: 
@@ -544,14 +549,12 @@ MonoBehaviour:
   - XRI Right Interaction
   - XRI Left Interaction
   - XRI Left Locomotion
-  robotControlMaps1:
+  robotControlMaps_Sim:
   - XRI Right Locomotion/Jump
   - XRI Left/Thumbstick
   - XRI Right Interaction
   - XRI Left Interaction
-  robotControlMaps2:
-  - XRI Right Interaction
-  - XRI Left Interaction
+  robotControlMaps_Real:
   - MOD_Joystick
 --- !u!4 &843755298
 Transform:
@@ -704,6 +707,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6900676903622151380, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
+      propertyPath: m_CameraTransform
+      value: 
+      objectReference: {fileID: 516902440}
     - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_Name
       value: XR Interaction Simulator
