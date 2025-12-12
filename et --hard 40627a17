@@ -1,0 +1,812 @@
+[33mcommit 90bd9205ec1ca66ea3d9bdcceec48aab0443868c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mevent3-hj[m[33m)[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Dec 13 17:25:33 2025 +0900
+
+    change workingfile name
+
+[33mcommit d4ae58d589520c02f5384a6b3254045d7bcca246[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Dec 13 14:38:28 2025 +0900
+
+    fix event 2 boundaries
+
+[33mcommit 5e28c90f150fff4284d41c3692f8147d509f9cc0[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Dec 13 14:37:42 2025 +0900
+
+    fix event 2 boundaries
+
+[33mcommit 86766f2d495c78ac6d6c7929805fbd42b15c6860[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Dec 13 14:36:13 2025 +0900
+
+    fix event 2 boundaries
+
+[33mcommit 732f972c717d3a3537900f949f652fa120c8e0a7[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Dec 13 14:17:51 2025 +0900
+
+    implement event 2 (tree falling)
+
+[33mcommit 36da5c144134681c9362aa4a1c333810af31ab13[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Dec 12 22:02:31 2025 +0900
+
+    implement event2 (waypoints, start/end Trigger)
+
+[33mcommit 316621262095c9398b1848d0be235b3beb441e45[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feature/sounds[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Sat Dec 13 16:51:41 2025 +0900
+
+    Changed UI Height
+
+[33mcommit 566cf52019971d3e600bac605e02194011aa6911[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Sat Dec 13 16:44:27 2025 +0900
+
+    Added Event Trigger Sounds and UI Button Sounds
+
+[33mcommit 540087f844527716046ec252bd7aa6ed64cef853[m
+Merge: 7d073268 8c49d82b
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Sat Dec 13 16:11:35 2025 +0900
+
+    Merge branch 'main' into feature/sounds
+
+[33mcommit 8c49d82b6ab39bd8ea9a546501eaaaf87c34e73a[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Sat Dec 13 16:08:47 2025 +0900
+
+    Added Minimap Alerts for Events 2,3
+
+[33mcommit c0f43134ab51bac1bb34d9566e11ecc0f5bc888f[m
+Merge: c9d1e559 d63dd14c
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Dec 12 21:58:37 2025 +0900
+
+    Merge branch 'event3-jm'
+
+[33mcommit d63dd14c8f0a9528b539e1805513fb50d41e7e34[m[33m ([m[1;31morigin/event3-jm[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Dec 12 21:57:09 2025 +0900
+
+    Minor bug fixes
+
+[33mcommit c9d1e559241fa7335c580b6b64a7cd6eb654eceb[m
+Merge: 2a38f5a1 12d3e177
+Author: junhee-k <73790085+junhee-k@users.noreply.github.com>
+Date:   Fri Dec 12 21:56:38 2025 +0900
+
+    Merge pull request #14 from sawo0150/event3-jm
+    
+    Event 3 Implementation: Children Crossing Road + Sound System
+
+[33mcommit 12d3e1779b3372681acbe36aa675e8c90726287b[m
+Merge: b5e52c94 2a38f5a1
+Author: junhee-k <73790085+junhee-k@users.noreply.github.com>
+Date:   Fri Dec 12 11:43:26 2025 +0900
+
+    Merge branch 'main' into event3-jm
+
+[33mcommit b5e52c942f6f88b6b2c3cbf99ff84daf6b26a696[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Dec 12 11:42:33 2025 +0900
+
+    update 2_SimulationScene
+
+[33mcommit bf62b599332c924a343d2572d837c793b5f5d362[m
+Author: nightbird6174 <jamiehyun@snu.ac.kr>
+Date:   Fri Dec 12 11:30:39 2025 +0900
+
+    Event 3 Before Merge
+
+[33mcommit 7d073268fa2ad838138e1a63bd266edd09d04e07[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Dec 12 11:22:53 2025 +0900
+
+    Added Basic Sounds to Project
+
+[33mcommit 2a38f5a1fd330eee1c45696136b5abfa2c0c0ea8[m
+Merge: 12ab8de9 8de1b91c
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Thu Dec 4 22:50:40 2025 +0900
+
+    Merge pull request #13 from sawo0150/hj-connecting-scenes
+    
+    Merge Simulation Scene and Real Robot Scene
+    
+    (씬 전환 적용해보려고 일단 된 것 까지 merge 했습니다)
+
+[33mcommit 8de1b91c96889431426038f22c7a957989ebdcbe[m[33m ([m[1;31morigin/hj-connecting-scenes[m[33m)[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Tue Dec 2 22:32:50 2025 +0900
+
+    refactor GameManager and SceneManagers (set regions simply)
+
+[33mcommit 92a34da4fc1911a46c597925c947d012f4c6bc9f[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Tue Dec 2 21:44:00 2025 +0900
+
+    apply interrupt handler on RealRobotScene
+
+[33mcommit f231e38ed9acdbd3b278ba524dfca3c3a23e02b2[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Nov 29 22:45:14 2025 +0900
+
+    (chore) add gitignore ./idea and .DS_Store
+
+[33mcommit d1caad3edd0294f1844223cda18f717472b64c1b[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Sat Nov 29 22:28:40 2025 +0900
+
+    fix merge conflict
+
+[33mcommit c8559c9a2c5e5734a336508b28acc36ee43f60b5[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 28 17:37:57 2025 +0900
+
+    merge all scenes #2
+
+[33mcommit 973e4ddf9d6dac0322105307310d53169156c01e[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 28 17:22:27 2025 +0900
+
+    merge all scenes #1
+    
+    # Conflicts:
+    #       Assets/Projects/LoaderScene/GameManager.cs
+
+[33mcommit 12ab8de96bca804bb3b0016f1a42a394e92695a3[m
+Merge: f76c425d c99dda9b
+Author: HyunjaeRoh <107918576+HyunjaeRoh@users.noreply.github.com>
+Date:   Sat Nov 29 21:02:52 2025 +0900
+
+    Merge pull request #12 from sawo0150/events-junhee
+    
+    Add Player UI System and Event Alert/Delivery Panels
+
+[33mcommit c99dda9bef957c2f30709564f9e7ff7159f0ee60[m[33m ([m[1;31morigin/events-junhee[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 16:15:28 2025 +0900
+
+    Completed PlayerUI for Full Loop of Event1
+
+[33mcommit c76b10dd3941faa8fc894e494ee237263145c033[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 14:56:33 2025 +0900
+
+    Moved Event Specific UI to PlayerUIManager
+
+[33mcommit 6a087639a576ee61a810ba30f13a770cb8d29786[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 13:06:32 2025 +0900
+
+    Added Controller Guide Image
+
+[33mcommit 0136616dc6a79b4386b7cf855f3481b7488e2a16[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 11:49:25 2025 +0900
+
+    Implemented Collision and Respawn Logic
+
+[33mcommit f76c425dc7232adddbcc34c898416eb6d66789c0[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 28 11:14:16 2025 +0900
+
+    5.scene 변경 사항 upload
+
+[33mcommit ad119d6e52938f0c077d3c65c3e0e8d63995775f[m
+Merge: 1d560e85 16048050
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 28 11:01:57 2025 +0900
+
+    Merge remote-tracking branch 'origin/Real_VRIS_final'
+
+[33mcommit 1d560e85e4fed324b57b703177f5fb03256ec408[m
+Merge: f51daa3a 7bafee22
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 28 09:53:50 2025 +0900
+
+    Merge pull request #10 from sawo0150/events-junhee
+    
+    Event System Implementation with XR Controller Support
+
+[33mcommit 7bafee225e791fe99738581409aa76fdff62ad68[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 06:13:14 2025 +0900
+
+    Finished Palette Menu Toggle
+
+[33mcommit 27c9048f8f520ffa94fe5e43eeac71b2af75594f[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 05:36:10 2025 +0900
+
+    BlinkingButton Implementation Complete
+
+[33mcommit c5eb323d3ef8f544c500dac7c7ad0f964386d2b4[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 04:38:31 2025 +0900
+
+    Minor Bug Fix for Car Control
+
+[33mcommit 215006cd06222e7bc4856e7bba83273120fcd81f[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 04:32:12 2025 +0900
+
+    Implemented Warning UI for Event Boundary Alerts
+
+[33mcommit 85bd070a5e55e6ebe36afd8a69e8e6d7b279be52[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 02:55:55 2025 +0900
+
+    Fixed Manual Control Bug
+
+[33mcommit 1c88b8dc0e41bf3af1020088d661704373791431[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 01:41:06 2025 +0900
+
+    Changed Deer Jumping Logic to Add Wait Time
+
+[33mcommit b62e997e79c277a6821008400a289c921ff8d8c3[m[33m ([m[1;32mevents-junhee[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 28 00:35:21 2025 +0900
+
+    Finished Event1 Robot Configuration
+
+[33mcommit 16048050362a6092fc44b48a085bd2b35f15ea33[m[33m ([m[1;31morigin/Real_VRIS_final[m[33m)[m
+Author: sawo0150 <swpants05@gmail.com>
+Date:   Thu Nov 27 21:39:19 2025 +0900
+
+    로봇 통신 기능 합침
+
+[33mcommit e8e24be0038361071e6b0ed8dcea2c5b26b19de0[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Nov 27 15:05:39 2025 +0900
+
+    Moved Configurations to Simulation Scene
+
+[33mcommit f51daa3a9f74c1264fae3ed58023327308fec11c[m
+Merge: c8b1325d 47172f62
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Thu Nov 27 14:27:35 2025 +0900
+
+    Merge pull request #9 from sawo0150/mj_test
+    
+    Mj test
+
+[33mcommit 47172f62007dc033ac68bb17817f5ff8f5d02602[m[33m ([m[1;31morigin/mj_test[m[33m)[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Thu Nov 27 14:23:38 2025 +0900
+
+    Status 항 추가
+
+[33mcommit c9c5067c166672f5efdc2e32cacc8222a26e881b[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Nov 27 11:34:00 2025 +0900
+
+    Add Robot Input using Meta Quest 3 Controllers
+
+[33mcommit ab97c56db0ecd11d1a29131f77eb85499c22f526[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Wed Nov 26 11:10:56 2025 +0900
+
+    Sample Minimap Marker 수정
+
+[33mcommit c8b1325d81ddb963d9bb71923b1cdac5f57ff5cb[m
+Merge: cf4c287b 659ecf9a
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Wed Nov 26 09:08:28 2025 +0900
+
+    Merge pull request #8 from sawo0150/mj_test
+    
+    5_RealRobotScene 제작
+
+[33mcommit 659ecf9a254ef4e704aec45c5b432d7ac10c83a6[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Wed Nov 26 01:15:09 2025 +0900
+
+    5_RealRobotScene 제작
+
+[33mcommit d72505afe014b2f3853429edd32375efcdd2eb93[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Tue Nov 25 15:19:29 2025 +0900
+
+    Control Room Scene 통합중
+
+[33mcommit d57cfa7722a0363cf4d1e66b8fdaf672ebb88653[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Mon Nov 24 23:21:19 2025 +0900
+
+    Added Transporter (General) + Joystick Send Command
+
+[33mcommit 6bed1876e28333bf2d2f117e9b6336eecb64e3c6[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Mon Nov 24 20:01:42 2025 +0900
+
+    Create New Input Actions
+
+[33mcommit 386a535f0a8f4a7d29924c2b4ec7e02a533b115c[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Sun Nov 23 19:01:04 2025 +0900
+
+    Control Room 기능 추가
+
+[33mcommit 7964881a26e044a280e710ddb631b22445a4fcc0[m
+Merge: f38c3168 cf4c287b
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Sun Nov 23 17:46:11 2025 +0900
+
+    Merge remote-tracking branch 'origin/main' into mj_test
+
+[33mcommit f38c3168c3350ac6c2233eb31f89a3755e621fab[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Sun Nov 23 17:44:50 2025 +0900
+
+    Settings
+
+[33mcommit cf4c287bd7558301c8a0ca3c1f86acb3adff3f0b[m
+Merge: 7980ce1c 899bb614
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Sat Nov 22 17:28:42 2025 +0900
+
+    Merge pull request #7 from sawo0150/realInterventionSystem-WebRTC
+    
+    Real intervention system - 기존 contorl room에 WebRTC기능 구현 완료
+
+[33mcommit 899bb6148fd21c23127bc8c4bc958627287e305f[m[33m ([m[1;31morigin/realInterventionSystem-WebRTC[m[33m)[m
+Author: sawo0150 <swpants05@gmail.com>
+Date:   Sat Nov 22 17:24:47 2025 +0900
+
+    Update RenderStreamingProjectSettings.asset
+
+[33mcommit f3297a60bfa7a22641414a762b3e158faf2ca56b[m
+Author: sawo0150 <swpants05@gmail.com>
+Date:   Sat Nov 22 17:00:11 2025 +0900
+
+    code 살짝 수정
+
+[33mcommit 0a4e61e2b8bfb10b12d15cca2aa0a6037b6fcc4c[m
+Author: sawo0150 <swpants05@gmail.com>
+Date:   Sat Nov 22 16:11:33 2025 +0900
+
+    webRTC 기능 controlRoom scene에 연결 완료
+
+[33mcommit 7980ce1c5abd71453729bc9bd23d785a0615a80f[m
+Merge: 5c43ead7 66a38cb6
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 21 13:33:53 2025 +0900
+
+    Merge pull request #6 from sawo0150/events-junhee
+    
+    Event System Implementation with Autonomous Robot Navigation
+
+[33mcommit 66a38cb66dbc1448fa2782ba02cec6cd9ce5ed9f[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 10:21:23 2025 +0900
+
+    Updated references from RobotWheelController to RobotNavMeshController
+    
+    - Updated GameTypes.cs to use RobotNavMeshController
+    - Updated GameManager.cs to reference robotNavMeshController field
+    - Updated Events README.md documentation
+    
+    This fixes compilation errors after removing the deprecated RobotWheelController.
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit e0cd91ad0be674734b345e2e763d020ad1ef2af1[m
+Merge: 2805f70d 5c43ead7
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 10:15:13 2025 +0900
+
+    Merge main into events-junhee to check for conflicts
+
+[33mcommit 2805f70d2c667d0d7fbe05ceed2e6411d1efaed6[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 09:53:39 2025 +0900
+
+    Fixed teleportation issue with agent.Warp()
+
+[33mcommit 5c43ead74bc612e203c03b44f022f531cca119c9[m
+Merge: 5b0f2262 0d6496f2
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 21 09:52:04 2025 +0900
+
+    Merge pull request #5 from sawo0150/hyunjaeroh
+    
+    feat: implementation fo GameManager and core logic flows
+
+[33mcommit 1cfda679a92c353d04b8981bfa8c065caede66a2[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 05:04:28 2025 +0900
+
+    Updated the Robot Prefab, Reset Bug still exists
+
+[33mcommit 289eca7f179c98fb3572f59b133b3dc3c3844a95[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 04:28:05 2025 +0900
+
+    Renamed Files to Event1xxx
+
+[33mcommit c7cd3011af9bc46eac2044a3c2f2b54726e17dc1[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 04:24:31 2025 +0900
+
+    Finished Configuring Full Event1 Flow
+
+[33mcommit 3cb69620dc6b774b0fe2ec2097d4117839f59733[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 02:24:32 2025 +0900
+
+    Implemented Autonomous Navigation for Event1
+
+[33mcommit af1383f6a7476ae2fdac97c7317a606ce256cd3f[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Nov 21 01:44:35 2025 +0900
+
+    Setup Event1Controller
+
+[33mcommit 0d6496f2c5fe66c3d77239c45bc4bef3785023d2[m
+Merge: 57689135 5b0f2262
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 21 00:51:37 2025 +0900
+
+    Merge branch 'main' into hyunjaeroh
+
+[33mcommit 576891351f6dcce29bb8730cdf1ce03402290e54[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 21 06:57:02 2025 +0900
+
+    refactor overall logic flow
+
+[33mcommit 5b0f2262e4f6029924fbf7f6eb3fbfa9e97d396c[m
+Author: eric-mjk <eric.mjkim35@gmail.com>
+Date:   Thu Nov 20 21:02:30 2025 +0900
+
+    Camera 초기 커밋
+
+[33mcommit fdd678173cfa54515ef6850ff18a80f3f13ae99c[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Nov 20 14:01:54 2025 +0900
+
+    Implemented Event Interface and created Event1
+
+[33mcommit f8c46307971d781223e8ba86750aa8e2048cc031[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Wed Nov 19 03:44:25 2025 +0900
+
+    implement and update MonitoringScene and SimulationScene
+
+[33mcommit b9fd229649bef1cbf88ae8e9587c284211654e48[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Wed Nov 19 03:41:39 2025 +0900
+
+    update GameManager and LoaderScene
+
+[33mcommit 336a8a95e677c2aa1c3983295ed5fd2383fe9637[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Tue Nov 18 23:03:03 2025 +0900
+
+    implement MonitoringScene simply
+
+[33mcommit c3dd6fb97bb1cf00e5fdda95c0ff2bdb2a9251e1[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Tue Nov 18 23:01:35 2025 +0900
+
+    (chore) change playerobject pose (for debuggind)
+
+[33mcommit 4d36cad3711eea1cc3983b0ad071c7c1384eb422[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Tue Nov 18 23:01:03 2025 +0900
+
+    add MovePlayer() method
+
+[33mcommit 3cb77574991780cff5f2faa244e94758165898a8[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 06:48:21 2025 +0900
+
+    add CheckAssignments() method
+
+[33mcommit b9fe0bf9e0ded94547a005bd6b63a8b4d31da82e[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 06:28:52 2025 +0900
+
+    edit log message
+
+[33mcommit 17f0774c2720f1f59b1685dabdbd2001890fffe8[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 05:24:02 2025 +0900
+
+    fix LoadScenesSequence() (wait until scene load)
+
+[33mcommit 37708af4d772d3a6b5d6df7cd2337c567ed3c6a1[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 05:22:45 2025 +0900
+
+    remove old scene
+
+[33mcommit ceeb510a6dd01a4523e6e9a6a2c6e27b63202cb9[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 04:24:35 2025 +0900
+
+    (chore) edit workspace of hyunjaeroh
+
+[33mcommit 00b00dc96b83486de53160a157ee60295d7b423d[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 04:22:07 2025 +0900
+
+    set MonitoringScene
+
+[33mcommit cc0e33a07f3d49b9b1be938cc78c4d2d52c81a91[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 04:18:18 2025 +0900
+
+    add helper scripts (MyDebug.cs, MyMemo.cs)
+
+[33mcommit 470670e1be2732d32db552cd72c6e9df739c23b5[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 14 04:15:52 2025 +0900
+
+    edit player (XR Origin) prefab
+
+[33mcommit a54a3da4dd25c97c6384fb55393443509b9dc246[m
+Merge: de01b935 ca9e3b1e
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 14 10:57:16 2025 +0900
+
+    Merge pull request #4 from sawo0150/jetson-streaming_test
+    
+    Add prototype Unity streaming
+
+[33mcommit de01b9351af274cfe86b1d351ef545a4e46fdccd[m
+Merge: 684ba3c9 9877de51
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 14 10:48:07 2025 +0900
+
+    Merge pull request #3 from sawo0150/events-junhee
+    
+    Robot Control System with WheelColliders and Smooth Camera
+
+[33mcommit 9877de51e5a036720537cf1c711283cd6c8e0bf3[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 12 23:20:46 2025 +0900
+
+    Created a RobotPrefab for easy drag and drop
+
+[33mcommit 684ba3c90d1755b2da0c8016f527e329219c105f[m
+Merge: 92106390 5ac621a2
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Wed Nov 12 23:17:11 2025 +0900
+
+    Merge pull request #2 from sawo0150/hyunjaeroh
+    
+    Implementation of Simple Event 2 (Tree Falling and Meteor Falling)
+
+[33mcommit 4a7095a63fb1d9926254508919f42846ab5c41e7[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 12 22:39:21 2025 +0900
+
+    Found Suitable Configuration for Robot Control
+
+[33mcommit 10acdcae02abb7365cbfbba8b8007ed56531364d[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 12 15:07:13 2025 +0900
+
+    Initial Delivery Robot Prefab Created
+
+[33mcommit c51bb67bdafb6f690c29b0a0ae33a7bc6edb7f6f[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 12 13:01:45 2025 +0900
+
+    Updated Tricky Road to remove guardrails
+
+[33mcommit ca9e3b1e0427da4ba19553850612532feb44a850[m[33m ([m[1;31morigin/jetson-streaming_test[m[33m)[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Sat Nov 8 16:33:50 2025 +0900
+
+    Add jetson WASD control test
+
+[33mcommit 2e08d0f40e6efa87a92ac96d1b55c93f33af5ea2[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Sat Nov 8 15:10:33 2025 +0900
+
+    insta360 Test success
+
+[33mcommit 25a5300dd0f66dab501215730886cdc12aec8ebd[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Nov 7 21:18:08 2025 +0900
+
+    Add WebRTC Samples
+
+[33mcommit 5ac621a226438b09421a119934f288494319d2d0[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 03:55:53 2025 +0900
+
+    (chore) edit starting point
+
+[33mcommit c63003fc9deb507d347e184bf5ec7cade1084830[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 03:51:14 2025 +0900
+
+    feat: implementing event 2 (tree fall and meteor falling) scenario
+
+[33mcommit cbda7d5a3b1cf1b9da3b1f4c9c0f50aa580e2fde[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 03:49:42 2025 +0900
+
+    add meteor prefab
+
+[33mcommit ee9733944e165e032c6507c5815793907b29717c[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 03:17:34 2025 +0900
+
+    add blocking wall prefab
+
+[33mcommit 37f00a44a74d42a024ca02d00aed54925af2bf38[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 03:02:54 2025 +0900
+
+    add prefabs and scripts for tree falling event
+
+[33mcommit f5cd9b009ee192b39562a929bc43bab503dbd22c[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 01:56:56 2025 +0900
+
+    add BigRock externel asset
+
+[33mcommit 33c2917d2aa9c53278d61310cd0a17a01bf11eb7[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 01:51:03 2025 +0900
+
+    add modified XR Origin (based on XR Origin in XRI Toolkit and Complete XR Origin in XRI Examples)
+
+[33mcommit e62ef861ce8402a251ac81aa9aa6a81f7f2b8386[m
+Author: HyunjaeRoh <rohhj0410@gmail.com>
+Date:   Fri Nov 7 01:45:09 2025 +0900
+
+    initial commit
+
+[33mcommit 24547f1acede8f36c8fac849ef609952b3519765[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Nov 6 22:07:22 2025 +0900
+
+    unity render streaming package 추가
+
+[33mcommit 92106390191e88222dec4445fbce90fec290a544[m
+Merge: 17a71fc4 4cecde06
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Nov 6 19:54:32 2025 +0900
+
+    Merge pull request #1 from sawo0150/events-junhee
+    
+    Merge Events-Junhee Feature Branch to Main
+
+[33mcommit 4cecde06f83c6d9cd5e963aeb7745c67b5f7a54c[m[33m ([m[1;31morigin/tricky-road[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Nov 6 00:21:44 2025 +0900
+
+    Made Final Changes to Junhee Scene before Merge
+
+[33mcommit 0640ed566543aee4cd6a09e6dc4c4ceab9b18d6a[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 5 23:55:47 2025 +0900
+
+    Added Sphere Obstacle, Reorganized Obstacles
+
+[33mcommit a1e569f943a159982fa98c1cf9579fdf0a90b850[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 5 17:49:49 2025 +0900
+
+    Finished Setting Up Deer Cross Scenario
+
+[33mcommit de64e352e1087b0abb35b7f9a77d277a8f6ccac2[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 5 17:25:31 2025 +0900
+
+    Added Cloud Particle System
+
+[33mcommit 59d1f85dc106da094b46f57e98adda86f9d80607[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 5 13:41:33 2025 +0900
+
+    Created Tricky Road Prefabs and Scene
+
+[33mcommit 66ecb38eb868c8042b79ea8eff6aee6076e81b0a[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Wed Nov 5 12:43:00 2025 +0900
+
+    Created new scene to make changes to CityScene
+
+[33mcommit 4b8fb16a5ee8307c8aec5057d4af6fc3bd068aa0[m[33m ([m[1;31morigin/child-event[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Mon Nov 3 10:12:33 2025 +0900
+
+    Add camera movement
+
+[33mcommit ff6fdce530bcae2a226a5244cc01d8d6bed798f1[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Fri Oct 31 10:00:41 2025 +0900
+
+    Child Crossing Script Implementation
+
+[33mcommit 678f5b30a0e2de6f1abdbc8e0d33311e6b3b8a58[m[33m ([m[1;31morigin/tree-event[m[33m)[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Oct 30 17:35:23 2025 +0900
+
+    Added Child Event
+
+[33mcommit ad2a6321fbefe23a79b2ab28e240af1779604ff9[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Oct 30 17:30:06 2025 +0900
+
+    Finished Simple Tree Fall Event Implementation
+
+[33mcommit f6f2dc435ced18e86faa852ac8c790fe76658b39[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Oct 30 17:15:21 2025 +0900
+
+    Added Tree Prefab and TreeFall script
+
+[33mcommit 105bddedd56a6bc3abbd32f3c1bb7e7ce321b70a[m
+Author: junhee-k <rlawnsgml0919@gmail.com>
+Date:   Thu Oct 30 17:02:19 2025 +0900
+
+    Initial commit
+
+[33mcommit 17a71fc40c7e595dbb71e83cf3c5953506ba8aab[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Fri Oct 24 01:26:43 2025 +0900
+
+    robot simple waypoint follower 제작
+
+[33mcommit fb8c3bfeb85c1fdfbccc760a90488f1a5248cd27[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 23:05:21 2025 +0900
+
+    VR controller 인식 못하는 문제 해결
+
+[33mcommit 984955a2153786d07387c0f30cd256863c4b5565[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 21:37:49 2025 +0900
+
+    add XRinteractionToolkit,AINavigationSample
+
+[33mcommit b802df1c3f3618daffb72700b6ea67bb2e3127c1[m
+Author: sawo0150 <swpants05@gmail.com>
+Date:   Thu Oct 23 20:54:41 2025 +0900
+
+    Update README.md
+
+[33mcommit 88cd6c12d576c51b53c0d74c9e56d5bcdb5305f4[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 20:48:03 2025 +0900
+
+    폴더 convention update
+
+[33mcommit b7b71425992e868bdfdaf28a8ec4d3d3b265d535[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 20:22:19 2025 +0900
+
+    polyperfect package upload
+
+[33mcommit 53499774fdb7ce5032db7dfe5cd54b8cffe0c14e[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 19:57:27 2025 +0900
+
+    Initial project setup with URP template
+    
+    Added Unity project files including Universal Render Pipeline (URP) template assets, input actions, scene, settings, and configuration files. This provides a starting point for development with URP and the new Input System.
+
+[33mcommit 65de1a83c7d4dd70631fa522a744ca8876ffa42e[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 19:50:43 2025 +0900
+
+    Specify Unity version in README
+
+[33mcommit a7a15ac64f815804fc617cc753e13a58afa89b36[m
+Author: sawo0150 <101260689+sawo0150@users.noreply.github.com>
+Date:   Thu Oct 23 19:50:03 2025 +0900
+
+    Initial commit

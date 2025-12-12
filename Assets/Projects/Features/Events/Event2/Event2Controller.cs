@@ -4,7 +4,7 @@ using System.Collections;
 using Project;
 
 /// <summary>
-/// Controller for Event 1 - Slope/Tree Fall Event
+/// Controller for Event 2 - Tree Fall Event
 /// Manages event lifecycle, robot control, and respawn system
 /// </summary>
 public class Event2Controller : MonoBehaviour, IEvent
@@ -14,32 +14,23 @@ public class Event2Controller : MonoBehaviour, IEvent
     public GameObject robot;
     [Tooltip("Robot's waypoint follower component for autonomous navigation")]
     public RobotWaypointFollower autonomousNavigation;
+
     [Tooltip("Event location where robot should navigate to")]
     public Transform eventLocation;
 
+    public Transform eventWaypoint1;
+    
     [Header("Event Components")]
     [Tooltip("Start trigger zone")]
-    public Event1StartTrigger startTrigger;
+    public Event2StartTrigger startTrigger;
     [Tooltip("End trigger zone")]
-    public Event1EndTrigger endTrigger;
-
-    [Header("Obstacle References")]
-    [Tooltip("Deer jumping obstacles")]
-    public JumpBetweenPoints[] deerObstacles;
-    [Tooltip("Rolling sphere spawner")]
-    public RollingObstacleSpawner rollingObstacle;
-    [Tooltip("Clouds particle system")]
-    public ParticleSystem cloudsParticleSystem;
+    public Event2EndTrigger endTrigger;
+    
 
     [Header("Event Boundaries")]
     [Tooltip("Event boundary colliders - robot must stay within ANY of these boundaries")]
     public EventBoundary[] eventBoundaries;
 
-    [Header("Respawn System")]
-    [Tooltip("Respawn point for deer collision")]
-    public Transform deerRespawnPoint;
-    [Tooltip("Respawn point for rolling stone collision")]
-    public Transform stoneRespawnPoint;
 
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
@@ -48,8 +39,10 @@ public class Event2Controller : MonoBehaviour, IEvent
     private EventState currentState = EventState.Idle;
     private RobotNavMeshController robotController;
     private NavMeshAgent navMeshAgent;
+    
+    private Coroutine initializationCoroutine;
 
-    void Start()
+    private void Start()
     {
         // Get robot controller reference
         if (robot != null)
@@ -68,31 +61,31 @@ public class Event2Controller : MonoBehaviour, IEvent
         ValidateSetup();
     }
 
-    void ValidateSetup()
+    private void ValidateSetup()
     {
         if (robot == null)
         {
-            Debug.LogError("[Event1Controller] Robot not assigned!");
+            Debug.LogError("[Event2Controller] Robot not assigned!");
         }
 
         if (robotController == null)
         {
-            Debug.LogError("[Event1Controller] Robot missing RobotNavMeshController component!");
+            Debug.LogError("[Event2Controller] Robot missing RobotNavMeshController component!");
         }
 
         if (eventLocation == null)
         {
-            Debug.LogError("[Event1Controller] Event location not assigned!");
+            Debug.LogError("[Event2Controller] Event location not assigned!");
         }
 
         if (startTrigger == null)
         {
-            Debug.LogWarning("[Event1Controller] Start trigger not assigned!");
+            Debug.LogWarning("[Event2Controller] Start trigger not assigned!");
         }
 
         if (endTrigger == null)
         {
-            Debug.LogWarning("[Event1Controller] End trigger not assigned!");
+            Debug.LogWarning("[Event2Controller] End trigger not assigned!");
         }
     }
 
@@ -102,7 +95,7 @@ public class Event2Controller : MonoBehaviour, IEvent
     {
         if (currentState != EventState.Idle)
         {
-            Debug.LogWarning($"[Event1Controller] Cannot initialize - current state: {currentState}");
+            Debug.LogWarning($"[Event2Controller] Cannot initialize - current state: {currentState}");
             return;
         }
 
@@ -110,7 +103,7 @@ public class Event2Controller : MonoBehaviour, IEvent
 
         if (enableDebugLogs)
         {
-            Debug.Log("[Event1Controller] Initializing - robot navigating to event location");
+            Debug.Log("[Event2Controller] Initializing - robot navigating to event location");
         }
 
         // Disable player control
@@ -122,12 +115,12 @@ public class Event2Controller : MonoBehaviour, IEvent
         // Enable autonomous navigation to event location
         EnableAutonomousNavigation();
     }
-
+    
     public void StartEvent()
     {
         if (currentState != EventState.Initializing)
         {
-            Debug.LogWarning($"[Event1Controller] Cannot start - current state: {currentState}");
+            Debug.LogWarning($"[Event2Controller] Cannot start - current state: {currentState}");
             return;
         }
 
@@ -135,7 +128,7 @@ public class Event2Controller : MonoBehaviour, IEvent
 
         if (enableDebugLogs)
         {
-            Debug.Log("[Event1Controller] Event started - player has control");
+            Debug.Log("[Event2Controller] Event started - player has control");
         }
 
         // Disable autonomous navigation
@@ -146,52 +139,13 @@ public class Event2Controller : MonoBehaviour, IEvent
         {
             robotController.enabled = true;
         }
-
-        // Start all deer obstacles
-        if (deerObstacles != null && deerObstacles.Length > 0)
-        {
-            foreach (JumpBetweenPoints deer in deerObstacles)
-            {
-                if (deer != null)
-                {
-                    deer.StartJumping();
-
-                    if (enableDebugLogs)
-                    {
-                        Debug.Log($"[Event1Controller] Started deer obstacle: {deer.gameObject.name}");
-                    }
-                }
-            }
-        }
-
-        // Start rolling obstacle spawner
-        if (rollingObstacle != null)
-        {
-            rollingObstacle.StartSpawning();
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Started rolling obstacle spawner");
-            }
-        }
-
-        // Start clouds particle system
-        if (cloudsParticleSystem != null)
-        {
-            cloudsParticleSystem.Play();
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Started clouds particle system");
-            }
-        }
     }
 
     public void ResetEvent()
     {
         if (enableDebugLogs)
         {
-            Debug.Log("[Event1Controller] Resetting event");
+            Debug.Log("[Event2Controller] Resetting event");
         }
 
         currentState = EventState.Idle;
@@ -209,7 +163,7 @@ public class Event2Controller : MonoBehaviour, IEvent
 
             if (enableDebugLogs)
             {
-                Debug.Log("[Event1Controller] Robot reset to waypoint 0");
+                Debug.Log("[Event2Controller] Robot reset to waypoint 0");
             }
         }
 
@@ -217,47 +171,6 @@ public class Event2Controller : MonoBehaviour, IEvent
         if (startTrigger != null)
         {
             startTrigger.ResetEvent();
-        }
-
-        // Stop and reset all deer obstacles
-        if (deerObstacles != null && deerObstacles.Length > 0)
-        {
-            foreach (JumpBetweenPoints deer in deerObstacles)
-            {
-                if (deer != null)
-                {
-                    deer.StopJumping();
-                    deer.ResetToWaitingPoint();
-
-                    if (enableDebugLogs)
-                    {
-                        Debug.Log($"[Event1Controller] Reset deer obstacle: {deer.gameObject.name}");
-                    }
-                }
-            }
-        }
-
-        // Stop rolling obstacle spawner
-        if (rollingObstacle != null)
-        {
-            rollingObstacle.StopSpawning();
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Stopped rolling obstacle spawner");
-            }
-        }
-
-        // Stop clouds particle system
-        if (cloudsParticleSystem != null)
-        {
-            cloudsParticleSystem.Stop();
-            cloudsParticleSystem.Clear(); // Remove existing particles
-
-            if (enableDebugLogs)
-            {
-                Debug.Log("[Event1Controller] Stopped clouds particle system");
-            }
         }
     }
 
@@ -268,7 +181,7 @@ public class Event2Controller : MonoBehaviour, IEvent
 
     public string GetEventName()
     {
-        return "Event 1";
+        return "Event 2";
     }
 
     public EventBoundary[] GetEventBoundaries()
@@ -280,43 +193,59 @@ public class Event2Controller : MonoBehaviour, IEvent
 
     #region Autonomous Navigation
 
-    void EnableAutonomousNavigation()
+    private void EnableAutonomousNavigation()
     {
-        if (autonomousNavigation != null && eventLocation != null)
-        {
-            // Tell robot to navigate to event location
-            autonomousNavigation.NavigateToEvent(eventLocation.position);
-
-            if (enableDebugLogs)
-            {
-                Debug.Log($"[Event1Controller] Robot navigating to event location at {eventLocation.position}");
-            }
-        }
-        else
-        {
-            // Fallback: Directly teleport robot to event location for testing
-            if (robot != null && eventLocation != null)
-            {
-                robot.transform.position = eventLocation.position;
-                robot.transform.rotation = eventLocation.rotation;
-
-                if (enableDebugLogs)
-                {
-                    Debug.LogWarning("[Event1Controller] No autonomous navigation assigned - teleported robot to event location");
-                }
-
-                // Automatically trigger Start() after teleport for testing
-                Invoke(nameof(SimulateArrival), 1f);
-            }
-        }
+        if (initializationCoroutine != null) StopCoroutine(initializationCoroutine);
+        initializationCoroutine = StartCoroutine(MoveToEventSequence());
     }
+    
+    
+    private IEnumerator MoveToEventSequence()
+    {
+        // 1. Move to intermediate waypoint
+        if (autonomousNavigation != null && eventWaypoint1 != null)
+        {
+            autonomousNavigation.NavigateToEvent(eventWaypoint1.position);
+            
+            if (enableDebugLogs) Debug.Log($"[Event2Controller] Moving to Intermediate Waypoint: {eventWaypoint1.name}");
+            yield return new WaitUntil(() => autonomousNavigation.IsAtEvent());
+            
+            yield return new WaitForSeconds(0.5f);
+        }
 
+        // 2. Move to EventLocation
+        if (navMeshAgent != null && eventLocation != null)
+        {
+            if (enableDebugLogs) Debug.Log($"[Event2Controller] Moving to Final Location: {eventLocation.name}");
+            
+            navMeshAgent.SetDestination(eventLocation.position);
+            
+            navMeshAgent.isStopped = false; 
+            
+            while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+            {
+                yield return null;
+            }
+        }
+
+        if (enableDebugLogs) Debug.Log("[Event2Controller] Arrived at Event Location.");
+
+        SimulateArrival();
+        
+        initializationCoroutine = null;
+    }
+    
     void DisableAutonomousNavigation()
     {
         // Robot has arrived at event, no need to disable anything
+        if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled)
+        {
+            navMeshAgent.isStopped = true;
+        }
+
         if (enableDebugLogs)
         {
-            Debug.Log("[Event1Controller] Robot at event location");
+            Debug.Log("[Event2Controller] Autonomous navigation finished/disabled");
         }
     }
 
@@ -327,7 +256,7 @@ public class Event2Controller : MonoBehaviour, IEvent
         {
             if (enableDebugLogs)
             {
-                Debug.Log("[Event1Controller] Robot arrived at event location (simulated)");
+                Debug.Log("[Event2Controller] Robot arrived at event location (simulated)");
             }
 
             // Notify SimulationSceneManager
@@ -339,77 +268,34 @@ public class Event2Controller : MonoBehaviour, IEvent
     }
 
     #endregion
-
+    
     #region Respawn System
-
-    /// <summary>
-    /// Respawns the robot to the appropriate location based on obstacle type
-    /// Shows corresponding panel via PlayerUIManager and auto-hides it
-    /// </summary>
-    public void RespawnRobot(ObstacleType obstacleType)
+    public void RespawnRobot()
     {
-        if (currentState != EventState.Active)
+        if (currentState != EventState.Active) return;
+        
+        var respawnTarget = eventLocation; 
+
+        if (respawnTarget != null && navMeshAgent != null)
         {
-            if (enableDebugLogs)
+            navMeshAgent.Warp(respawnTarget.position);
+            robot.transform.rotation = respawnTarget.rotation;
+
+            var rb = robot.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                Debug.LogWarning($"[Event1Controller] Respawn ignored - event not active (state: {currentState})");
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
-            return;
-        }
-
-        Transform respawnPoint = null;
-        UIMessageType panelType = UIMessageType.Warning; // Default fallback
-
-        // Determine respawn point and panel type based on obstacle type
-        switch (obstacleType)
-        {
-            case ObstacleType.Deer:
-                respawnPoint = deerRespawnPoint;
-                panelType = UIMessageType.DeerRespawn;
-                break;
-
-            case ObstacleType.RollingStone:
-                respawnPoint = stoneRespawnPoint;
-                panelType = UIMessageType.StoneRespawn;
-                break;
-        }
-
-        // Validate respawn point
-        if (respawnPoint == null)
-        {
-            Debug.LogError($"[Event1Controller] Respawn point not assigned for {obstacleType}!");
-            return;
-        }
-
-        // Warp robot to respawn point
-        if (navMeshAgent != null)
-        {
-            navMeshAgent.Warp(respawnPoint.position);
-            robot.transform.rotation = respawnPoint.rotation;
 
             if (enableDebugLogs)
             {
-                Debug.Log($"[Event1Controller] Robot respawned to {obstacleType} respawn point at {respawnPoint.position}");
+                Debug.Log($"[Event2Controller] Robot respawned at {respawnTarget.name}");
             }
         }
         else
         {
-            Debug.LogError("[Event1Controller] NavMeshAgent not found on robot - cannot warp!");
-        }
-
-        // Show respawn panel via PlayerUIManager with auto-hide (3 seconds)
-        if (PlayerUIManager.Instance != null)
-        {
-            PlayerUIManager.Instance.ShowMessage(panelType, "", 3f);
-
-            if (enableDebugLogs)
-            {
-                Debug.Log($"[Event1Controller] Showing {obstacleType} respawn panel for 3 seconds");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[Event1Controller] PlayerUIManager not found - cannot show respawn panel");
+            Debug.LogWarning("[Event2Controller] Cannot respawn - NavMeshAgent or StartPoint2 is missing.");
         }
     }
 
