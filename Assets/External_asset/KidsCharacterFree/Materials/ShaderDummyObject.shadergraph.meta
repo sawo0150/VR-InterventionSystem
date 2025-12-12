@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 297e236bb32d9485f9da94a1a26f7b65
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 242192
+  packageName: Kids character Free
+  packageVersion: 1.0
+  assetPath: Assets/KidsCharacterFree/Materials/ShaderDummyObject.shadergraph
+  uploadId: 578579
