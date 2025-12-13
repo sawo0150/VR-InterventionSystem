@@ -66,6 +66,15 @@ namespace VRInterventionSystem.Audio
         [Tooltip("Delay in seconds before playing impact sound after tree starts falling")]
         public float treeImpactDelay = 1.5f;
 
+        [Header("Children Ambient Sounds")]
+        [Tooltip("Looping ambient sound for children (plays while Event 3 is active)")]
+        public AudioClip childrenAmbientLoop;
+        [Range(0f, 1f)]
+        public float childrenAmbientVolume = 0.4f;
+        [Tooltip("2D blend for children sounds (0 = full 2D, plays from user/camera)")]
+        [Range(0f, 1f)]
+        public float childrenSpatialBlend = 0f;
+
         [Header("UI Alert Sounds")]
         [Tooltip("Sound for general alerts (event activation, etc)")]
         public AudioClip alertSound;

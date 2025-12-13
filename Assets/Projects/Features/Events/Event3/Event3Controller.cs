@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using Project;
+using VRInterventionSystem.Audio;
 
 /// <summary>
 /// Controller for Event 3 - Children Event
@@ -37,6 +38,10 @@ public class Event3Controller : MonoBehaviour, IEvent
     [Tooltip("Respawn point for Children collision from second road")]
     public Transform ChildrenRespawnPoint2;
 
+    [Header("Audio")]
+    [Tooltip("AudioSource for children ambient sound (assign AudioSource on Robot3)")]
+    public AudioSource childrenAmbientAudioSource;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
@@ -44,6 +49,7 @@ public class Event3Controller : MonoBehaviour, IEvent
     private EventState currentState = EventState.Idle;
     private RobotNavMeshController robotController;
     private NavMeshAgent navMeshAgent;
+    private bool wasPlayerSeated = false;
 
     void Start()
     {
@@ -60,8 +66,98 @@ public class Event3Controller : MonoBehaviour, IEvent
             }
         }
 
+        // Initialize children ambient audio
+        InitializeChildrenAudio();
+
         // Validate setup
         ValidateSetup();
+    }
+
+    /// <summary>
+    /// Initialize AudioSource with settings from AudioConfig for children ambient sound
+    /// </summary>
+    void InitializeChildrenAudio()
+    {
+        if (childrenAmbientAudioSource == null)
+        {
+            Debug.LogWarning("[Event3Controller] childrenAmbientAudioSource is null - please assign AudioSource on Robot3!");
+            return;
+        }
+
+        if (SoundManager.Instance == null)
+        {
+            Debug.LogWarning("[Event3Controller] SoundManager.Instance is null - cannot initialize!");
+            return;
+        }
+
+        var config = SoundManager.Instance.GetAudioConfig();
+        if (config == null)
+        {
+            Debug.LogWarning("[Event3Controller] AudioConfig is null - cannot initialize!");
+            return;
+        }
+
+        // Configure the AudioSource
+        childrenAmbientAudioSource.clip = config.childrenAmbientLoop;
+        childrenAmbientAudioSource.loop = true;
+        childrenAmbientAudioSource.playOnAwake = false;
+        childrenAmbientAudioSource.volume = config.childrenAmbientVolume;
+        childrenAmbientAudioSource.spatialBlend = config.childrenSpatialBlend;
+
+        Debug.Log($"[Event3Controller] Children audio initialized - clip: {config.childrenAmbientLoop != null}, volume: {config.childrenAmbientVolume}, spatialBlend: {config.childrenSpatialBlend}");
+    }
+
+    void Update()
+    {
+        // Only manage audio when event is active
+        if (currentState == EventState.Active)
+        {
+            UpdateChildrenAmbientSound();
+        }
+    }
+
+    void UpdateChildrenAmbientSound()
+    {
+        if (childrenAmbientAudioSource == null || GameManager.Instance == null) return;
+
+        bool isPlayerControlling = GameManager.Instance.GetPlayerState() == PlayerState.ControllingMode;
+
+        // Debug logging every 60 frames
+        if (enableDebugLogs && Time.frameCount % 60 == 0)
+        {
+            Debug.Log($"[Event3Controller] State check - isControlling: {isPlayerControlling}, wasPlayerSeated: {wasPlayerSeated}, audioPlaying: {childrenAmbientAudioSource.isPlaying}");
+        }
+
+        // Player just entered controlling mode - start sound
+        if (isPlayerControlling && !wasPlayerSeated)
+        {
+            if (childrenAmbientAudioSource.clip != null && !childrenAmbientAudioSource.isPlaying)
+            {
+                childrenAmbientAudioSource.Play();
+                Debug.Log("[Event3Controller] Player in controlling mode - started children ambient sound");
+            }
+        }
+        // Player just exited controlling mode - stop sound
+        else if (!isPlayerControlling && wasPlayerSeated)
+        {
+            if (childrenAmbientAudioSource.isPlaying)
+            {
+                childrenAmbientAudioSource.Stop();
+                Debug.Log("[Event3Controller] Player left controlling mode - stopped children ambient sound");
+            }
+            else
+            {
+                Debug.Log("[Event3Controller] Player left controlling mode - but sound was not playing");
+            }
+        }
+        // Safety check: If sound is playing but player is not in controlling mode, stop it
+        else if (!isPlayerControlling && childrenAmbientAudioSource.isPlaying)
+        {
+            childrenAmbientAudioSource.Stop();
+            Debug.Log("[Event3Controller] Safety stop - sound playing without controlling mode");
+        }
+
+        wasPlayerSeated = isPlayerControlling;
     }
 
     void ValidateSetup()
@@ -89,6 +185,11 @@ public class Event3Controller : MonoBehaviour, IEvent
         if (endTrigger == null)
         {
             Debug.LogWarning("[Event3Controller] End trigger not assigned!");
+        }
+
+        if (childrenAmbientAudioSource == null)
+        {
+            Debug.LogWarning("[Event3Controller] Children ambient AudioSource not assigned - please assign AudioSource on Robot3!");
         }
     }
 
@@ -129,6 +230,34 @@ public class Event3Controller : MonoBehaviour, IEvent
 
         currentState = EventState.Active;
 
+        // Initialize wasPlayerSeated and handle sound if already in controlling mode
+        if (GameManager.Instance != null)
+        {
+            bool isCurrentlyControlling = GameManager.Instance.GetPlayerState() == PlayerState.ControllingMode;
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[Event3Controller] Event started - initial player state: {(isCurrentlyControlling ? "ControllingMode" : "MonitoringMode")}");
+            }
+
+            // If player is already in controlling mode when event starts, start the sound
+            if (isCurrentlyControlling && childrenAmbientAudioSource != null &&
+                childrenAmbientAudioSource.clip != null && !childrenAmbientAudioSource.isPlaying)
+            {
+                childrenAmbientAudioSource.Play();
+                if (enableDebugLogs)
+                {
+                    Debug.Log("[Event3Controller] Player already in controlling mode - started children ambient sound");
+                }
+            }
+
+            wasPlayerSeated = isCurrentlyControlling;
+        }
+        else
+        {
+            wasPlayerSeated = false;
+        }
+
         if (enableDebugLogs)
         {
             Debug.Log("[Event3Controller] Event started - player has control");
@@ -142,6 +271,8 @@ public class Event3Controller : MonoBehaviour, IEvent
         {
             robotController.enabled = true;
         }
+
+        // Sound will start automatically when player sits in robot (handled by Update)
 
         // Start all Children obstacles
         if (ChildrenObstacles != null && ChildrenObstacles.Length > 0)
@@ -173,6 +304,18 @@ public class Event3Controller : MonoBehaviour, IEvent
         {
             robotController.enabled = false;
         }
+
+        // Stop children ambient sound
+        if (childrenAmbientAudioSource != null && childrenAmbientAudioSource.isPlaying)
+        {
+            childrenAmbientAudioSource.Stop();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("[Event3Controller] Stopped children ambient sound");
+            }
+        }
+        wasPlayerSeated = false;
 
         // Move robot back to waypoint 0 and resume patrol
         if (autonomousNavigation != null)
