@@ -20,6 +20,15 @@ MonoBehaviour:
   deerCollisionSound: {fileID: 8300000, guid: e07e40535eb1a4a3591ccbda3bb995fb, type: 3}
   stoneCollisionSound: {fileID: 8300000, guid: e07e40535eb1a4a3591ccbda3bb995fb, type: 3}
   collisionVolume: 0.7
+  deerAmbientLoop: {fileID: 8300000, guid: 7043d5ae2d0db46f6a08f6fba53bddf1, type: 3}
+  deerAmbientVolume: 0.6
+  deerSpatialBlend: 1
+  deerMaxDistance: 30
+  boulderRollingLoop: {fileID: 8300000, guid: 4d6a585f7a0474d6aa70768e4b048a4a, type: 3}
+  boulderRollingVolume: 0.7
+  boulderSpatialBlend: 1
+  boulderMaxDistance: 40
+  boulderCollisionCooldown: 0.2
   alertSound: {fileID: 8300000, guid: 45a347794ca004efa9b3042beb8072fb, type: 3}
   warningSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}
   errorSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}

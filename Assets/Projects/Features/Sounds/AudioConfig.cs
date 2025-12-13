@@ -36,6 +36,19 @@ namespace VRInterventionSystem.Audio
         [Tooltip("Max distance for deer sounds")]
         public float deerMaxDistance = 30f;
 
+        [Header("Boulder Rolling Sounds")]
+        [Tooltip("Looping sound when boulder is rolling/colliding")]
+        public AudioClip boulderRollingLoop;
+        [Range(0f, 1f)]
+        public float boulderRollingVolume = 0.5f;
+        [Tooltip("3D spatial blend for boulder sounds (1 = full 3D)")]
+        [Range(0f, 1f)]
+        public float boulderSpatialBlend = 1f;
+        [Tooltip("Max distance for boulder sounds")]
+        public float boulderMaxDistance = 40f;
+        [Tooltip("Minimum time between collision sounds (prevents sound spam)")]
+        public float boulderCollisionCooldown = 0.2f;
+
         [Header("UI Alert Sounds")]
         [Tooltip("Sound for general alerts (event activation, etc)")]
         public AudioClip alertSound;

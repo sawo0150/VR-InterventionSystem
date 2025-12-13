@@ -82,6 +82,13 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Deer Spatial Blend: 1.0 (full 3D)
 - Deer Max Distance: 30f
 
+**Boulder Rolling Sounds:**
+- Boulder Rolling Loop: Looping sound when boulder is rolling/colliding
+- Boulder Rolling Volume: 0.5
+- Boulder Spatial Blend: 1.0 (full 3D)
+- Boulder Max Distance: 40f
+- Boulder Collision Cooldown: 0.2s (prevents sound spam)
+
 **UI Alert Sounds:**
 - Alert Sound: Event activation alerts
 - Warning Sound: Boundary violations
@@ -123,6 +130,16 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Plays as 3D spatial audio from each deer's position
 - Controlled in `JumpBetweenPoints.cs:342-345` (start) and `JumpBetweenPoints.cs:373-376` (stop)
 
+### Boulder Rolling Sounds
+- Looping rolling sound plays when boulder collides with objects
+- Each boulder has its own AudioSource component for proper 3D spatial audio
+- Automatically starts on collision (OnCollisionEnter)
+- Automatically stops when boulder stops colliding (OnCollisionExit)
+- Uses collision velocity threshold to prevent sound on tiny bumps
+- Cooldown system prevents sound spam from rapid collisions
+- Plays as 3D spatial audio from boulder's position
+- Controlled in `RollingBoulderSound.cs` component
+
 ### UI Alert Sounds
 - Triggered whenever UI panels are shown
 - Different sounds for different message types:
@@ -162,6 +179,8 @@ SoundManager.Instance.PlayButtonHoverSound();
 - `AudioConfig.cs` - ScriptableObject for organizing audio settings
 - `SoundManager.cs` - Singleton managing all sound playback
 - `UIButtonSound.cs` - Component for automatic button sound playback
+- `UIEventTriggerButton.cs` - Component for event trigger button sounds
+- `RollingBoulderSound.cs` - Component for boulder rolling/collision sounds
 - `SOUND_SETUP_GUIDE.md` - This guide
 
 ### Modified Files
@@ -189,6 +208,13 @@ SoundManager.Instance.PlayButtonHoverSound();
 2. Listen for looping ambient sound from each deer
 3. Move closer to deer to hear 3D spatial audio effect
 4. Complete or reset Event 1 - sound should stop automatically
+
+### Test Boulder Rolling Sounds
+1. Start Event 1
+2. Wait for a boulder to spawn and start rolling
+3. Listen for rolling sound when boulder hits the ground or other objects
+4. Move closer to boulder to hear 3D spatial audio effect
+5. Sound should stop when boulder stops colliding
 
 ### Test UI Sounds
 1. Trigger various UI messages (warnings, alerts, etc.)
