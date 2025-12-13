@@ -45451,6 +45451,10 @@ PrefabInstance:
       value: TreeTriggerZone 3
       objectReference: {fileID: 0}
     - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: targetTag
+      value: Robot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
       propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -89880,6 +89884,10 @@ PrefabInstance:
     - target: {fileID: 2367586963870379948, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
       propertyPath: m_Name
       value: TreeTriggerZone 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: targetTag
+      value: Robot
       objectReference: {fileID: 0}
     - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
       propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.size
@@ -161408,7 +161416,7 @@ Transform:
   m_GameObject: {fileID: 1461647061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.52, y: -1.36, z: 0.07}
+  m_LocalPosition: {x: 8.26, y: -1.36, z: 0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -201920,7 +201928,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 817841314}
         m_TargetAssemblyTypeName: Project.SimulationSceneManager, Assembly-CSharp
         m_MethodName: ResetCurrentEvent
         m_Mode: 1
@@ -224015,7 +224023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452cb4ff09f44d447b33a2143ce142ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Event2EndTrigger
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 1837290662}
   robotTag: Robot
   onEventComplete:
     m_PersistentCalls:
@@ -224053,7 +224061,7 @@ Transform:
   m_GameObject: {fileID: 2032307370}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 68.56, y: -0.27, z: 1.96}
+  m_LocalPosition: {x: 65.28, y: -0.27, z: 1.96}
   m_LocalScale: {x: 1.7260001, y: 1, z: 3.8981}
   m_ConstrainProportionsScale: 0
   m_Children: []
