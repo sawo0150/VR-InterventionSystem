@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "name": "Return(Teleport)",
+    "maps": [
+        {
+            "name": "ReturnAction",
+            "id": "ada95dbf-4300-489c-af55-4cc76fdb62d9",
+            "actions": [
+                {
+                    "name": "return_action",
+                    "type": "Button",
+                    "id": "9bd39527-cfac-445e-ac20-93407401aed4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0e245d3f-a263-4e3b-9323-233a4cab6613",
+                    "path": "<XRController>{RightHand}/{PrimaryAction}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "return_action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4598b015-e80b-4903-8d4d-f23b7bf8981b",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "return_action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

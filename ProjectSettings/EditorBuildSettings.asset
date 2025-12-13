@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/2_SimulationScene.unity
     guid: b7b7d5e9d7eafac49b34a9bdfafb359e
+  - enabled: 1
+    path: Assets/Scenes/5_RealRobotScene.unity
+    guid: 871c688a85d1de24a877511a14f22a10
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: efb7b87eb8ecd9d46b3a0351222f323f, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: cd0186ba280498948befdd257e7afe59, type: 2}

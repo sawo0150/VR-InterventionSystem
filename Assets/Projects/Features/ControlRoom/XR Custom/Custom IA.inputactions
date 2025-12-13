@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "name": "Custom IA",
+    "maps": [
+        {
+            "name": "BasicControl",
+            "id": "4392b452-185b-4625-bf8a-fbfbe13e5041",
+            "actions": [
+                {
+                    "name": "RightStick",
+                    "type": "Button",
+                    "id": "0f0c4392-4506-4708-89ac-12eb8e8c9737",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightA",
+                    "type": "Button",
+                    "id": "7ec69f95-1ca1-4bc7-ae61-24b463382383",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightB",
+                    "type": "Button",
+                    "id": "883d678b-11f8-40e7-ade4-bfee0a79d894",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5c48592a-def8-4972-8b38-3c1c5ea25cd6",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58d8ad8c-f3a5-4a30-a4f1-7ce456fe8e1a",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightA",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fccb7330-45d2-4d2c-9e7b-d2bd9e903aac",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
