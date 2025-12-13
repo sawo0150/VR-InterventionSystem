@@ -120,6 +120,7 @@ namespace Project
 
         /// <summary>
         /// Disable a specific event button (called when button is pressed)
+        /// Note: Does NOT hide the goal icon - that's done when event ends via HideEventGoal()
         /// </summary>
         /// <param name="eventId">Event ID (1, 2, 3, etc.)</param>
         public void DisableEventButton(int eventId)
@@ -140,12 +141,6 @@ namespace Project
 
             // Disable the button (BlinkingButton will auto-stop via OnDisable)
             eventButtons[index].gameObject.SetActive(false);
-            
-            
-            if (index < eventGoals.Length && eventGoals[index] != null)
-            {
-                eventGoals[index].SetActive(false);
-            }
 
             if (enableDebugLogs)
             {
@@ -205,7 +200,7 @@ namespace Project
                     eventButtons[i].gameObject.SetActive(false);
                 }
             }
-            
+
             for (int i = 0; i < eventGoals.Length; i++)
             {
                 if (eventGoals[i] != null) eventGoals[i].SetActive(false);
@@ -214,6 +209,62 @@ namespace Project
             if (enableDebugLogs)
             {
                 Debug.Log("[MinimapButtonManager] Disabled all event buttons");
+            }
+        }
+
+        /// <summary>
+        /// Show event goal icon when event starts (called from Event Controller's StartEvent)
+        /// </summary>
+        /// <param name="eventId">Event ID (1, 2, 3, etc.)</param>
+        public void ShowEventGoal(int eventId)
+        {
+            int index = eventId - 1; // Convert to 0-based index
+
+            if (index < 0 || index >= eventGoals.Length)
+            {
+                Debug.LogError($"[MinimapButtonManager] Invalid event ID: {eventId}. Must be between 1 and {eventGoals.Length}");
+                return;
+            }
+
+            if (eventGoals[index] == null)
+            {
+                Debug.LogWarning($"[MinimapButtonManager] Event Goal Icon {eventId} is not assigned!");
+                return;
+            }
+
+            eventGoals[index].SetActive(true);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[MinimapButtonManager] Showed event goal icon {eventId}");
+            }
+        }
+
+        /// <summary>
+        /// Hide event goal icon when event ends (called from Event Controller's ResetEvent)
+        /// </summary>
+        /// <param name="eventId">Event ID (1, 2, 3, etc.)</param>
+        public void HideEventGoal(int eventId)
+        {
+            int index = eventId - 1; // Convert to 0-based index
+
+            if (index < 0 || index >= eventGoals.Length)
+            {
+                Debug.LogError($"[MinimapButtonManager] Invalid event ID: {eventId}. Must be between 1 and {eventGoals.Length}");
+                return;
+            }
+
+            if (eventGoals[index] == null)
+            {
+                Debug.LogWarning($"[MinimapButtonManager] Event Goal Icon {eventId} is not assigned!");
+                return;
+            }
+
+            eventGoals[index].SetActive(false);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[MinimapButtonManager] Hid event goal icon {eventId}");
             }
         }
     }

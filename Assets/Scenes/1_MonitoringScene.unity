@@ -2256,7 +2256,7 @@ MonoBehaviour:
   eventGoals:
   - {fileID: 1082184742}
   - {fileID: 1151110947}
-  - {fileID: 0}
+  - {fileID: 1662213390}
   enableDebugLogs: 0
 --- !u!1 &768524219
 GameObject:

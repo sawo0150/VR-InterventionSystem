@@ -113,6 +113,12 @@ public class Event1Controller : MonoBehaviour, IEvent
             Debug.Log("[Event1Controller] Initializing - robot navigating to event location");
         }
 
+        // Show event goal icon on minimap
+        if (MinimapButtonManager.Instance != null)
+        {
+            MinimapButtonManager.Instance.ShowEventGoal(1);
+        }
+
         // Disable player control
         if (robotController != null)
         {
@@ -195,6 +201,12 @@ public class Event1Controller : MonoBehaviour, IEvent
         }
 
         currentState = EventState.Idle;
+
+        // Hide event goal icon on minimap
+        if (MinimapButtonManager.Instance != null)
+        {
+            MinimapButtonManager.Instance.HideEventGoal(1);
+        }
 
         // Disable player control
         if (robotController != null)
