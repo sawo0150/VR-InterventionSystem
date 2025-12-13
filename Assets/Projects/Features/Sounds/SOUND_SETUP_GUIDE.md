@@ -89,6 +89,15 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Boulder Max Distance: 40f
 - Boulder Collision Cooldown: 0.2s (prevents sound spam)
 
+**Tree Falling Sounds:**
+- Tree Fall Sound: Sound when tree starts falling (Event 2)
+- Tree Impact Sound: Sound when tree hits the ground
+- Tree Fall Volume: 0.6
+- Tree Impact Volume: 0.7
+- Tree Spatial Blend: 1.0 (full 3D)
+- Tree Max Distance: 50f
+- Tree Impact Velocity Threshold: 2.0 (minimum velocity for impact sound)
+
 **UI Alert Sounds:**
 - Alert Sound: Event activation alerts
 - Warning Sound: Boundary violations
@@ -140,6 +149,16 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Plays as 3D spatial audio from boulder's position
 - Controlled in `RollingBoulderSound.cs` component
 
+### Tree Falling Sounds
+- Two-part sound system: falling sound + impact sound
+- Each tree has its own AudioSource component for proper 3D spatial audio
+- Fall sound plays when tree starts falling (when FallingDown.FallDown() is called)
+- Impact sound plays when tree hits the ground (OnCollisionEnter)
+- Uses impact velocity threshold to ensure sound only plays on significant impacts
+- Only plays impact sound once per fall
+- Plays as 3D spatial audio from tree's position
+- Controlled in `FallingTreeSound.cs` component
+
 ### UI Alert Sounds
 - Triggered whenever UI panels are shown
 - Different sounds for different message types:
@@ -181,6 +200,7 @@ SoundManager.Instance.PlayButtonHoverSound();
 - `UIButtonSound.cs` - Component for automatic button sound playback
 - `UIEventTriggerButton.cs` - Component for event trigger button sounds
 - `RollingBoulderSound.cs` - Component for boulder rolling/collision sounds
+- `FallingTreeSound.cs` - Component for tree falling/impact sounds (Event 2)
 - `SOUND_SETUP_GUIDE.md` - This guide
 
 ### Modified Files
@@ -215,6 +235,13 @@ SoundManager.Instance.PlayButtonHoverSound();
 3. Listen for rolling sound when boulder hits the ground or other objects
 4. Move closer to boulder to hear 3D spatial audio effect
 5. Sound should stop when boulder stops colliding
+
+### Test Tree Falling Sounds
+1. Start Event 2
+2. Trigger a tree to fall
+3. Listen for falling sound when tree starts to fall
+4. Listen for impact sound when tree hits the ground
+5. Move closer to tree to hear 3D spatial audio effect
 
 ### Test UI Sounds
 1. Trigger various UI messages (warnings, alerts, etc.)

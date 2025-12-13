@@ -49,6 +49,23 @@ namespace VRInterventionSystem.Audio
         [Tooltip("Minimum time between collision sounds (prevents sound spam)")]
         public float boulderCollisionCooldown = 0.2f;
 
+        [Header("Tree Falling Sounds")]
+        [Tooltip("Sound when tree starts falling (Event 2)")]
+        public AudioClip treeFallSound;
+        [Tooltip("Sound when tree impacts the ground")]
+        public AudioClip treeImpactSound;
+        [Range(0f, 1f)]
+        public float treeFallVolume = 0.6f;
+        [Range(0f, 1f)]
+        public float treeImpactVolume = 0.7f;
+        [Tooltip("3D spatial blend for tree sounds (1 = full 3D)")]
+        [Range(0f, 1f)]
+        public float treeSpatialBlend = 1f;
+        [Tooltip("Max distance for tree sounds")]
+        public float treeMaxDistance = 50f;
+        [Tooltip("Delay in seconds before playing impact sound after tree starts falling")]
+        public float treeImpactDelay = 1.5f;
+
         [Header("UI Alert Sounds")]
         [Tooltip("Sound for general alerts (event activation, etc)")]
         public AudioClip alertSound;

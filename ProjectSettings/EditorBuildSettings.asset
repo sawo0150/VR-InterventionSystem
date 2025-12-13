@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/1_MonitoringScene.unity
     guid: a2e2f3d6978b0594a8fb12351a15dd03
   - enabled: 1
-    path: Assets/Scenes/2_SimulationScene.unity
+    path: Assets/Scenes/2_SimulationScene_hj.unity
     guid: b7b7d5e9d7eafac49b34a9bdfafb359e
   - enabled: 1
     path: Assets/Scenes/5_RealRobotScene.unity

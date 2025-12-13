@@ -29,6 +29,13 @@ MonoBehaviour:
   boulderSpatialBlend: 1
   boulderMaxDistance: 40
   boulderCollisionCooldown: 0.2
+  treeFallSound: {fileID: 8300000, guid: 73d02a2221fc14b8caeeb193231731c7, type: 3}
+  treeImpactSound: {fileID: 8300000, guid: 3cc1d431240334119a2cceb20372bd86, type: 3}
+  treeFallVolume: 0.6
+  treeImpactVolume: 0.7
+  treeSpatialBlend: 1
+  treeMaxDistance: 50
+  treeImpactDelay: 3.5
   alertSound: {fileID: 8300000, guid: 45a347794ca004efa9b3042beb8072fb, type: 3}
   warningSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}
   errorSound: {fileID: 8300000, guid: f53fb3ea8687b42cf947a0551c7202f7, type: 3}
