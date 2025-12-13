@@ -44,8 +44,12 @@ namespace VRInterventionSystem.Audio
         public AudioClip buttonClickSound;
         [Tooltip("Sound when hovering over interactive UI elements")]
         public AudioClip buttonHoverSound;
+        [Tooltip("Sound when event trigger button is clicked (Event 1, 2, 3 buttons)")]
+        public AudioClip eventTriggerButtonSound;
         [Range(0f, 1f)]
         public float buttonSoundVolume = 0.5f;
+        [Range(0f, 1f)]
+        public float eventButtonVolume = 0.7f;
 
         [Header("Completion Sounds")]
         [Tooltip("Sound when delivery is completed successfully")]

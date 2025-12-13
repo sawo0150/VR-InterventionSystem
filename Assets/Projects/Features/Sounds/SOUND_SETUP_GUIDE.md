@@ -85,9 +85,11 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - UI Sound Volume: 0.6
 
 **UI Interaction Sounds:**
-- Button Click Sound: Sound when button is pressed/clicked
+- Button Click Sound: Sound when regular button is pressed/clicked
 - Button Hover Sound: Sound when hovering over buttons
+- Event Trigger Button Sound: Special sound for Event 1/2/3 trigger buttons
 - Button Sound Volume: 0.5
+- Event Button Volume: 0.7
 
 **Completion Sounds:**
 - Delivery Complete Sound: Success/completion sound
@@ -182,7 +184,7 @@ SoundManager.Instance.PlayButtonHoverSound();
 
 ## Adding Button Sounds to Your UI
 
-### Method 1: Automatic (Recommended)
+### For Regular Buttons (Method 1 - Automatic)
 
 1. **Select any UI Button** in your scene
 2. **Add Component** → Search for "UIButtonSound"
@@ -191,6 +193,21 @@ SoundManager.Instance.PlayButtonHoverSound();
    - ✓ Play Hover Sound (checkbox)
 4. **Done!** The button will now play sounds automatically
 
+### For Event Trigger Buttons (Special Sound)
+
+**For Event 1, 2, 3 buttons in the minimap/monitoring scene:**
+
+1. **Select the Event button** (Event 1, Event 2, or Event 3 button)
+2. **Add Component** → Search for "UIEventTriggerButton"
+3. **Configure** (optional):
+   - ✓ Play Event Trigger Sound (checkbox) - Uses special event sound
+   - ✓ Play Hover Sound (checkbox)
+4. **Done!** The button will play a special event trigger sound when clicked
+
+**Difference:**
+- `UIButtonSound` → Plays regular button click sound
+- `UIEventTriggerButton` → Plays special event trigger sound (more impactful for starting events)
+
 ### Method 2: Manual (For Custom Buttons)
 
 If you have custom button scripts, add these calls:
@@ -198,10 +215,13 @@ If you have custom button scripts, add these calls:
 ```csharp
 using VRInterventionSystem.Audio;
 
-// On button click
+// Regular button click
 SoundManager.Instance?.PlayButtonClickSound();
 
-// On button hover
+// Event trigger button click (special sound)
+SoundManager.Instance?.PlayEventTriggerButtonSound();
+
+// Button hover
 SoundManager.Instance?.PlayButtonHoverSound();
 ```
 

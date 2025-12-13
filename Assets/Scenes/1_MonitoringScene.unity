@@ -574,7 +574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
   playClickSound: 1
-  playHoverSound: 1
+  playHoverSound: 0
 --- !u!1 &135451550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
   playClickSound: 1
-  playHoverSound: 1
+  playHoverSound: 0
 --- !u!1 &577132521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2668,6 +2668,7 @@ GameObject:
   - component: {fileID: 816054759}
   - component: {fileID: 816054758}
   - component: {fileID: 816054761}
+  - component: {fileID: 816054762}
   m_Layer: 5
   m_Name: PrevButton
   m_TagString: Untagged
@@ -2797,6 +2798,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &816054762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816054756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &829280039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2874,6 +2889,7 @@ GameObject:
   - component: {fileID: 837259763}
   - component: {fileID: 837259762}
   - component: {fileID: 837259761}
+  - component: {fileID: 837259764}
   m_Layer: 5
   m_Name: TriggerButton 3
   m_TagString: Untagged
@@ -2983,6 +2999,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837259759}
   m_CullTransparentMesh: 1
+--- !u!114 &837259764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837259759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4fb326b244e4c508ba328b0ce94f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIEventTriggerButton
+  playEventTriggerSound: 1
+  playHoverSound: 0
 --- !u!1 &872509936
 GameObject:
   m_ObjectHideFlags: 0
@@ -3024,6 +3054,7 @@ Transform:
   - {fileID: 1291145083}
   - {fileID: 1663086910}
   - {fileID: 2121920476}
+  - {fileID: 1729158843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &990837963
@@ -3406,6 +3437,7 @@ GameObject:
   - component: {fileID: 1057334965}
   - component: {fileID: 1057334964}
   - component: {fileID: 1057334967}
+  - component: {fileID: 1057334968}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -3535,6 +3567,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1057334968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057334962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 1
 --- !u!1 &1105290253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3686,6 +3732,7 @@ GameObject:
   - component: {fileID: 1129032799}
   - component: {fileID: 1129032798}
   - component: {fileID: 1129032801}
+  - component: {fileID: 1129032802}
   m_Layer: 5
   m_Name: SkipButton
   m_TagString: Untagged
@@ -3815,6 +3862,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1129032802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129032796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8348979f43cf04f8bade9aac9f59d5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
+  playClickSound: 1
+  playHoverSound: 0
 --- !u!1 &1145564238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4289,7 +4350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
   playClickSound: 1
-  playHoverSound: 1
+  playHoverSound: 0
 --- !u!1 &1336659375
 GameObject:
   m_ObjectHideFlags: 0
@@ -5087,6 +5148,7 @@ GameObject:
   - component: {fileID: 1629417664}
   - component: {fileID: 1629417663}
   - component: {fileID: 1629417662}
+  - component: {fileID: 1629417665}
   m_Layer: 5
   m_Name: TriggerButton 2
   m_TagString: Untagged
@@ -5196,6 +5258,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629417660}
   m_CullTransparentMesh: 1
+--- !u!114 &1629417665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629417660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4fb326b244e4c508ba328b0ce94f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIEventTriggerButton
+  playEventTriggerSound: 1
+  playHoverSound: 0
 --- !u!1 &1638956739
 GameObject:
   m_ObjectHideFlags: 0
@@ -5514,6 +5590,7 @@ GameObject:
   - component: {fileID: 1664672780}
   - component: {fileID: 1664672779}
   - component: {fileID: 1664672778}
+  - component: {fileID: 1664672781}
   m_Layer: 5
   m_Name: TriggerButton 1
   m_TagString: Untagged
@@ -5623,6 +5700,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664672776}
   m_CullTransparentMesh: 1
+--- !u!114 &1664672781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664672776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4fb326b244e4c508ba328b0ce94f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIEventTriggerButton
+  playEventTriggerSound: 1
+  playHoverSound: 0
 --- !u!1 &1665060167
 GameObject:
   m_ObjectHideFlags: 0

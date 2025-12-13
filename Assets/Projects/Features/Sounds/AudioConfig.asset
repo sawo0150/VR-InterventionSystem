@@ -26,9 +26,11 @@ MonoBehaviour:
   hintSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
   statusSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
   uiSoundVolume: 0.6
-  buttonClickSound: {fileID: 8300000, guid: 0ddf69541af314cb58835fb8698e8fe6, type: 3}
+  buttonClickSound: {fileID: 8300000, guid: b3966da015cb2483b927f426b2d4acbb, type: 3}
   buttonHoverSound: {fileID: 0}
+  eventTriggerButtonSound: {fileID: 8300000, guid: 93f35fe5deb0e423e95b5ba52c30db82, type: 3}
   buttonSoundVolume: 0.5
+  eventButtonVolume: 0.7
   deliveryCompleteSound: {fileID: 8300000, guid: cd93ae180585743bbbf10ecd95d962d1, type: 3}
   completionVolume: 0.8
   engineSpatialBlend: 1

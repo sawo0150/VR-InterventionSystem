@@ -220,6 +220,19 @@ namespace VRInterventionSystem.Audio
         }
 
         /// <summary>
+        /// Play event trigger button sound (for Event 1, 2, 3 buttons)
+        /// </summary>
+        public void PlayEventTriggerButtonSound()
+        {
+            if (uiAudioSource == null || audioConfig == null) return;
+
+            if (audioConfig.eventTriggerButtonSound != null)
+            {
+                uiAudioSource.PlayOneShot(audioConfig.eventTriggerButtonSound, audioConfig.eventButtonVolume);
+            }
+        }
+
+        /// <summary>
         /// Stop all sounds immediately
         /// </summary>
         public void StopAllSounds()
