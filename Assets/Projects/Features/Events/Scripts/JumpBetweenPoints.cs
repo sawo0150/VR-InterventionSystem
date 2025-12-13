@@ -1,4 +1,5 @@
 using UnityEngine;
+using VRInterventionSystem.Audio;
 
 /// <summary>
 /// Makes a GameObject jump in a cycle: A → Waiting → B → Waiting → A (repeat)
@@ -74,11 +75,22 @@ public class JumpBetweenPoints : MonoBehaviour
     private Rigidbody rb;
     private Vector3 targetPosition; // Position to move to in FixedUpdate
     private bool needsPositionUpdate = false; // Flag to update position in FixedUpdate
+    private AudioSource audioSource; // AudioSource for ambient deer sounds
 
     void Start()
     {
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
+
+        // Get or create AudioSource component
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        // Configure AudioSource for 3D spatial audio
+        InitializeAudioSource();
 
         // Validate setup
         if (pointB == null)
@@ -294,7 +306,26 @@ public class JumpBetweenPoints : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the jumping behavior
+    /// Initialize AudioSource with settings from AudioConfig
+    /// </summary>
+    private void InitializeAudioSource()
+    {
+        if (audioSource == null || SoundManager.Instance == null) return;
+
+        var config = SoundManager.Instance.GetAudioConfig();
+        if (config == null) return;
+
+        audioSource.clip = config.deerAmbientLoop;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.volume = config.deerAmbientVolume;
+        audioSource.spatialBlend = config.deerSpatialBlend;
+        audioSource.maxDistance = config.deerMaxDistance;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+    }
+
+    /// <summary>
+    /// Starts the jumping behavior and ambient sound
     /// </summary>
     public void StartJumping()
     {
@@ -306,6 +337,12 @@ public class JumpBetweenPoints : MonoBehaviour
 
         isJumping = true;
         jumpProgress = 0f;
+
+        // Start ambient deer sound
+        if (audioSource != null && audioSource.clip != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
 
         // Start from Point A with a pause
         currentPhase = JumpPhase.AtA;
@@ -321,7 +358,7 @@ public class JumpBetweenPoints : MonoBehaviour
     }
 
     /// <summary>
-    /// Stops the jumping behavior
+    /// Stops the jumping behavior and ambient sound
     /// </summary>
     public void StopJumping()
     {
@@ -331,6 +368,12 @@ public class JumpBetweenPoints : MonoBehaviour
         jumpProgress = 0f;
         pauseTimer = 0f;
         waitTimer = 0f;
+
+        // Stop ambient deer sound
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
 
     /// <summary>

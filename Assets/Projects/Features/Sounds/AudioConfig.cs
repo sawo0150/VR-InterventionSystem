@@ -25,6 +25,17 @@ namespace VRInterventionSystem.Audio
         [Range(0f, 1f)]
         public float collisionVolume = 0.7f;
 
+        [Header("Deer Ambient Sounds")]
+        [Tooltip("Looping ambient sound for deer (plays while Event 1 is active)")]
+        public AudioClip deerAmbientLoop;
+        [Range(0f, 1f)]
+        public float deerAmbientVolume = 0.4f;
+        [Tooltip("3D spatial blend for deer sounds (1 = full 3D)")]
+        [Range(0f, 1f)]
+        public float deerSpatialBlend = 1f;
+        [Tooltip("Max distance for deer sounds")]
+        public float deerMaxDistance = 30f;
+
         [Header("UI Alert Sounds")]
         [Tooltip("Sound for general alerts (event activation, etc)")]
         public AudioClip alertSound;

@@ -76,6 +76,12 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Stone Collision Sound: Impact sound for rolling stones
 - Collision Volume: 0.7
 
+**Deer Ambient Sounds:**
+- Deer Ambient Loop: Looping ambient sound for deer (plays while Event 1 is active)
+- Deer Ambient Volume: 0.4
+- Deer Spatial Blend: 1.0 (full 3D)
+- Deer Max Distance: 30f
+
 **UI Alert Sounds:**
 - Alert Sound: Event activation alerts
 - Warning Sound: Boundary violations
@@ -108,6 +114,14 @@ Open the `MainAudioConfig` asset and assign your audio clips:
 - Different sounds for deer vs. rolling stones
 - Plays at collision location (3D spatial audio)
 - Triggered in `ObstacleCollisionHandler.cs:90-93`
+
+### Deer Ambient Sounds
+- Looping ambient sound that plays while Event 1 is active
+- Each deer has its own AudioSource component for proper 3D spatial audio
+- Automatically starts when deer begin jumping (Event 1 starts)
+- Automatically stops when deer stop jumping (Event 1 ends/resets)
+- Plays as 3D spatial audio from each deer's position
+- Controlled in `JumpBetweenPoints.cs:342-345` (start) and `JumpBetweenPoints.cs:373-376` (stop)
 
 ### UI Alert Sounds
 - Triggered whenever UI panels are shown
@@ -156,6 +170,7 @@ SoundManager.Instance.PlayButtonHoverSound();
 - `PlayerUIManager.cs` - Added UI alert sounds
 - `SimulationSceneManager.cs` - Added delivery complete sound
 - `GameManager.cs` - Added using statement for Audio namespace
+- `JumpBetweenPoints.cs` - Added deer ambient looping sounds with AudioSource
 
 ## Testing
 
@@ -168,6 +183,12 @@ SoundManager.Instance.PlayButtonHoverSound();
 1. Start Event 1
 2. Intentionally collide with a deer or rolling stone
 3. Listen for impact sound
+
+### Test Deer Ambient Sounds
+1. Start Event 1
+2. Listen for looping ambient sound from each deer
+3. Move closer to deer to hear 3D spatial audio effect
+4. Complete or reset Event 1 - sound should stop automatically
 
 ### Test UI Sounds
 1. Trigger various UI messages (warnings, alerts, etc.)

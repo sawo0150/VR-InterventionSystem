@@ -233,6 +233,14 @@ namespace VRInterventionSystem.Audio
         }
 
         /// <summary>
+        /// Get the audio configuration (for external components to access settings)
+        /// </summary>
+        public AudioConfig GetAudioConfig()
+        {
+            return audioConfig;
+        }
+
+        /// <summary>
         /// Stop all sounds immediately
         /// </summary>
         public void StopAllSounds()
