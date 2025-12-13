@@ -1165,7 +1165,7 @@ MonoBehaviour:
   deliveryPanelPrefab: {fileID: 1329564909406039413, guid: c812ba152094b480ca68bd846603e6bf, type: 3}
   followSpeed: 15
   distanceFromCamera: 0.75
-  offsetFromCenter: {x: 0, y: 0.25, z: 0}
+  offsetFromCenter: {x: 0, y: 0.1, z: 0}
   boundaryCheckInterval: 0.2
   enableDebugLogs: 1
 --- !u!143 &1871224632 stripped
