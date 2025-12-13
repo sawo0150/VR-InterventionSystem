@@ -103232,7 +103232,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5272966720553917592, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1513958620}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5514254046639757011, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 915531654}
   m_SourcePrefab: {fileID: 100100000, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
 --- !u!4 &915531647 stripped
 Transform:
@@ -137227,6 +137230,20 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.113000005, y: 3.0410001, z: -0.069000006}
   m_TimeToStationary: 0.5
+--- !u!114 &1246257610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246257602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0059e4d2e01064dd88f143ed294421fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.FallingTreeSound
+  playFallSound: 1
+  playImpactSound: 1
 --- !u!43 &1246299259
 Mesh:
   m_ObjectHideFlags: 0
