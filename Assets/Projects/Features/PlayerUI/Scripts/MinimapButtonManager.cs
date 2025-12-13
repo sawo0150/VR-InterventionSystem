@@ -24,6 +24,10 @@ namespace Project
         [Header("Event Buttons")]
         [Tooltip("Array of event buttons (index 0 = Event 1, index 1 = Event 2, etc.)")]
         [SerializeField] private Button[] eventButtons = new Button[3];
+        
+        [Header("Event Goals")]
+        [Tooltip("Array of event goal icons matching the buttons (index 0 = Event 1 Goal, etc.)")]
+        [SerializeField] private GameObject[] eventGoals = new GameObject[3];
 
         [Header("Debug")]
         [Tooltip("Enable debug logging")]
@@ -64,6 +68,15 @@ namespace Project
                 {
                     Debug.LogWarning($"[MinimapButtonManager] Event button {i + 1} not assigned!");
                 }
+
+                if (i < eventGoals.Length && eventGoals[i] != null)
+                {
+                    eventGoals[i].SetActive(false);
+                }
+                else if (enableDebugLogs)
+                {
+                    Debug.LogWarning($"[MinimapButtonManager] Event Goal Icon {i + 1} not assigned!");
+                }
             }
         }
 
@@ -89,6 +102,15 @@ namespace Project
 
             // Enable the button (BlinkingButton will auto-start via OnEnable)
             eventButtons[index].gameObject.SetActive(true);
+            
+            if (index < eventGoals.Length && eventGoals[index] != null)
+            {
+                eventGoals[index].SetActive(true);
+            }
+            else if (enableDebugLogs)
+            {
+                Debug.LogWarning($"[MinimapButtonManager] Event Goal Icon {index + 1} not assigned!");
+            }
 
             if (enableDebugLogs)
             {
@@ -118,6 +140,12 @@ namespace Project
 
             // Disable the button (BlinkingButton will auto-stop via OnDisable)
             eventButtons[index].gameObject.SetActive(false);
+            
+            
+            if (index < eventGoals.Length && eventGoals[index] != null)
+            {
+                eventGoals[index].SetActive(false);
+            }
 
             if (enableDebugLogs)
             {
@@ -176,6 +204,11 @@ namespace Project
                 {
                     eventButtons[i].gameObject.SetActive(false);
                 }
+            }
+            
+            for (int i = 0; i < eventGoals.Length; i++)
+            {
+                if (eventGoals[i] != null) eventGoals[i].SetActive(false);
             }
 
             if (enableDebugLogs)
