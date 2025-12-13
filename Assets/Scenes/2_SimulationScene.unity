@@ -79433,6 +79433,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeliveryBot
       objectReference: {fileID: 0}
+    - target: {fileID: 5514254046639757011, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -103185,6 +103189,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Event3_DeliveryBot
       objectReference: {fileID: 0}
+    - target: {fileID: 5514254046639757011, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7139021376133516503, guid: c3d51df864e954a8f88f6ba953538d91, type: 3}
       propertyPath: m_Speed
       value: 15
@@ -121737,6 +121745,10 @@ PrefabInstance:
     - target: {fileID: 1937661009659080330, guid: 6153eb8b338fe6540b3f527f8f3c7997, type: 3}
       propertyPath: m_Name
       value: Minimap Robot Icon 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937661009659080330, guid: 6153eb8b338fe6540b3f527f8f3c7997, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2812435146306733486, guid: 6153eb8b338fe6540b3f527f8f3c7997, type: 3}
       propertyPath: m_Mesh
