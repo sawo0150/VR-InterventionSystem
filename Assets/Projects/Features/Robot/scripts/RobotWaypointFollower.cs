@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using VRInterventionSystem.Audio;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class RobotWaypointFollower : MonoBehaviour
@@ -22,6 +23,10 @@ public class RobotWaypointFollower : MonoBehaviour
     [Range(0.5f, 5f)]
     public float groundCheckDistance = 2f;
 
+    [Header("Engine Sound")]
+    [Tooltip("Maximum speed for engine sound normalization")]
+    public float maxSpeed = 3.5f;
+
     [Header("Debug")]
     [Tooltip("Enable debug logging")]
     public bool enableDebugLogs = true;
@@ -30,6 +35,7 @@ public class RobotWaypointFollower : MonoBehaviour
     private int currentWaypointIndex = 0;
     private Transform rotationTarget;
     private RaycastHit lastGroundHit;
+    private AudioSource engineAudioSource;
 
     // Navigation state
     private enum NavigationState
@@ -54,6 +60,9 @@ public class RobotWaypointFollower : MonoBehaviour
 
         // Determine which transform to rotate for slope alignment
         rotationTarget = (visualMesh != null) ? visualMesh : transform;
+
+        // Initialize engine audio source
+        InitializeEngineAudioSource();
 
         if (waypoints.Length == 0)
         {
@@ -125,6 +134,9 @@ public class RobotWaypointFollower : MonoBehaviour
 
         // Always align to slope during autonomous navigation
         AlignToSlope();
+
+        // Update engine sound based on velocity
+        UpdateEngineSound();
     }
     void GoToNextWaypoint()
     {
@@ -296,6 +308,106 @@ public class RobotWaypointFollower : MonoBehaviour
 
             // Smoothly interpolate to target rotation on the rotation target
             rotationTarget.rotation = Quaternion.Slerp(rotationTarget.rotation, targetRotation, slopeAlignmentSpeed * Time.deltaTime);
+        }
+    }
+
+    #endregion
+
+    #region Engine Sound
+
+    /// <summary>
+    /// Initialize AudioSource for engine sound
+    /// </summary>
+    void InitializeEngineAudioSource()
+    {
+        // Get or create AudioSource component
+        engineAudioSource = GetComponent<AudioSource>();
+        if (engineAudioSource == null)
+        {
+            engineAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (SoundManager.Instance == null)
+        {
+            Debug.LogWarning($"[RobotWaypointFollower] SoundManager.Instance is null on {gameObject.name}");
+            return;
+        }
+
+        var config = SoundManager.Instance.GetAudioConfig();
+        if (config == null)
+        {
+            Debug.LogWarning($"[RobotWaypointFollower] AudioConfig is null");
+            return;
+        }
+
+        // Configure engine audio source
+        engineAudioSource.clip = config.engineLoop;
+        engineAudioSource.loop = true;
+        engineAudioSource.playOnAwake = false;
+        engineAudioSource.volume = config.engineBaseVolume;
+        engineAudioSource.pitch = config.engineMinPitch;
+        engineAudioSource.spatialBlend = config.engineSpatialBlend;
+        engineAudioSource.maxDistance = config.engineMaxDistance;
+        engineAudioSource.rolloffMode = AudioRolloffMode.Linear;
+
+        if (enableDebugLogs)
+        {
+            Debug.Log($"[RobotWaypointFollower] Engine audio initialized on {gameObject.name}");
+        }
+    }
+
+    /// <summary>
+    /// Update engine sound based on NavMeshAgent velocity
+    /// Always plays based on robot's movement speed
+    /// </summary>
+    void UpdateEngineSound()
+    {
+        if (engineAudioSource == null || agent == null) return;
+
+        if (SoundManager.Instance == null) return;
+
+        var config = SoundManager.Instance.GetAudioConfig();
+        if (config == null) return;
+
+        // Calculate speed from NavMeshAgent velocity
+        float currentSpeed = agent.velocity.magnitude;
+        float speedNormalized = Mathf.Clamp01(currentSpeed / maxSpeed);
+        bool isMoving = currentSpeed > 0.01f;
+
+        // Start or stop the engine sound based on movement
+        if (isMoving && !engineAudioSource.isPlaying)
+        {
+            engineAudioSource.Play();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[RobotWaypointFollower] Started engine sound on {gameObject.name}");
+            }
+        }
+        else if (!isMoving && engineAudioSource.isPlaying)
+        {
+            engineAudioSource.Stop();
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[RobotWaypointFollower] Stopped engine sound on {gameObject.name}");
+            }
+        }
+
+        // Update pitch based on speed
+        if (isMoving)
+        {
+            float targetPitch = Mathf.Lerp(
+                config.engineMinPitch,
+                config.engineMaxPitch,
+                speedNormalized
+            );
+
+            engineAudioSource.pitch = Mathf.Lerp(
+                engineAudioSource.pitch,
+                targetPitch,
+                Time.deltaTime / config.enginePitchSmoothTime
+            );
         }
     }
 

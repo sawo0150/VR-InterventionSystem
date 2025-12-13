@@ -75,15 +75,10 @@ public class Event3Controller : MonoBehaviour, IEvent
 
     /// <summary>
     /// Initialize AudioSource with settings from AudioConfig for children ambient sound
+    /// Creates a dedicated AudioSource for children sound to avoid conflicts with engine sound
     /// </summary>
     void InitializeChildrenAudio()
     {
-        if (childrenAmbientAudioSource == null)
-        {
-            Debug.LogWarning("[Event3Controller] childrenAmbientAudioSource is null - please assign AudioSource on Robot3!");
-            return;
-        }
-
         if (SoundManager.Instance == null)
         {
             Debug.LogWarning("[Event3Controller] SoundManager.Instance is null - cannot initialize!");
@@ -97,14 +92,28 @@ public class Event3Controller : MonoBehaviour, IEvent
             return;
         }
 
-        // Configure the AudioSource
+        // ALWAYS create a new dedicated AudioSource for children ambient sound
+        // This ensures it never conflicts with the engine sound AudioSource
+        if (robot != null)
+        {
+            childrenAmbientAudioSource = robot.AddComponent<AudioSource>();
+            Debug.Log("[Event3Controller] Created dedicated AudioSource for children ambient sound");
+        }
+
+        if (childrenAmbientAudioSource == null)
+        {
+            Debug.LogWarning("[Event3Controller] childrenAmbientAudioSource is null - cannot initialize!");
+            return;
+        }
+
+        // Configure the AudioSource for children ambient sound
         childrenAmbientAudioSource.clip = config.childrenAmbientLoop;
         childrenAmbientAudioSource.loop = true;
         childrenAmbientAudioSource.playOnAwake = false;
         childrenAmbientAudioSource.volume = config.childrenAmbientVolume;
         childrenAmbientAudioSource.spatialBlend = config.childrenSpatialBlend;
 
-        Debug.Log($"[Event3Controller] Children audio initialized - clip: {config.childrenAmbientLoop != null}, volume: {config.childrenAmbientVolume}, spatialBlend: {config.childrenSpatialBlend}");
+        Debug.Log($"[Event3Controller] Children audio initialized - clip: {config.childrenAmbientLoop != null}, clip name: {config.childrenAmbientLoop?.name}, volume: {config.childrenAmbientVolume}, spatialBlend: {config.childrenSpatialBlend}");
     }
 
     void Update()
