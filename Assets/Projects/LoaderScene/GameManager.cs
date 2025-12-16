@@ -273,8 +273,23 @@ namespace Project
             
             // Docking (Set Parent and Initialize Pose)
             playerObject.transform.SetParent(targetAnchor, false);
-            playerObject.transform.localPosition = Vector3.zero;
-            playerObject.transform.localRotation = Quaternion.identity;
+            
+            
+            // playerObject.transform.localPosition = Vector3.zero;
+            // playerObject.transform.localRotation = Quaternion.identity;
+            // [VR 보정 1] 회전 맞추기
+            // 카메라가 현재 바라보는 방향(Yaw)을 앵커의 정면(0도)에 맞추기 위해 Rig를 반대로 회전
+            float cameraYaw = Camera.main.transform.localEulerAngles.y;
+            playerObject.transform.localRotation = Quaternion.Euler(0, -cameraYaw, 0);
+
+            // [VR 보정 2] 위치 맞추기
+            // Rig를 0,0,0에 두면 카메라가 오프셋만큼 엇나감.
+            // 따라서 카메라가 0,0,0(앵커 위치)에 오도록 Rig를 반대 방향으로 이동.
+            // (단, Tracking Origin Mode가 Floor라면 높이(Y)는 보정하지 않음)
+            Vector3 rigToHead = playerObject.transform.InverseTransformPoint(Camera.main.transform.position);
+            rigToHead.y = 0; // 높이는 건드리지 않음 (바닥 높이 유지)
+            playerObject.transform.localPosition = -rigToHead;
+            
             playerObject.transform.localScale = Vector3.one;
             
             // Enable Physics & Settings
