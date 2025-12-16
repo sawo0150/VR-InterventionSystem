@@ -1165,6 +1165,8 @@ MonoBehaviour:
   errorPanelPrefab: {fileID: 0}
   deerRespawnPanelPrefab: {fileID: 2191333819200875518, guid: 623b689e4996040efbb6d0a9b87e4c03, type: 3}
   stoneRespawnPanelPrefab: {fileID: 3447541090138658412, guid: 5885e2656a89e49418b258037b11a252, type: 3}
+  childrenRespawnPanelPrefab: {fileID: 0}
+  childWarningPanelPrefab: {fileID: 2191333819200875518, guid: 35db296ae0c6c44419b24b72d70b0818, type: 3}
   alertPanelPrefab: {fileID: 1329564909406039413, guid: 84471ab42eea145a58b9440d6177aeed, type: 3}
   deliveryPanelPrefab: {fileID: 1329564909406039413, guid: c812ba152094b480ca68bd846603e6bf, type: 3}
   followSpeed: 15

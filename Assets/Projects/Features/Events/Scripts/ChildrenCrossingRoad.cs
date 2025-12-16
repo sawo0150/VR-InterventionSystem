@@ -1,4 +1,6 @@
 using UnityEngine;
+using VRInterventionSystem.Audio;
+using Project;
 
 public class ChildrenCrossingRoad : MonoBehaviour
 {
@@ -77,13 +79,32 @@ public class ChildrenCrossingRoad : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        // DeliveryBot에 "Player" 또는 "DeliveryBot" 태그를 달아둔다고 가정
+        // Check if robot collided with child
         if (other.CompareTag("Robot"))
         {
-            Debug.Log("Boy와 DeliveryBot이 만났습니다.");
+            Debug.Log($"[ChildrenCrossingRoad] Robot collided with child: {gameObject.name}");
 
-            // 여기서 네가 이미 만든 리스폰 시스템을 호출
-            // 예: other.GetComponent<DeliveryBotRespawn>().Respawn();
+            // Show child warning panel (uses text already set in the panel prefab)
+            if (PlayerUIManager.Instance != null)
+            {
+                PlayerUIManager.Instance.ShowMessage(UIMessageType.ChildWarning, "", 3f);
+                Debug.Log("[ChildrenCrossingRoad] Showing child warning panel");
+            }
+            else
+            {
+                Debug.LogWarning("[ChildrenCrossingRoad] PlayerUIManager.Instance is null - cannot show warning panel");
+            }
+
+            // Play error sound
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayUISound(UIMessageType.ChildWarning);
+                Debug.Log("[ChildrenCrossingRoad] Playing child warning sound");
+            }
+            else
+            {
+                Debug.LogWarning("[ChildrenCrossingRoad] SoundManager.Instance is null - cannot play warning sound");
+            }
         }
     }
 }

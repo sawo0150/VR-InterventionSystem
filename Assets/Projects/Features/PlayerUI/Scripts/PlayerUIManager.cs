@@ -50,6 +50,12 @@ namespace Project
         [Tooltip("Stone respawn panel prefab (Event 1)")]
         [SerializeField] private UIMessagePanel stoneRespawnPanelPrefab;
 
+        [Tooltip("Children respawn panel prefab (Event 3)")]
+        [SerializeField] private UIMessagePanel childrenRespawnPanelPrefab;
+
+        [Tooltip("Child warning panel prefab (Event 3 - shown when robot collides with child)")]
+        [SerializeField] private UIMessagePanel childWarningPanelPrefab;
+
         [Tooltip("Alert panel prefab (shown when events are activated)")]
         [SerializeField] private UIMessagePanel alertPanelPrefab;
 
@@ -120,6 +126,8 @@ namespace Project
             InstantiatePanel(UIMessageType.Error, errorPanelPrefab);
             InstantiatePanel(UIMessageType.DeerRespawn, deerRespawnPanelPrefab);
             InstantiatePanel(UIMessageType.StoneRespawn, stoneRespawnPanelPrefab);
+            InstantiatePanel(UIMessageType.ChildrenRespawn, childrenRespawnPanelPrefab);
+            InstantiatePanel(UIMessageType.ChildWarning, childWarningPanelPrefab);
             InstantiatePanel(UIMessageType.Alert, alertPanelPrefab);
             InstantiatePanel(UIMessageType.Delivery, deliveryPanelPrefab);
 

@@ -157,6 +157,8 @@ namespace VRInterventionSystem.Audio
                 UIMessageType.Status => audioConfig.statusSound,
                 UIMessageType.DeerRespawn => audioConfig.errorSound,
                 UIMessageType.StoneRespawn => audioConfig.errorSound,
+                UIMessageType.ChildrenRespawn => audioConfig.errorSound,
+                UIMessageType.ChildWarning => audioConfig.errorSound,
                 UIMessageType.Delivery => audioConfig.deliveryCompleteSound,
                 _ => null
             };

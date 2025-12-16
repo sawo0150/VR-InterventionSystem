@@ -140,11 +140,8 @@ public class Event2Controller : MonoBehaviour, IEvent
         // Disable autonomous navigation
         DisableAutonomousNavigation();
 
-        // Give player control
-        if (robotController != null)
-        {
-            robotController.enabled = true;
-        }
+        // NOTE: Do NOT enable robotController here - GameManager handles this in OnEventActivated()
+        // based on whether player is currently boarded on the robot
     }
 
     public void ResetEvent()

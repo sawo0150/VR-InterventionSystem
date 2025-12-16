@@ -37,9 +37,14 @@ namespace Project
         StoneRespawn,
 
         /// <summary>
-        /// Respawn message when robot is hit by deer (Event 1)
+        /// Respawn message when robot is hit by children (Event 3)
         /// </summary>
         ChildrenRespawn,
+
+        /// <summary>
+        /// Warning message when robot collides with a child (Event 3)
+        /// </summary>
+        ChildWarning,
 
         /// <summary>
         /// Alert message shown when an event is activated
