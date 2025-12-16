@@ -345,11 +345,12 @@ namespace Project
 
             if (canControl)
             {
-                // Configure XR input for robot control
-                scenarioData.robotNavMeshController.enableXRInput = true;
+                // Configure XR input for robot control (MUST assign action reference BEFORE enabling)
                 scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableXRInput = true;
                 scenarioData.robotNavMeshController.enableKeyboardInput = false; // Disable keyboard when in VR mode
 
+                // Enable controller LAST (OnEnable will use the action reference we just set)
                 scenarioData.robotNavMeshController.enabled = true;
                 // Keep "Robot" tag (event triggers need it to detect robot arrival)
                 MyDebug.Log("🕹️ Manual Control Enabled (XR Input Active)");
@@ -533,17 +534,24 @@ namespace Project
             }
 
             // If player is currently controlling this robot, enable manual control now
-            if (currentActiveScenarioData != null &&
+            if (currentPlayerState == PlayerState.ControllingMode &&
+                currentActiveScenarioData != null &&
                 currentActiveScenarioData.id == eventId)
             {
-                // Enable manual control
-                scenarioData.robotNavMeshController.enableXRInput = true;
+                // Enable manual control (MUST assign action reference BEFORE enabling)
                 scenarioData.robotNavMeshController.xrThumbstickAction = xrThumbstickInputAction;
+                scenarioData.robotNavMeshController.enableXRInput = true;
                 scenarioData.robotNavMeshController.enableKeyboardInput = false;
+
+                // Enable controller LAST (OnEnable will use the action reference we just set)
                 scenarioData.robotNavMeshController.enabled = true;
                 // Keep "Robot" tag (event triggers need it to detect robot arrival)
 
                 MyDebug.Log("🕹️ Manual Control NOW Enabled (Event Active)");
+            }
+            else
+            {
+                MyDebug.Log($"Manual control NOT enabled - PlayerState: {currentPlayerState}, ScenarioID: {currentActiveScenarioData?.id}, EventID: {eventId}");
             }
         }
 

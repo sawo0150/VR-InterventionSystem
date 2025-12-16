@@ -322,10 +322,17 @@ public class Event1Controller : MonoBehaviour, IEvent
 
     void DisableAutonomousNavigation()
     {
-        // Robot has arrived at event, no need to disable anything
+        // Robot has arrived at event, stop autonomous navigation and prepare for manual control
+        if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled)
+        {
+            navMeshAgent.ResetPath(); // Clear the autonomous path
+            navMeshAgent.isStopped = false; // Must be false for manual control to work
+            navMeshAgent.velocity = Vector3.zero; // Stop current movement
+        }
+
         if (enableDebugLogs)
         {
-            Debug.Log("[Event1Controller] Robot at event location");
+            Debug.Log("[Event1Controller] Autonomous navigation finished/disabled - ready for manual control");
         }
     }
 
