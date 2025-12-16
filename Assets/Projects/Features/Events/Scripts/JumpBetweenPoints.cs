@@ -404,6 +404,19 @@ public class JumpBetweenPoints : MonoBehaviour
         if (pointA != null)
         {
             SetPosition(pointA.position);
+
+            // Also reset rotation to match Point A's rotation, then rotate 90 degrees left
+            Quaternion targetRotation = pointA.rotation * Quaternion.Euler(0f, -90f, 0f);
+
+            if (rb != null && rb.isKinematic)
+            {
+                rb.MoveRotation(targetRotation);
+            }
+            else
+            {
+                transform.rotation = targetRotation;
+            }
+
             currentPhase = JumpPhase.AtA;
         }
     }

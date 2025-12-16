@@ -239,7 +239,7 @@ public class Event1Controller : MonoBehaviour, IEvent
                 if (deer != null)
                 {
                     deer.StopJumping();
-                    deer.ResetToWaitingPoint();
+                    deer.ResetToPointA();
 
                     if (enableDebugLogs)
                     {
