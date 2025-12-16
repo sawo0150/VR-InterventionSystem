@@ -8,9 +8,15 @@ namespace Project
 {
     public class TutorialUIController : MonoBehaviour
     {
+        [Header("UI Components")]
         [SerializeField] private GameObject tutorialCanvas; 
-        [SerializeField] private TextMeshProUGUI titleText;
+        [SerializeField] private TextMeshProUGUI titleObject;
+        [SerializeField] private TextMeshProUGUI subTitleObject;
+        
+        [Header("Content Data")]
         [SerializeField] private List<GameObject> contentPages;
+        [SerializeField] private List<string> titleTexts;
+        [SerializeField] private List<string> subTitleTexts;
 
         [Header("Buttons")]
         [SerializeField] private Button prevButton;
@@ -31,6 +37,7 @@ namespace Project
         {
             CheckAssignments();
             InitializeListeners();
+            ResetContentPages();
         }
         
         private void CheckAssignments()
@@ -43,6 +50,12 @@ namespace Project
             
             if (contentPages == null || contentPages.Count == 0)
                 MyDebug.LogWarning($"[{GetType().Name}] contentPages list is empty!");
+            
+            if (titleTexts != null && contentPages != null && titleTexts.Count != contentPages.Count)
+                MyDebug.LogWarning($"[{GetType().Name}] Count mismatch: Pages({contentPages.Count}) vs Titles({titleTexts.Count}); Some pages might show empty titles");
+            
+            if (titleTexts != null && subTitleTexts != null && titleTexts.Count != subTitleTexts.Count)
+                MyDebug.LogWarning($"[{GetType().Name}] Count mismatch: Pages({subTitleTexts.Count}) vs Titles({titleTexts.Count}); Some pages might show empty titles");
         }
         
         private void InitializeListeners()
@@ -50,6 +63,19 @@ namespace Project
             prevButton.onClick.AddListener(OnPrevClick);
             nextButton.onClick.AddListener(OnNextClick);
             skipButton.onClick.AddListener(OnSkipClick);
+        }
+        
+        private void ResetContentPages()
+        {
+            if (contentPages == null || contentPages.Count == 0) return;
+
+            for (var i = 0; i < contentPages.Count; i++)
+            {
+                if (contentPages[i] != null)
+                {
+                    contentPages[i].SetActive(i == 0);
+                }
+            }
         }
 
         public void BeginTutorial(Action onComplete)
@@ -81,11 +107,31 @@ namespace Project
 
         private void UpdateUI()
         {
-            // Update content
+            // Update content page
             for (var i = 0; i < contentPages.Count; i++)
             {
                 if (contentPages[i] != null) 
                     contentPages[i].SetActive(i == currentIndex);
+            }
+            
+            // Update title text
+            if (titleTexts != null && currentIndex < titleTexts.Count)
+            {
+                titleObject.text = titleTexts[currentIndex];
+            }
+            else
+            {
+                titleObject.text = ""; 
+            }
+            
+            //Update subtitle text
+            if (subTitleTexts != null && currentIndex < subTitleTexts.Count)
+            {
+                subTitleObject.text = subTitleTexts[currentIndex];
+            }
+            else
+            {
+                subTitleObject.text = "";
             }
             
             // Update button states
