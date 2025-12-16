@@ -275,22 +275,32 @@ namespace Project
             playerObject.transform.SetParent(targetAnchor, false);
             
             
-            // playerObject.transform.localPosition = Vector3.zero;
-            // playerObject.transform.localRotation = Quaternion.identity;
-            // [VR 보정 1] 회전 맞추기
-            // 카메라가 현재 바라보는 방향(Yaw)을 앵커의 정면(0도)에 맞추기 위해 Rig를 반대로 회전
+            playerObject.transform.localPosition = Vector3.zero;
+            playerObject.transform.localRotation = Quaternion.identity;
+            playerObject.transform.localScale = Vector3.one;
+            
+            // -----------------------------------------------------------
+            // [VR 보정 로직] : 의자(TargetAnchor) 좌표계 기준
+            // -----------------------------------------------------------
+
+            // A. 회전 보정 (Yaw)
+            // "카메라가 바라보는 방향"이 "의자 정면"과 일치하도록 Rig를 반대로 돌립니다.
+            // 카메라의 로컬 회전값(HMD가 돌아간 정도)만큼 Rig를 반대로 돌려 상쇄합니다.
             float cameraYaw = Camera.main.transform.localEulerAngles.y;
             playerObject.transform.localRotation = Quaternion.Euler(0, -cameraYaw, 0);
 
-            // [VR 보정 2] 위치 맞추기
-            // Rig를 0,0,0에 두면 카메라가 오프셋만큼 엇나감.
-            // 따라서 카메라가 0,0,0(앵커 위치)에 오도록 Rig를 반대 방향으로 이동.
-            // (단, Tracking Origin Mode가 Floor라면 높이(Y)는 보정하지 않음)
-            Vector3 rigToHead = playerObject.transform.InverseTransformPoint(Camera.main.transform.position);
-            rigToHead.y = 0; // 높이는 건드리지 않음 (바닥 높이 유지)
-            playerObject.transform.localPosition = -rigToHead;
-            
-            playerObject.transform.localScale = Vector3.one;
+            // B. 위치 보정 (Position) - 핵심 수정 사항 ✨
+            // 중요: Rig가 아닌 'targetAnchor(의자)' 기준으로 카메라가 어디 있는지 계산해야 합니다.
+            Vector3 cameraPosInSeatSpace = targetAnchor.InverseTransformPoint(Camera.main.transform.position);
+    
+            // 높이(Y)는 HMD 키 높이를 유지해야 하므로 보정에서 제외 (선택 사항)
+            // 완전한 착석감을 원하면 y도 포함해도 되지만, 바닥이 꺼질 수 있으므로 x, z만 보정 추천
+            cameraPosInSeatSpace.y = 0; 
+
+            // 카메라가 의자 중심에서 벗어난 만큼 Rig를 반대로 이동
+            playerObject.transform.localPosition = -cameraPosInSeatSpace;
+
+            // -----------------------------------------------------------
             
             // Enable Physics & Settings
             switch (currentPlayerState)
