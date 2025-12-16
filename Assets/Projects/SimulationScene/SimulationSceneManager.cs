@@ -193,7 +193,25 @@ namespace Project
                 }
             }
 
+            // Reset GameManager's scenario data states BEFORE resetting the event
+            // This ensures the robot is in Auto mode and event is Idle
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ResetEventStates(currentEventIndex + 1); // Convert 0-based to 1-based
+
+                if (enableDebugLogs)
+                {
+                    Debug.Log($"[SimulationSceneManager] Reset scenario states for Event {currentEventIndex + 1}");
+                }
+            }
+
             currentEvent.ResetEvent();
+
+            // Re-enable all event trigger buttons
+            if (MonitoringSceneManager.Instance != null)
+            {
+                MonitoringSceneManager.Instance.EnableAllEventButtons();
+            }
 
             // Return player to monitoring scene via GameManager
             GameManager.Instance.ReturnToMonitoring();

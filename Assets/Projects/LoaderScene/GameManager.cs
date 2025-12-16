@@ -317,6 +317,18 @@ namespace Project
                 return;
             }
 
+            // Disable previous robot's controller if switching between robots
+            if (currentActiveScenarioData != null && currentActiveScenarioData.id != robotId)
+            {
+                MyDebug.Log($"[{GetType().Name}] Disabling previous robot {currentActiveScenarioData.id} controller");
+                currentActiveScenarioData.robotNavMeshController.enableXRInput = false;
+                currentActiveScenarioData.robotNavMeshController.enableKeyboardInput = true;
+                currentActiveScenarioData.robotNavMeshController.enabled = false;
+            }
+
+            // Update current active scenario data to the new robot
+            currentActiveScenarioData = scenarioData;
+
             // 플레이어 상태 변경
             currentPlayerState = PlayerState.ControllingMode;
             MyDebug.Log($"[{GetType().Name}] Change PlayerState to ControllingMode");
@@ -344,7 +356,11 @@ namespace Project
             }
             else
             {
-                scenarioData.robotNavMeshController.enabled = false;
+                // Only disable if it's currently enabled (don't interfere with Auto mode)
+                if (scenarioData.robotNavMeshController.enabled)
+                {
+                    scenarioData.robotNavMeshController.enabled = false;
+                }
 
                 if (scenarioData.eventState == EventState.Initializing)
                 {
@@ -474,6 +490,12 @@ namespace Project
                 return;
             }
 
+            // Disable other event trigger buttons
+            if (MonitoringSceneManager.Instance != null)
+            {
+                MonitoringSceneManager.Instance.DisableOtherEventButtons(eventId);
+            }
+
             // Set event state to Initializing (robot will navigate to event location)
             currentActiveScenarioData.eventState = EventState.Initializing;
             // Trigger the event in SimulationSceneManager
@@ -559,6 +581,26 @@ namespace Project
             PlayerUIManager.Instance.ShowMessage(UIMessageType.Alert, alertMessage, alertDisplayDuration);
 
             MyDebug.Log($"[GameManager] ShowMessage call completed - alert should now be visible");
+        }
+
+        /// <summary>
+        /// Reset event and robot states for a specific event
+        /// Called when event completes and resets
+        /// </summary>
+        public void ResetEventStates(int eventId)
+        {
+            var scenarioData = GetScenarioData(eventId);
+            if (scenarioData == null)
+            {
+                MyDebug.LogError($"[{GetType().Name}] Cannot reset states - Scenario {eventId} not found");
+                return;
+            }
+
+            // Reset states to Idle and Auto
+            scenarioData.eventState = EventState.Idle;
+            scenarioData.robotState = RobotState.Auto;
+
+            MyDebug.Log($"[{GetType().Name}] Reset Event {eventId} states: eventState=Idle, robotState=Auto");
         }
         #endregion
 

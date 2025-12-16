@@ -169,5 +169,39 @@ namespace Project
             GameManager.Instance.BoardRobot(robotId);
         }
         #endregion
+
+        #region Event Button Management
+        /// <summary>
+        /// Disable all event trigger buttons except the active one
+        /// Called when an event starts
+        /// </summary>
+        public void DisableOtherEventButtons(int activeEventId)
+        {
+            foreach (var pair in eventTriggerButtons)
+            {
+                if (pair.button != null && pair.eventId != activeEventId)
+                {
+                    pair.button.interactable = false;
+                    MyDebug.Log($"[{GetType().Name}] Disabled event button {pair.eventId}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable all event trigger buttons
+        /// Called when an event completes/resets
+        /// </summary>
+        public void EnableAllEventButtons()
+        {
+            foreach (var pair in eventTriggerButtons)
+            {
+                if (pair.button != null)
+                {
+                    pair.button.interactable = true;
+                    MyDebug.Log($"[{GetType().Name}] Enabled event button {pair.eventId}");
+                }
+            }
+        }
+        #endregion
     }
 }
