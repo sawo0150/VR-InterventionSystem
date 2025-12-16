@@ -14,12 +14,17 @@ namespace Project.Event
         [SerializeField] private float fallForce = 2.0f;
         //[SerializeField] private float torqueForce = 1.0f;
 
+        private Vector3 startPosition;
+        private Quaternion startRotation;
+
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
             
-            // set 'isKinematic' to prevent falling down before the function call
             rb.isKinematic = true;
+
+            startPosition = transform.position;
+            startRotation = transform.rotation;
         }
         
         void Start()
@@ -53,6 +58,16 @@ namespace Project.Event
             // // Set Torque
             // Vector3 randomTorque = new Vector3(Random.value, Random.value, Random.value);
             // rb.AddTorque(randomTorque * torqueForce, ForceMode.Impulse);
+        }
+
+        public void ResetObject()
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            
+            transform.position = startPosition;
+            transform.rotation = startRotation;
         }
     }
 }

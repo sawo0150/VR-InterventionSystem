@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Unity Technologies
-  productName: XRI Examples
+  companyName: VRIS
+  productName: VR_InterVention_System
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -70,7 +70,6 @@ PlayerSettings:
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 0
   androidUseSwappy: 0
-  androidDisplayOptions: 1
   androidBlitType: 1
   androidResizeableActivity: 0
   androidDefaultWindowWidth: 1920
@@ -143,7 +142,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 3.1.2
+  bundleVersion: 0.1
   preloadedAssets:
   - {fileID: 11400000, guid: cd0186ba280498948befdd257e7afe59, type: 2}
   metroInputSource: 0
@@ -167,14 +166,14 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.unity.xr.interaction.examples
+    Android: com.VRIS.VR_InterVention_System
     Standalone: com.unity.xr.interaction.examples
   buildNumber:
     Standalone: 0
     VisionOS: 0
     iPhone: 0
     tvOS: 0
-  overrideDefaultApplicationIdentifier: 1
+  overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 33
   AndroidTargetSdkVersion: 33
@@ -298,7 +297,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 88200832b3fc0544ba404537a884638d, type: 3}
+      m_Icon: {fileID: 2800000, guid: 8dbf6a870d9bc6d4d9d997862d49c5ca, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -1047,4 +1046,3 @@ PlayerSettings:
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
-  d3d12DeviceFilterListAsset: {fileID: 0}

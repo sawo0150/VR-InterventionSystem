@@ -156,6 +156,7 @@ RectTransform:
   - {fileID: 898202214}
   - {fileID: 1203947503}
   - {fileID: 590616005}
+  - {fileID: 127949582}
   m_Father: {fileID: 990837964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -183,6 +184,78 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
+--- !u!1 &33395660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 33395661}
+  - component: {fileID: 33395663}
+  - component: {fileID: 33395662}
+  m_Layer: 5
+  m_Name: RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &33395661
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33395660}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 127949582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &33395662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33395660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: c756d393ff0c433439d891519a6147c5, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &33395663
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33395660}
+  m_CullTransparentMesh: 1
 --- !u!1 &52022934
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +729,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VRInterventionSystem.Audio.UIButtonSound
   playClickSound: 1
   playHoverSound: 0
+--- !u!1 &127949581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 127949582}
+  - component: {fileID: 127949584}
+  - component: {fileID: 127949583}
+  m_Layer: 5
+  m_Name: 8 How To Start
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &127949582
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127949581}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 33395661}
+  m_Father: {fileID: 22460015}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &127949583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127949581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &127949584
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127949581}
+  m_CullTransparentMesh: 1
 --- !u!1 &135451550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,7 +1234,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: ef92a21f2cba871419cc49fc30542c81, type: 3}
+  m_Texture: {fileID: 2800000, guid: dde5f010695561840b3151b9590487af, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1157,7 +1306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: e2156925152070b498afc70153c49660, type: 3}
+  m_Texture: {fileID: 2800000, guid: c1f5dd2f72eb3164fbd5d735c832c698, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1292,7 +1441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 600864ed758a7ee4fbea2cb96e7fa417, type: 3}
+  m_Texture: {fileID: 2800000, guid: 98addb9d3ea526740919e20c44590a3d, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1757,7 +1906,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 2735430aed02e51449015df37a2f0ae5, type: 3}
+  m_Texture: {fileID: 2800000, guid: 7379a8dcbdef6c044b26ff258d027dbd, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1823,7 +1972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 100
+  m_MinHeight: 50
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -3636,7 +3785,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: a11f42a093dbc0c4a934968103d40927, type: 3}
+  m_Texture: {fileID: 2800000, guid: a178b3c7603e53740b92d9ea20814f53, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -4631,7 +4780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: c9d7b6c012c0c1040a6f0ac86fcc8165, type: 3}
+  m_Texture: {fileID: 2800000, guid: a4a45bf706e276b43ad3612792963ebf, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -5732,8 +5881,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7276,30 +7425,27 @@ MonoBehaviour:
   - {fileID: 898202213}
   - {fileID: 1203947502}
   - {fileID: 590616004}
+  - {fileID: 127949581}
   titleTexts:
-  - Welcome, Operator
-  - 'System Overview: Monitor Robot Status'
+  - Welcome, Operator!
+  - Monitor Robot Status
   - Obstruction Detected
-  - Manual Control Mode
+  - Manual Mode Active
   - Destination Reached
-  - Mission Accomplished
+  - Mission Success
   - Switch to Live Operation
   - Real-Time Monitoring
+  - Initiate Simulation
   subTitleTexts:
   - ' '
-  - Monitor the robot's position and camera views. Use the buttons to simulate emergency
-    scenarios.
-  - An error has occurred. Select the warning icon on the map to initiate manual
-    intervention.
-  - You are now in control. Use the left joystick to steer the robot around the obstacle.
-  - Arrived at the target location. Press the 'Complete Delivery' button to finish
-    the task.
-  - Congratulations! Delivery complete. The robot is now returning to base in autonomous
-    mode.
-  - Simulation training complete. Select 'Sector B' to connect to the real robot
-    fleet.
-  - Monitor the live SLAM map and camera feed. Click the screen if manual intervention
-    is needed.
+  - System Ready. Monitor the dashboard and use buttons to test scenarios.
+  - Select the alert icon to take manual control.
+  - Use the left joystick to navigate around the obstacle.
+  - Press 'Complete Delivery' to finish the mission.
+  - The robot is returning to base automatically.
+  - Training Complete. Then, select 'Sector B' to connect to the live system.
+  - Monitor the status and click the screen to intervene.
+  - Ready to practice? Select any 'Trigger Event' button to spawn an emergency scenario.
   prevButton: {fileID: 816054758}
   skipButton: {fileID: 1129032798}
   nextButton: {fileID: 1057334964}
@@ -7641,7 +7787,7 @@ Transform:
   m_GameObject: {fileID: 1782830920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.338, z: -2}
+  m_LocalPosition: {x: 0, y: -0.338, z: -2.611}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8512,11 +8658,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Welcome to the <b>Virtual Reality Intervention System</b>.\r\n\r\nYou
-    now have total oversight of our city-wide delivery fleet.\r\nFeel free to toggle
-    between units and jump directly into their <b>POV</b> to assess their surroundings.\r\n\r\nWhile
-    the fleet operates autonomously, <b>no system is perfect</b>\u2014please remain
-    vigilant, as navigation errors may occur."
+  m_text: "<b>Welcome to the Virtual Reality Intervention System</b>.\r\n\n<b>Mission</b>:\n-
+    Oversee the city-wide autonomous delivery fleet. \n- Monitor real-time feeds
+    and jump into <b>POV mode</b> to assess situations.\n\n<b>Note</b>: The fleet
+    is autonomous, but navigation errors may occur. <b>Remain vigilant and intervene
+    when necessary.</b>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8543,8 +8689,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
-  m_fontSizeBase: 42
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8555,7 +8701,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 30
+  m_lineSpacing: 2
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -8652,7 +8798,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 584bce3b1c9cb114587eaada1e4498aa, type: 3}
+  m_Texture: {fileID: 2800000, guid: 675980e74bdeae04d9deaa9ecbabc520, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -8869,13 +9015,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
