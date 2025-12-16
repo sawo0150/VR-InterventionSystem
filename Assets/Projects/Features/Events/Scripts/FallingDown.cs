@@ -65,9 +65,16 @@ namespace Project.Event
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
-            
+
             transform.position = startPosition;
             transform.rotation = startRotation;
+
+            // Reset sound component if present
+            var treeSound = GetComponent<VRInterventionSystem.Audio.FallingTreeSound>();
+            if (treeSound != null)
+            {
+                treeSound.ResetState();
+            }
         }
     }
 }
