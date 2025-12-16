@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using Project;
+using Project.Event;
 
 /// <summary>
 /// Controller for Event 2 - Tree Fall Event
@@ -25,6 +26,11 @@ public class Event2Controller : MonoBehaviour, IEvent
     public Event2StartTrigger startTrigger;
     [Tooltip("End trigger zone")]
     public Event2EndTrigger endTrigger;
+    [Tooltip("List of falling trees to reset")]
+    public FallingDown[] fallingTrees;
+    
+    [Tooltip("List of triggers to reset")]
+    public OneShotTrigger[] treeTriggers;
     
 
     [Header("Event Boundaries")]
@@ -180,6 +186,22 @@ public class Event2Controller : MonoBehaviour, IEvent
         if (startTrigger != null)
         {
             startTrigger.ResetEvent();
+        }
+        
+        if (fallingTrees != null)
+        {
+            foreach (var tree in fallingTrees)
+            {
+                if (tree != null) tree.ResetObject();
+            }
+        }
+        
+        if (treeTriggers != null)
+        {
+            foreach (var trigger in treeTriggers)
+            {
+                if (trigger != null) trigger.ResetTrigger();
+            }
         }
     }
 

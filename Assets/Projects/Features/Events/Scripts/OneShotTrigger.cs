@@ -48,5 +48,14 @@ namespace Project.Event
             // Remove the trigger
             col.enabled = false;
         }
+
+        public void ResetTrigger()
+        {
+            hasFired = false;
+            if (col != null)
+            {
+                col.enabled = true;
+            }
+        }
     }
 }
