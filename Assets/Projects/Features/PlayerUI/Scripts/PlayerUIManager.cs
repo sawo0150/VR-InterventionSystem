@@ -148,13 +148,7 @@ namespace Project
                 UpdateCanvasPosition();
             }
 
-            // Only check boundaries when player is controlling a robot
-            if (GameManager.Instance == null || GameManager.Instance.GetPlayerState() != PlayerState.ControllingMode)
-            {
-                return;
-            }
-
-            // Check boundaries periodically
+            // Check boundaries periodically (includes cleanup when not controlling)
             boundaryCheckTimer += Time.deltaTime;
             if (boundaryCheckTimer >= boundaryCheckInterval)
             {
@@ -227,9 +221,58 @@ namespace Project
             EventBoundary[] boundaries = currentEvent.GetEventBoundaries();
             if (boundaries == null || boundaries.Length == 0) return;
 
-            // Get robot position
+            // Only check boundaries when player is actually controlling a robot (not just monitoring)
+            if (GameManager.Instance.GetPlayerState() != PlayerState.ControllingMode)
+            {
+                // Player is not controlling - hide warning and reset state
+                if (wasOutOfBounds)
+                {
+                    HideWarning();
+                    wasOutOfBounds = false;
+                }
+                return;
+            }
+
+            // Get currently viewed/controlled robot
             Transform robotTransform = GameManager.Instance.GetCurrentRobotTransform();
-            if (robotTransform == null) return;
+            if (robotTransform == null)
+            {
+                // No robot being controlled - hide warning and reset state
+                if (wasOutOfBounds)
+                {
+                    HideWarning();
+                    wasOutOfBounds = false;
+                }
+                return;
+            }
+
+            // IMPORTANT: Only check boundaries for the event's robot, not other robots
+            // Get the event's robot GameObject
+            GameObject eventRobot = null;
+            if (currentEvent is Event1Controller event1)
+            {
+                eventRobot = event1.robot;
+            }
+            else if (currentEvent is Event2Controller event2)
+            {
+                eventRobot = event2.robot;
+            }
+            else if (currentEvent is Event3Controller event3)
+            {
+                eventRobot = event3.robot;
+            }
+
+            // If the currently controlled robot is not the event's robot, don't check boundaries
+            if (eventRobot == null || robotTransform.gameObject != eventRobot)
+            {
+                // Player is controlling a different robot - hide warning and reset state
+                if (wasOutOfBounds)
+                {
+                    HideWarning();
+                    wasOutOfBounds = false;
+                }
+                return;
+            }
 
             Vector3 robotPosition = robotTransform.position;
 
