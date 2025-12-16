@@ -33810,6 +33810,151 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6793478750679864930, guid: 7f4908aebbc4c81439ba3af6606148e8, type: 3}
   m_PrefabInstance: {fileID: 309910020}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &310384959
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1248065882}
+    m_Modifications:
+    - target: {fileID: 2367586963870379948, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Name
+      value: TreeTriggerZone 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5452188
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Center.z
+      value: -0.2726095
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: targetTag
+      value: Robot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1028553460}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: FallDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TriggerShake
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Project.Event.FallingDown, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Project.Event.CameraShake, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: onTriggerOnce.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.6599998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+--- !u!4 &310384960 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+  m_PrefabInstance: {fileID: 310384959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &310384961 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+  m_PrefabInstance: {fileID: 310384959}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1466b857f5217f84e85f02bd93e5e406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
 --- !u!1001 &312215673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45451,6 +45596,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TreeTriggerZone 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5487734
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Center.z
+      value: 0.27438658
+      objectReference: {fileID: 0}
     - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
       propertyPath: targetTag
       value: Robot
@@ -45565,6 +45718,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
   m_PrefabInstance: {fileID: 420279171}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &420279173 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+  m_PrefabInstance: {fileID: 420279171}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1466b857f5217f84e85f02bd93e5e406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
 --- !u!1001 &420711315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89903,6 +90067,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TreeTriggerZone 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Size.z
+      value: 1.715984
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434220640985720540, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+      propertyPath: m_Center.z
+      value: -0.35799187
+      objectReference: {fileID: 0}
     - target: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
       propertyPath: targetTag
       value: Robot
@@ -90017,6 +90189,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4839122695263564615, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
   m_PrefabInstance: {fileID: 805067073}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &805067075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2465817048438653783, guid: d980c220ce1d4a543873dd6e14d1b6dc, type: 3}
+  m_PrefabInstance: {fileID: 805067073}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1466b857f5217f84e85f02bd93e5e406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerZone
 --- !u!1001 &808557021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114953,7 +115136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fded393ee025d4399c4be7aab6bbc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Event.Toppling
-  fallOnStart: 1
+  fallOnStart: 0
   fallDirection: {x: 0, y: 0, z: 1}
   fallForce: 100
 --- !u!114 &1028553465
@@ -137799,6 +137982,7 @@ Transform:
   - {fileID: 1028553457}
   - {fileID: 1246257603}
   - {fileID: 613861066}
+  - {fileID: 310384960}
   - {fileID: 805067074}
   - {fileID: 420279172}
   - {fileID: 704862695}
@@ -147570,6 +147754,14 @@ MonoBehaviour:
   eventWaypoint1: {fileID: 745218527}
   startTrigger: {fileID: 1349321390}
   endTrigger: {fileID: 2032307371}
+  fallingTrees:
+  - {fileID: 1028553460}
+  - {fileID: 1246257604}
+  - {fileID: 613861067}
+  treeTriggers:
+  - {fileID: 310384961}
+  - {fileID: 805067075}
+  - {fileID: 420279173}
   eventBoundaries:
   - {fileID: 1468606414}
   enableDebugLogs: 1
@@ -224213,7 +224405,7 @@ Transform:
   m_GameObject: {fileID: 2032307370}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 65.28, y: -0.27, z: 1.96}
+  m_LocalPosition: {x: 59.7, y: -0.27, z: 1.96}
   m_LocalScale: {x: 1.7260001, y: 1, z: 3.8981}
   m_ConstrainProportionsScale: 0
   m_Children: []
