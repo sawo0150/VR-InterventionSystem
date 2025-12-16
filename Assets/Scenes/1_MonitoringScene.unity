@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 5e6bf175200bfe64bb9707c431335f02, type: 3}
+  m_Texture: {fileID: 2800000, guid: ef92a21f2cba871419cc49fc30542c81, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1157,7 +1157,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: e2156925152070b498afc70153c49660, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1292,7 +1292,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: 600864ed758a7ee4fbea2cb96e7fa417, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: 2735430aed02e51449015df37a2f0ae5, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1823,7 +1823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 50
+  m_MinHeight: 100
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -3636,7 +3636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: a11f42a093dbc0c4a934968103d40927, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -4631,7 +4631,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: c9d7b6c012c0c1040a6f0ac86fcc8165, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -7278,22 +7278,28 @@ MonoBehaviour:
   - {fileID: 590616004}
   titleTexts:
   - Welcome, Operator
-  - How to Play?
-  - How to Play?
-  - How to Play?
-  - How to Play?
-  - How to Play?
-  - How to Play?
-  - How to Play?
+  - 'System Overview: Monitor Robot Status'
+  - Obstruction Detected
+  - Manual Control Mode
+  - Destination Reached
+  - Mission Accomplished
+  - Switch to Live Operation
+  - Real-Time Monitoring
   subTitleTexts:
-  - 'Welcome to the VRIS System:'
-  - 'Monitor Robot Status:'
-  - 'Check Error Alerts:'
-  - 'Take Manual Control:'
-  - 'Complete the Mission:'
-  - 'Return to Base:'
-  - 'Switch to Real Robot:'
-  - 'Control the Real Robot:'
+  - ' '
+  - Monitor the robot's position and camera views. Use the buttons to simulate emergency
+    scenarios.
+  - An error has occurred. Select the warning icon on the map to initiate manual
+    intervention.
+  - You are now in control. Use the left joystick to steer the robot around the obstacle.
+  - Arrived at the target location. Press the 'Complete Delivery' button to finish
+    the task.
+  - Congratulations! Delivery complete. The robot is now returning to base in autonomous
+    mode.
+  - Simulation training complete. Select 'Sector B' to connect to the real robot
+    fleet.
+  - Monitor the live SLAM map and camera feed. Click the screen if manual intervention
+    is needed.
   prevButton: {fileID: 816054758}
   skipButton: {fileID: 1129032798}
   nextButton: {fileID: 1057334964}
@@ -8506,10 +8512,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'You are aligned to ~~~
-
-
-    Now, ~~'
+  m_text: "Welcome to the <b>Virtual Reality Intervention System</b>.\r\n\r\nYou
+    now have total oversight of our city-wide delivery fleet.\r\nFeel free to toggle
+    between units and jump directly into their <b>POV</b> to assess their surroundings.\r\n\r\nWhile
+    the fleet operates autonomously, <b>no system is perfect</b>\u2014please remain
+    vigilant, as navigation errors may occur."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8536,8 +8543,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8548,7 +8555,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -8645,7 +8652,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 8bed04ce7a3fd714caaa792466033b60, type: 3}
+  m_Texture: {fileID: 2800000, guid: 584bce3b1c9cb114587eaada1e4498aa, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -8868,7 +8875,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

@@ -54,8 +54,8 @@ namespace Project
             if (titleTexts != null && contentPages != null && titleTexts.Count != contentPages.Count)
                 MyDebug.LogWarning($"[{GetType().Name}] Count mismatch: Pages({contentPages.Count}) vs Titles({titleTexts.Count}); Some pages might show empty titles");
             
-            if (titleTexts != null && subTitleTexts != null && titleTexts.Count != subTitleTexts.Count)
-                MyDebug.LogWarning($"[{GetType().Name}] Count mismatch: Pages({subTitleTexts.Count}) vs Titles({titleTexts.Count}); Some pages might show empty titles");
+            if (subTitleTexts != null && contentPages != null && subTitleTexts.Count != contentPages.Count)
+                MyDebug.LogWarning($"[{GetType().Name}] Count mismatch: Pages({contentPages.Count}) vs Titles({subTitleTexts.Count}); Some pages might show empty subTitles");
         }
         
         private void InitializeListeners()
