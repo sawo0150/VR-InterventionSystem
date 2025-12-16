@@ -131,42 +131,53 @@ public class Event3Controller : MonoBehaviour, IEvent
 
         bool isPlayerControlling = GameManager.Instance.GetPlayerState() == PlayerState.ControllingMode;
 
+        // Check if the player is controlling THIS robot (Event 3's robot), not another robot
+        bool isControllingThisRobot = false;
+        if (isPlayerControlling)
+        {
+            Transform currentRobot = GameManager.Instance.GetCurrentRobotTransform();
+            if (currentRobot != null && robot != null && currentRobot.gameObject == robot)
+            {
+                isControllingThisRobot = true;
+            }
+        }
+
         // Debug logging every 60 frames
         if (enableDebugLogs && Time.frameCount % 60 == 0)
         {
-            Debug.Log($"[Event3Controller] State check - isControlling: {isPlayerControlling}, wasPlayerSeated: {wasPlayerSeated}, audioPlaying: {childrenAmbientAudioSource.isPlaying}");
+            Debug.Log($"[Event3Controller] State check - isControllingThisRobot: {isControllingThisRobot}, wasPlayerSeated: {wasPlayerSeated}, audioPlaying: {childrenAmbientAudioSource.isPlaying}");
         }
 
-        // Player just entered controlling mode - start sound
-        if (isPlayerControlling && !wasPlayerSeated)
+        // Player just boarded THIS robot - start sound
+        if (isControllingThisRobot && !wasPlayerSeated)
         {
             if (childrenAmbientAudioSource.clip != null && !childrenAmbientAudioSource.isPlaying)
             {
                 childrenAmbientAudioSource.Play();
-                Debug.Log("[Event3Controller] Player in controlling mode - started children ambient sound");
+                Debug.Log("[Event3Controller] Player boarded Event 3 robot - started children ambient sound");
             }
         }
-        // Player just exited controlling mode - stop sound
-        else if (!isPlayerControlling && wasPlayerSeated)
+        // Player just left THIS robot - stop sound
+        else if (!isControllingThisRobot && wasPlayerSeated)
         {
             if (childrenAmbientAudioSource.isPlaying)
             {
                 childrenAmbientAudioSource.Stop();
-                Debug.Log("[Event3Controller] Player left controlling mode - stopped children ambient sound");
+                Debug.Log("[Event3Controller] Player left Event 3 robot - stopped children ambient sound");
             }
             else
             {
-                Debug.Log("[Event3Controller] Player left controlling mode - but sound was not playing");
+                Debug.Log("[Event3Controller] Player left Event 3 robot - but sound was not playing");
             }
         }
-        // Safety check: If sound is playing but player is not in controlling mode, stop it
-        else if (!isPlayerControlling && childrenAmbientAudioSource.isPlaying)
+        // Safety check: If sound is playing but player is not controlling this robot, stop it
+        else if (!isControllingThisRobot && childrenAmbientAudioSource.isPlaying)
         {
             childrenAmbientAudioSource.Stop();
-            Debug.Log("[Event3Controller] Safety stop - sound playing without controlling mode");
+            Debug.Log("[Event3Controller] Safety stop - sound playing but not controlling Event 3 robot");
         }
 
-        wasPlayerSeated = isPlayerControlling;
+        wasPlayerSeated = isControllingThisRobot;
     }
 
     void ValidateSetup()
@@ -245,28 +256,39 @@ public class Event3Controller : MonoBehaviour, IEvent
 
         currentState = EventState.Active;
 
-        // Initialize wasPlayerSeated and handle sound if already in controlling mode
+        // Initialize wasPlayerSeated and handle sound if already controlling THIS robot
         if (GameManager.Instance != null)
         {
             bool isCurrentlyControlling = GameManager.Instance.GetPlayerState() == PlayerState.ControllingMode;
 
-            if (enableDebugLogs)
+            // Check if player is controlling THIS robot (Event 3's robot)
+            bool isControllingThisRobot = false;
+            if (isCurrentlyControlling)
             {
-                Debug.Log($"[Event3Controller] Event started - initial player state: {(isCurrentlyControlling ? "ControllingMode" : "MonitoringMode")}");
+                Transform currentRobot = GameManager.Instance.GetCurrentRobotTransform();
+                if (currentRobot != null && robot != null && currentRobot.gameObject == robot)
+                {
+                    isControllingThisRobot = true;
+                }
             }
 
-            // If player is already in controlling mode when event starts, start the sound
-            if (isCurrentlyControlling && childrenAmbientAudioSource != null &&
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[Event3Controller] Event started - isControllingThisRobot: {isControllingThisRobot}");
+            }
+
+            // If player is already controlling THIS robot when event starts, start the sound
+            if (isControllingThisRobot && childrenAmbientAudioSource != null &&
                 childrenAmbientAudioSource.clip != null && !childrenAmbientAudioSource.isPlaying)
             {
                 childrenAmbientAudioSource.Play();
                 if (enableDebugLogs)
                 {
-                    Debug.Log("[Event3Controller] Player already in controlling mode - started children ambient sound");
+                    Debug.Log("[Event3Controller] Player already controlling Event 3 robot - started children ambient sound");
                 }
             }
 
-            wasPlayerSeated = isCurrentlyControlling;
+            wasPlayerSeated = isControllingThisRobot;
         }
         else
         {
